@@ -58,7 +58,7 @@ namespace FreeModScan
         public long FullAdress { get { return Offset + _adress; } }
 
         //TODO текстовый возврат множителей для возможности их скрытия когда не используются или не предусмотрены для данного типа данных
-        float _a = 1;                                //Множитель
+        float _a = 1;                                //Множитель A
         public float A
         {
             get { return _a; }
@@ -69,8 +69,11 @@ namespace FreeModScan
             }
         }
 
-        float _b = 0;                                //Коэффициент
-        public float B { get { return _b; } set { _b = value; } }
+        float _b = 0;                                //Коэффициент B
+        public float B {
+            get { return _b; }
+            set { _b = value; }
+        }
 
         bool _status = true;    //Статус (опрашивать/не опрашивать) 
         public bool Status { get { return _status; } set { _status = value; } }
