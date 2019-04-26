@@ -249,7 +249,7 @@ namespace FreeModScan
             }
         }
 
-        static public void addRegisters(Device dev, string regString, int rType, int dType, int bOrder=0)
+        static public void addRegisters(Device dev, string regString, int rType, int dType, int bOrder=1)
         {
             MatchCollection matches = Regex.Matches(regString, "((?<s>\\d+)-(?<e>\\d+))|(?<r>\\d+)");
 
@@ -430,8 +430,8 @@ namespace FreeModScan
                     dgvTable.Columns["FormatCol"].DataPropertyName = "dataType";
                     dgvTable.Columns["RepresentCol"].DataPropertyName = "Represent";
                     dgvTable.Columns["ByteOrderCol"].DataPropertyName = "byteOrder";
-                    dgvTable.Columns["MulACol"].DataPropertyName = "A";
-                    dgvTable.Columns["MulBCol"].DataPropertyName = "B";
+                    dgvTable.Columns["MulACol"].DataPropertyName = "strA";
+                    dgvTable.Columns["MulBCol"].DataPropertyName = "strB";
                     
                     //TODO: Реализовать "сборку" значения из соседних регистров согласно его типу
                     dgvTable.Columns["ValCol"].DataPropertyName = "stringVal";
@@ -715,6 +715,7 @@ namespace FreeModScan
             if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
             {
                 _conns[currConn].Devices[currDevice].Registers[currRegister].dataType = Register.DataType.Int16;
+                _conns[currConn].Devices[currDevice].Registers[currRegister].ValArr = new byte[2];
                 dgvRowUpdate();
             }
         }
@@ -724,6 +725,7 @@ namespace FreeModScan
             if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
             {
                 _conns[currConn].Devices[currDevice].Registers[currRegister].dataType = Register.DataType.Int32;
+                _conns[currConn].Devices[currDevice].Registers[currRegister].ValArr = new byte[4];
                 dgvRowUpdate();
             }
         }
@@ -733,6 +735,7 @@ namespace FreeModScan
             if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
             {
                 _conns[currConn].Devices[currDevice].Registers[currRegister].dataType = Register.DataType.Int64;
+                _conns[currConn].Devices[currDevice].Registers[currRegister].ValArr = new byte[8];
                 dgvRowUpdate();
             }
         }
@@ -742,6 +745,7 @@ namespace FreeModScan
             if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
             {
                 _conns[currConn].Devices[currDevice].Registers[currRegister].dataType = Register.DataType.Float;
+                _conns[currConn].Devices[currDevice].Registers[currRegister].ValArr = new byte[8];
                 dgvRowUpdate();
             }
         }
@@ -763,7 +767,22 @@ namespace FreeModScan
                 dgvRowUpdate();
             }
         }
-
+        private void tsBtnMidLE_Click(object sender, EventArgs e)
+        {
+            if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
+            {
+                _conns[currConn].Devices[currDevice].Registers[currRegister].byteOrder = Register.ByteOrder.MIDLITTLEENDIAN;
+                dgvRowUpdate();
+            }
+        }
+        private void tsBtnMidBE_Click(object sender, EventArgs e)
+        {
+            if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
+            {
+                _conns[currConn].Devices[currDevice].Registers[currRegister].byteOrder = Register.ByteOrder.MIDBIGENDIAN;
+                dgvRowUpdate();
+            }
+        }
         private void tsBtnStartPoll_Click(object sender, EventArgs e)
         {
             if (_conns[currConn].status){
@@ -831,5 +850,6 @@ namespace FreeModScan
         {
             Help.ShowHelp(this, "Help.chm");
         }
+
     }
 }

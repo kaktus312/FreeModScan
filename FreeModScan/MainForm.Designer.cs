@@ -84,19 +84,19 @@
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.tsMiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tsBtnInt16 = new System.Windows.Forms.ToolStripButton();
+            this.tsBtnInt32 = new System.Windows.Forms.ToolStripButton();
+            this.tsBtnInt64 = new System.Windows.Forms.ToolStripButton();
+            this.tsBtnFloatDt = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.tsBtnDec = new System.Windows.Forms.ToolStripButton();
             this.tsBtnHex = new System.Windows.Forms.ToolStripButton();
             this.tsBtnBin = new System.Windows.Forms.ToolStripButton();
             this.tsBtnOct = new System.Windows.Forms.ToolStripButton();
             this.tsBtnFloat = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsBtnInt16 = new System.Windows.Forms.ToolStripButton();
-            this.tsBtnInt32 = new System.Windows.Forms.ToolStripButton();
-            this.tsBtnInt64 = new System.Windows.Forms.ToolStripButton();
-            this.tsBtnFloatDt = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator19 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsBtnBE = new System.Windows.Forms.ToolStripButton();
             this.tsBtnLE = new System.Windows.Forms.ToolStripButton();
+            this.tsBtnMidLE = new System.Windows.Forms.ToolStripButton();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.tsBtnStartPoll = new System.Windows.Forms.ToolStripButton();
             this.tsTbPollInterval = new System.Windows.Forms.ToolStripTextBox();
@@ -191,8 +191,10 @@
             this.openMapDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.PollTimer = new System.Windows.Forms.Timer(this.components);
+            this.tsBtnBE = new System.Windows.Forms.ToolStripButton();
             this.deviceBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.mainFormBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.tsBtnMidBE = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -648,24 +650,71 @@
             // 
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsBtnInt16,
+            this.tsBtnInt32,
+            this.tsBtnInt64,
+            this.tsBtnFloatDt,
+            this.toolStripSeparator9,
             this.tsBtnDec,
             this.tsBtnHex,
             this.tsBtnBin,
             this.tsBtnOct,
             this.tsBtnFloat,
-            this.toolStripSeparator9,
-            this.tsBtnInt16,
-            this.tsBtnInt32,
-            this.tsBtnInt64,
-            this.tsBtnFloatDt,
             this.toolStripSeparator19,
+            this.tsBtnLE,
             this.tsBtnBE,
-            this.tsBtnLE});
+            this.tsBtnMidLE,
+            this.tsBtnMidBE});
             this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(370, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(478, 25);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
+            // 
+            // tsBtnInt16
+            // 
+            this.tsBtnInt16.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsBtnInt16.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnInt16.Image")));
+            this.tsBtnInt16.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsBtnInt16.Name = "tsBtnInt16";
+            this.tsBtnInt16.Size = new System.Drawing.Size(37, 22);
+            this.tsBtnInt16.Text = "Int16";
+            this.tsBtnInt16.Click += new System.EventHandler(this.tsBtnWord_Click);
+            // 
+            // tsBtnInt32
+            // 
+            this.tsBtnInt32.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsBtnInt32.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnInt32.Image")));
+            this.tsBtnInt32.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsBtnInt32.Name = "tsBtnInt32";
+            this.tsBtnInt32.Size = new System.Drawing.Size(37, 22);
+            this.tsBtnInt32.Text = "Int32";
+            this.tsBtnInt32.Click += new System.EventHandler(this.tsBtnDWord_Click);
+            // 
+            // tsBtnInt64
+            // 
+            this.tsBtnInt64.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsBtnInt64.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnInt64.Image")));
+            this.tsBtnInt64.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsBtnInt64.Name = "tsBtnInt64";
+            this.tsBtnInt64.Size = new System.Drawing.Size(37, 22);
+            this.tsBtnInt64.Text = "Int64";
+            this.tsBtnInt64.Click += new System.EventHandler(this.tsBtnIEEE754_Click);
+            // 
+            // tsBtnFloatDt
+            // 
+            this.tsBtnFloatDt.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsBtnFloatDt.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnFloatDt.Image")));
+            this.tsBtnFloatDt.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsBtnFloatDt.Name = "tsBtnFloatDt";
+            this.tsBtnFloatDt.Size = new System.Drawing.Size(35, 22);
+            this.tsBtnFloatDt.Text = "Float";
+            this.tsBtnFloatDt.Click += new System.EventHandler(this.tsBtnFloat_Click);
+            // 
+            // toolStripSeparator9
+            // 
+            this.toolStripSeparator9.Name = "toolStripSeparator9";
+            this.toolStripSeparator9.Size = new System.Drawing.Size(6, 25);
             // 
             // tsBtnDec
             // 
@@ -717,65 +766,10 @@
             this.tsBtnFloat.Text = "Float";
             this.tsBtnFloat.Click += new System.EventHandler(this.tsBtnFloat_Click_1);
             // 
-            // toolStripSeparator9
-            // 
-            this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(6, 25);
-            // 
-            // tsBtnInt16
-            // 
-            this.tsBtnInt16.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsBtnInt16.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnInt16.Image")));
-            this.tsBtnInt16.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsBtnInt16.Name = "tsBtnInt16";
-            this.tsBtnInt16.Size = new System.Drawing.Size(37, 22);
-            this.tsBtnInt16.Text = "Int16";
-            this.tsBtnInt16.Click += new System.EventHandler(this.tsBtnWord_Click);
-            // 
-            // tsBtnInt32
-            // 
-            this.tsBtnInt32.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsBtnInt32.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnInt32.Image")));
-            this.tsBtnInt32.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsBtnInt32.Name = "tsBtnInt32";
-            this.tsBtnInt32.Size = new System.Drawing.Size(37, 22);
-            this.tsBtnInt32.Text = "Int32";
-            this.tsBtnInt32.Click += new System.EventHandler(this.tsBtnDWord_Click);
-            // 
-            // tsBtnInt64
-            // 
-            this.tsBtnInt64.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsBtnInt64.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnInt64.Image")));
-            this.tsBtnInt64.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsBtnInt64.Name = "tsBtnInt64";
-            this.tsBtnInt64.Size = new System.Drawing.Size(37, 22);
-            this.tsBtnInt64.Text = "Int64";
-            this.tsBtnInt64.Click += new System.EventHandler(this.tsBtnIEEE754_Click);
-            // 
-            // tsBtnFloatDt
-            // 
-            this.tsBtnFloatDt.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsBtnFloatDt.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnFloatDt.Image")));
-            this.tsBtnFloatDt.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsBtnFloatDt.Name = "tsBtnFloatDt";
-            this.tsBtnFloatDt.Size = new System.Drawing.Size(35, 22);
-            this.tsBtnFloatDt.Text = "Float";
-            this.tsBtnFloatDt.Click += new System.EventHandler(this.tsBtnFloat_Click);
-            // 
             // toolStripSeparator19
             // 
             this.toolStripSeparator19.Name = "toolStripSeparator19";
             this.toolStripSeparator19.Size = new System.Drawing.Size(6, 25);
-            // 
-            // tsBtnBE
-            // 
-            this.tsBtnBE.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsBtnBE.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnBE.Image")));
-            this.tsBtnBE.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsBtnBE.Name = "tsBtnBE";
-            this.tsBtnBE.Size = new System.Drawing.Size(23, 22);
-            this.tsBtnBE.Text = "BE";
-            this.tsBtnBE.Click += new System.EventHandler(this.tsBtnBE_Click);
             // 
             // tsBtnLE
             // 
@@ -785,7 +779,18 @@
             this.tsBtnLE.Name = "tsBtnLE";
             this.tsBtnLE.Size = new System.Drawing.Size(23, 22);
             this.tsBtnLE.Text = "LE";
+            this.tsBtnLE.ToolTipText = "LE";
             this.tsBtnLE.Click += new System.EventHandler(this.tsBtnLE_Click);
+            // 
+            // tsBtnMidLE
+            // 
+            this.tsBtnMidLE.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsBtnMidLE.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnMidLE.Image")));
+            this.tsBtnMidLE.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsBtnMidLE.Name = "tsBtnMidLE";
+            this.tsBtnMidLE.Size = new System.Drawing.Size(38, 22);
+            this.tsBtnMidLE.Text = "MidLE";
+            this.tsBtnMidLE.Click += new System.EventHandler(this.tsBtnMidLE_Click);
             // 
             // toolStrip2
             // 
@@ -1673,6 +1678,17 @@
             this.PollTimer.Interval = 500;
             this.PollTimer.Tick += new System.EventHandler(this.PollTimer_Tick);
             // 
+            // tsBtnBE
+            // 
+            this.tsBtnBE.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsBtnBE.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnBE.Image")));
+            this.tsBtnBE.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsBtnBE.Name = "tsBtnBE";
+            this.tsBtnBE.Size = new System.Drawing.Size(23, 22);
+            this.tsBtnBE.Text = "BE";
+            this.tsBtnBE.ToolTipText = "BE";
+            this.tsBtnBE.Click += new System.EventHandler(this.tsBtnBE_Click);
+            // 
             // deviceBindingSource
             // 
             this.deviceBindingSource.DataSource = typeof(FreeModScan.Device);
@@ -1680,6 +1696,16 @@
             // mainFormBindingSource
             // 
             this.mainFormBindingSource.DataSource = typeof(FreeModScan.MainForm);
+            // 
+            // tsBtnMidBE
+            // 
+            this.tsBtnMidBE.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsBtnMidBE.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnMidBE.Image")));
+            this.tsBtnMidBE.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsBtnMidBE.Name = "tsBtnMidBE";
+            this.tsBtnMidBE.Size = new System.Drawing.Size(39, 22);
+            this.tsBtnMidBE.Text = "MidBE";
+            this.tsBtnMidBE.Click += new System.EventHandler(this.tsBtnMidBE_Click);
             // 
             // MainForm
             // 
@@ -1887,8 +1913,8 @@
         private System.Windows.Forms.ToolStripButton tsBtnOct;
         private System.Windows.Forms.RichTextBox rtbConsole;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator19;
-        private System.Windows.Forms.ToolStripButton tsBtnBE;
         private System.Windows.Forms.ToolStripButton tsBtnLE;
+        private System.Windows.Forms.ToolStripButton tsBtnMidLE;
         private System.Windows.Forms.Timer PollTimer;
         private System.Windows.Forms.DataGridViewTextBoxColumn RegisterCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn DeviceCol;
@@ -1901,6 +1927,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ValCol;
         private System.Windows.Forms.ToolStripButton tsBtnFloatDt;
         private System.Windows.Forms.ToolStripButton tsBtnFloat;
+        private System.Windows.Forms.ToolStripButton tsBtnBE;
+        private System.Windows.Forms.ToolStripButton tsBtnMidBE;
     }
 }
 

@@ -188,10 +188,7 @@ namespace FreeModScan
                         //этот массив нужно привести к виду 00-00-00-00-00-00-08-A1 для чего понадобиться обратить массив A1-08
                         //а затем обратить A1-08-00-00-00-00-00-00 до 00-00-00-00-00-00-08-A1
                         byte[] tmp = buff.Skip(index).Take(bytesNum).ToArray();
-                        //if (BitConverter.IsLittleEndian)
-                        //    tmp = tmp.Reverse().ToArray();
 
-                        //r.Val = BitConverter.ToUInt16(tmp, 0);
                         r.ValArr = tmp;
                         //Console.Out.Write(BitConverter.ToString(r.ValArr)+"\n");
                         index += bytesNum;
@@ -225,7 +222,7 @@ namespace FreeModScan
                     Console.Out.WriteLine(DateTime.Now + " >> " + BitConverter.ToString(tmp));
                     MainForm.console.Add(BitConverter.ToString(tmp) + "\n");
                 }
-                //spDataReceived();
+                spDataReceived();
             }
             //requests.Clear();//или очищать или формировать запросы один раз и перегенерировать их при необходимости
         }
@@ -233,18 +230,21 @@ namespace FreeModScan
         private void spDataReceived()
         {
             //Эмулятор ответов
-            byte[] buff = new byte[45] { 0x01, 0x03, 0x28, 0x00, 0x00, 0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0E, 0x08, 0xA1, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0xE8, 0x13, 0x8A, 0x00, 0x00, 0x00, 0x00, 0x74, 0x40 };
+            byte[] buff = new byte[45] { 0x01, 0x03, 0x28, 0x00, 0x00, 0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0E, 0x08, 0xA1, 0x09, 0xA2, 0xAB, 0xCD, 0x01, 0x02, 0x03, 0xE8, 0x13, 0x8A, 0x00, 0x00, 0x00, 0x00, 0x74, 0x40 };
             Console.Out.WriteLine(DateTime.Now + " << " + BitConverter.ToString(buff, 0));
 
             if (buff.Count() >= buffSize)
             {
                 //ответ полный, проверяем контрольную сумму и анализируем ответ
+                Console.Out.WriteLine(DateTime.Now + " << " + BitConverter.ToString(buff));
                 byte[] resp = buff.Take(buffSize - 2).ToArray();//без 2-х последних байтов ответа (CRC16)
                 byte[] crc = buff.Skip(buffSize - 2).Take(2).ToArray();//2 последних байта ответа (CRC16)
                 ushort crcRCV = BitConverter.ToUInt16(crc, 0);
                 ushort _crc16 = MainForm.CRC.ComputeChecksum(resp);
+                Console.Out.WriteLine(DateTime.Now + " << " + crcRCV + " / " + _crc16);
+
                 if (crcRCV != _crc16)
-                    return;
+                    //return;
                 if (resp[2] != 0x28)
                     return;//TODO сделать анализ ошибок modbus
                 sw.Stop();
@@ -271,8 +271,10 @@ namespace FreeModScan
                             case Register.DataType.Int32:
                                 bytesNum = 4;
                                 break;
+                            case Register.DataType.Float:
+                                bytesNum = 4;
+                                break;
                             case Register.DataType.Int64:
-                                //case Register.DataType.Float:
                                 bytesNum = 8;
                                 break;
                             default:
@@ -290,19 +292,16 @@ namespace FreeModScan
                         //этот массив нужно привести к виду 00-00-00-00-00-00-08-A1 для чего понадобиться обратить массив A1-08
                         //а затем обратить A1-08-00-00-00-00-00-00 до 00-00-00-00-00-00-08-A1
                         byte[] tmp = buff.Skip(index).Take(bytesNum).ToArray();
-                        //if (BitConverter.IsLittleEndian)
-                        //    tmp = tmp.Reverse().ToArray();
 
-                        //r.Val = BitConverter.ToUInt16(tmp, 0);
                         r.ValArr = tmp;
                         //Console.Out.Write(BitConverter.ToString(r.ValArr)+"\n");
                         index += bytesNum;
                     }
 
                 }
-                Console.Out.WriteLine(DateTime.Now + " << " + crcRCV + " / " + _crc16);
+
                 QueriesNumRCV++;
-                Console.Out.WriteLine(DateTime.Now + " << " + BitConverter.ToString(buff));
+
                 totalRCV = 0;
             }
         }

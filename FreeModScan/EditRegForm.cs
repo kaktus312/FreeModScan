@@ -27,10 +27,12 @@ namespace FreeModScan
             cbConnectionList.SelectedIndex = MainForm.currConn;
             cbDeviceList.SelectedIndex = MainForm.currDevice;
             cbRegState.Checked = currReg.Status;
-            cbDataType.SelectedIndex = (int) currReg.dataType;
+            cbDataType.SelectedIndex = (int) currReg.dataType-1;
             cbRegisterType.SelectedIndex = (int) currReg.Type-1;
             cbRepresent.SelectedIndex = (int)currReg.Represent;
             tbRegisterNum.Text = (currReg.Adress%100000).ToString();
+            cbUseMults.Checked = currReg.UseMults;
+            tbA.Enabled = tbB.Enabled = cbUseMults.Checked;
             tbA.Text = currReg.A.ToString();
             tbB.Text = currReg.B.ToString();
             cbByteOrder.SelectedIndex = (int)currReg.byteOrder;
@@ -42,10 +44,13 @@ namespace FreeModScan
             currReg.dataType = (Register.DataType) cbDataType.SelectedIndex;
             currReg.Type = (Register.RegType) cbRegisterType.SelectedIndex+1;
             currReg.Represent = (Register.Representation) cbRepresent.SelectedIndex;
-            //currReg.Adress = (cbRegisterType.SelectedIndex + 1) * 100000 + int.Parse(tbRegisterNum.Text);
-            currReg.Adress = int.Parse(tbRegisterNum.Text);
-            currReg.A = int.Parse(tbA.Text);
-            currReg.B = int.Parse(tbB.Text);
+            currReg.Adress = uint.Parse(tbRegisterNum.Text);
+            currReg.UseMults = cbUseMults.Checked;
+            if (cbUseMults.Checked)
+            {
+                currReg.A = float.Parse(tbA.Text);
+                currReg.B = float.Parse(tbB.Text);
+            }
             currReg.byteOrder = (Register.ByteOrder)cbByteOrder.SelectedIndex;
 
             if (currReg.devName != cbDeviceList.Text) {     //было изменено устройство и/или подключение
@@ -63,6 +68,11 @@ namespace FreeModScan
                 cbDeviceList.DisplayMember = "deviceName";
                 cbDeviceList.SelectedIndex = 0;
 
+        }
+
+        private void cbUseMults_CheckedChanged(object sender, EventArgs e)
+        {
+            tbA.Enabled = tbB.Enabled = cbUseMults.Checked;
         }
     }
 }

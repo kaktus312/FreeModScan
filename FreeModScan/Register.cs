@@ -31,51 +31,55 @@ namespace FreeModScan
             Int16 = 0,
             Int32 = 1,
             Int64 = 3,
-            Float = 4
+            Float = 4,
+            Double = 5
         }
 
         public enum ByteOrder : byte
         {
-            LITTLEENDIAN = 0,
-            BIGENDIAN = 1
+            LITTLEENDIAN  = 0,
+            BIGENDIAN = 1,
+            MIDLITTLEENDIAN = 2,
+            MIDBIGENDIAN = 3
         }
 
-        bool _useMults;
-        public bool UseMults { get { return _useMults; } set { _useMults = value; } }
-
-
-        string _title = "Default Register Title";       //Имя регистра
+        bool _useMults = false;
+        public bool UseMults
+        {
+            get { return _useMults; }
+            set
+            {
+                _useMults = value;
+                Represent = (value) ? Representation.Float : Represent;
+            }
+        }
+        string _title = "Default Register Title";
         public string Title { get { return _title; } set { _title = value; } }
-
-        string _devName;                                //Имя устройства
-        public string devName { get { return _devName; } set { _devName = value; } }
+        public string devName { get; set; }
 
         uint _offset;
         public uint Offset { get { return _offset; } set { _offset = value * 100000; } }
 
-        long _adress = 0;                                //Адрес регистра
+        long _adress = 0;
         public long Adress { get { return _adress; } set { _adress = value; } }
-        public long FullAdress { get { return Offset + _adress; } }
+        public long FullAdress { get { return Offset + Adress; } }
 
-        //TODO текстовый возврат множителей для возможности их скрытия когда не используются или не предусмотрены для данного типа данных
-        float _a = 1;                                //Множитель A
-        public float A
+        float _a = 1;
+        public float A { get { return _a; } set { _a = value; } }
+        public string strA
         {
-            get { return _a; }
-            set
-            {
-                _a = value;
-                //float.TryParse(value.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out _a);
-            }
+            get { return (UseMults == true) ? A.ToString() : ""; }
+            set { A = float.Parse(value); }
         }
 
-        float _b = 0;                                //Коэффициент B
-        public float B {
-            get { return _b; }
-            set { _b = value; }
+        float _b = 0;
+        public float B { get { return _b; } set { _b = value; } }
+        public string strB
+        {
+            get { return (UseMults == true) ? B.ToString() : ""; }
+            set { B = float.Parse(value); }
         }
-
-        bool _status = true;    //Статус (опрашивать/не опрашивать) 
+        bool _status = true;
         public bool Status { get { return _status; } set { _status = value; } }
 
         RegType _type = RegType.HOLDING_REGISTER;    //тип регистра
@@ -88,118 +92,129 @@ namespace FreeModScan
             set
             {
                 _dataType = value;
-                _represent = (value == DataType.Float) ? Representation.Float : Representation.DEC;
+                _represent = (value == DataType.Float) ? Representation.Float : _represent;
+                _useMults = (value == DataType.Float) ? true : _useMults;
             }
         }
 
-        ByteOrder _byteOrder = ByteOrder.LITTLEENDIAN;           //расположение байтов 
+        ByteOrder _byteOrder = ByteOrder.BIGENDIAN;
         public ByteOrder byteOrder { get { return _byteOrder; } set { _byteOrder = value; } }
 
         Representation _represent = Representation.DEC;    //представление данных
-        public Representation Represent { get { return _represent; } set { _represent = value; } }
-
-        byte[] _val; //Значение
-        public byte[] ValArr
+        public Representation Represent
         {
-            get
-            {
-                return _val;
-            }
+            get { return _represent; }
             set
             {
-                _val = value;
+                _represent = value;
+                _useMults = (value == Representation.Float);
             }
         }
+        byte[] _valArr;
+        public byte[] ValArr {
+            //get { return (BitConverter.IsLittleEndian) ? _valArr.Reverse().ToArray(): _valArr; }
+            get { return _valArr; }
+            set { _valArr = value; }
+        }
 
-        //TODO Обдумать хранение значения регистра (регистров) в виде массива байтов
+
+
         public string stringVal
         {
             get
             {
-                string s = "-";
                 if ((!Status) || (ValArr == null))
-                    return s;
-                var ba = (byteOrder == ByteOrder.BIGENDIAN) ? ValArr.Reverse().ToArray() : ValArr;
+                    return "-";
 
+                dynamic tmp;
 
-                //switch (dataType)
-                //{
-                //    case DataType.Int16:
-                //    default:
-                //        Int16 tmp = BitConverter.ToInt16(ba, 0);
-                //    case DataType.Int32:
-                //        Int32 tmp = BitConverter.ToInt32(ba, 0);
-                //    case DataType.Int64:
-                //        Int64 tmp = BitConverter.ToInt64(ba, 0);
-                //    case DataType.Float:
-                //        Int16 tmp = BitConverter.ToInt64(ba, 0);
-                //}
+                var ba = RotateVal();
+                int byteNum = ba.Count();
 
-
-
-                switch (Represent)
+                switch (dataType)
                 {
-                    case Representation.HEX:
-                        //s = tmp.ToString("X2");
-                        //s = Convert.ToString((Int16)tmp, 16);
-                        s = BitConverter.ToString(ba, 0);
+                    case DataType.Int16:
+                    default:
+                        tmp = BitConverter.ToInt16(ba, 0);
                         break;
-                    case Representation.BIN:
-                        //s = Convert.ToString((Int16)tmp, 2);
-                        s = "";
-                        foreach (byte tmpByte in ba)
-                            s += Convert.ToString(tmpByte, 2).PadLeft(8, '0') + " ";
+                    case DataType.Int32:
+                        tmp = BitConverter.ToInt32(ba, 0);
                         break;
-                    case Representation.OCT:
-                        //s = Convert.ToString(tmp, 8);
+                    case DataType.Int64:
+                        tmp = BitConverter.ToInt64(ba, 0);
                         break;
-                    case Representation.DEC:
-                        if (ba.Count() == 8)
-                        {
-                            Int64 tmp = BitConverter.ToInt64(ba.Reverse().ToArray(), 0);
-                            s = Convert.ToString(tmp, 10);
-                            break;
-                        }
-                        if (ba.Count() == 4)
-                        {
-                            Int32 tmp = BitConverter.ToInt32(ba.Reverse().ToArray(), 0);
-                            s = Convert.ToString(tmp, 10);
-                            break;
-                        }
-                        if (ba.Count() == 2)
-                        {
-                            Int16 tmp = BitConverter.ToInt16(ba.Reverse().ToArray(), 0);
-                            s = Convert.ToString(tmp, 10);
-                            break;
-                        }
-                        else
-                        {
-                            s = "???";
-                        }
+                    case DataType.Float:
+                        tmp = BitConverter.ToSingle(ba, 0);                            
                         break;
-                    case Representation.Float:
-                        s = Val.ToString("F2");
+                    case DataType.Double:
+                        tmp = BitConverter.ToDouble(ba, 0);
                         break;
                 }
-                return s;
+
+                if (_useMults)
+                    tmp = tmp * A + B;
+
+                return ConvertVal(tmp);
             }
         }
 
-        public float Val
+        byte[] RotateVal() 
         {
-            get
-            {
-                //TODO сделать варианты для тип данных float и продумать другие
-                Int16 tmp = BitConverter.ToInt16(ValArr.Reverse().ToArray(), 0);
-                return tmp * A + B;
-            }
+            int numBytes = ValArr.Count();
+            int step = numBytes / 2;
+            byte[] ba = new byte[numBytes];
+            if (byteOrder == ByteOrder.MIDLITTLEENDIAN)
+                for (int i = 0; i < numBytes; i += step)
+                {
+                    byte[] tmp = ValArr.Skip(i).Take(step).Reverse().ToArray();
+                    Array.Copy(tmp, 0, ba, i, step);
+                }
+            if (byteOrder == ByteOrder.MIDBIGENDIAN)
+                for (int i = 0; i < numBytes; i += step)
+                    Array.Copy(ValArr, i, ba, (numBytes - (step + i)), step);
+            if (byteOrder == ByteOrder.LITTLEENDIAN)
+                ba = ValArr;
+            if (byteOrder == ByteOrder.BIGENDIAN)
+                ba = ValArr.Reverse().ToArray();
+            return ba;
         }
+
+        string ConvertVal(dynamic num)
+        {
+            string s = "???";
+            byte[] ba = BitConverter.GetBytes(num);
+            switch (Represent)
+            {
+                case Representation.HEX:
+                    ba = ba.Reverse().ToArray();
+                    s = BitConverter.ToString(ba, 0);
+                    break;
+                case Representation.BIN:
+                    s = "";
+                    ba = ba.Reverse().ToArray();
+                    foreach (byte tmpByte in ba)
+                        s += Convert.ToString(tmpByte, 2).PadLeft(8, '0') + " ";
+                    break;
+                case Representation.OCT:
+                    s = Convert.ToString(num, 8);
+                    break;
+                case Representation.DEC:
+                    s = Convert.ToString(num, 10);
+                    break;
+                case Representation.Float:
+                    s = ((num < 0.000001) || (num > Int32.MaxValue)) ? num.ToString("E5") : num.ToString("F2");
+                    break;
+            }
+            return s;
+        }
+
 
         public Register()
         {
         }
 
-        public Register(uint regNum) : this()
+        public Register(uint regNum)
+            : this()
         {
             Adress = regNum;
         }

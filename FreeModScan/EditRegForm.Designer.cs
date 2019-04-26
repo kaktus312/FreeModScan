@@ -45,11 +45,11 @@
             this.tbB = new System.Windows.Forms.TextBox();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
-            this.label9 = new System.Windows.Forms.Label();
             this.cbRegState = new System.Windows.Forms.CheckBox();
             this.tbRegisterNum = new System.Windows.Forms.NumericUpDown();
             this.cbByteOrder = new System.Windows.Forms.ComboBox();
             this.label10 = new System.Windows.Forms.Label();
+            this.cbUseMults = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.tbRegisterNum)).BeginInit();
             this.SuspendLayout();
             // 
@@ -176,15 +176,15 @@
             // 
             // tbA
             // 
-            this.tbA.Location = new System.Drawing.Point(118, 197);
+            this.tbA.Location = new System.Drawing.Point(141, 197);
             this.tbA.Name = "tbA";
-            this.tbA.Size = new System.Drawing.Size(66, 20);
+            this.tbA.Size = new System.Drawing.Size(79, 20);
             this.tbA.TabIndex = 28;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(99, 200);
+            this.label7.Location = new System.Drawing.Point(122, 200);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(17, 13);
             this.label7.TabIndex = 19;
@@ -193,7 +193,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(194, 200);
+            this.label8.Location = new System.Drawing.Point(229, 200);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(17, 13);
             this.label8.TabIndex = 19;
@@ -203,9 +203,9 @@
             // 
             this.tbB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbB.Location = new System.Drawing.Point(213, 197);
+            this.tbB.Location = new System.Drawing.Point(248, 197);
             this.tbB.Name = "tbB";
-            this.tbB.Size = new System.Drawing.Size(66, 20);
+            this.tbB.Size = new System.Drawing.Size(79, 20);
             this.tbB.TabIndex = 28;
             // 
             // btnCancel
@@ -232,15 +232,6 @@
             this.btnApply.Text = "Применить";
             this.btnApply.UseVisualStyleBackColor = true;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(12, 200);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(88, 13);
-            this.label9.TabIndex = 19;
-            this.label9.Text = "Коэффициенты:";
             // 
             // cbRegState
             // 
@@ -293,6 +284,17 @@
             this.label10.TabIndex = 33;
             this.label10.Text = "Порядок байтов:";
             // 
+            // cbUseMults
+            // 
+            this.cbUseMults.AutoSize = true;
+            this.cbUseMults.Location = new System.Drawing.Point(12, 199);
+            this.cbUseMults.Name = "cbUseMults";
+            this.cbUseMults.Size = new System.Drawing.Size(107, 17);
+            this.cbUseMults.TabIndex = 35;
+            this.cbUseMults.Text = "Коэффициенты:";
+            this.cbUseMults.UseVisualStyleBackColor = true;
+            this.cbUseMults.CheckedChanged += new System.EventHandler(this.cbUseMults_CheckedChanged);
+            // 
             // EditRegForm
             // 
             this.AcceptButton = this.btnApply;
@@ -300,6 +302,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(366, 278);
+            this.Controls.Add(this.cbUseMults);
             this.Controls.Add(this.cbByteOrder);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.tbRegisterNum);
@@ -313,7 +316,6 @@
             this.Controls.Add(this.label8);
             this.Controls.Add(this.cbRegisterType);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.label9);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
@@ -353,10 +355,10 @@
         private System.Windows.Forms.TextBox tbB;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnApply;
-        private System.Windows.Forms.Label label9;
         private System.Windows.Forms.CheckBox cbRegState;
         private System.Windows.Forms.NumericUpDown tbRegisterNum;
         private System.Windows.Forms.ComboBox cbByteOrder;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.CheckBox cbUseMults;
     }
 }
