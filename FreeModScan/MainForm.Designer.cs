@@ -96,7 +96,9 @@
             this.tsBtnFloat = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator19 = new System.Windows.Forms.ToolStripSeparator();
             this.tsBtnLE = new System.Windows.Forms.ToolStripButton();
+            this.tsBtnBE = new System.Windows.Forms.ToolStripButton();
             this.tsBtnMidLE = new System.Windows.Forms.ToolStripButton();
+            this.tsBtnMidBE = new System.Windows.Forms.ToolStripButton();
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.tsBtnStartPoll = new System.Windows.Forms.ToolStripButton();
             this.tsTbPollInterval = new System.Windows.Forms.ToolStripTextBox();
@@ -141,6 +143,7 @@
             this.AdressCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FormatCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ByteOrderCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.k = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.MulACol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.MulBCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RepresentCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -191,10 +194,8 @@
             this.openMapDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.PollTimer = new System.Windows.Forms.Timer(this.components);
-            this.tsBtnBE = new System.Windows.Forms.ToolStripButton();
             this.deviceBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.mainFormBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.tsBtnMidBE = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -355,6 +356,7 @@
             this.tsmiMapSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.tsmiMapSave.Size = new System.Drawing.Size(232, 22);
             this.tsmiMapSave.Text = "&Сохранить";
+            this.tsmiMapSave.Click += new System.EventHandler(this.tsmiMapSave_Click);
             // 
             // tsmiMapSaveAs
             // 
@@ -665,9 +667,9 @@
             this.tsBtnBE,
             this.tsBtnMidLE,
             this.tsBtnMidBE});
-            this.toolStrip1.Location = new System.Drawing.Point(3, 0);
+            this.toolStrip1.Location = new System.Drawing.Point(403, 25);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(478, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(329, 25);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -764,6 +766,7 @@
             this.tsBtnFloat.Name = "tsBtnFloat";
             this.tsBtnFloat.Size = new System.Drawing.Size(35, 22);
             this.tsBtnFloat.Text = "Float";
+            this.tsBtnFloat.Visible = false;
             this.tsBtnFloat.Click += new System.EventHandler(this.tsBtnFloat_Click_1);
             // 
             // toolStripSeparator19
@@ -782,6 +785,17 @@
             this.tsBtnLE.ToolTipText = "LE";
             this.tsBtnLE.Click += new System.EventHandler(this.tsBtnLE_Click);
             // 
+            // tsBtnBE
+            // 
+            this.tsBtnBE.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsBtnBE.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnBE.Image")));
+            this.tsBtnBE.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsBtnBE.Name = "tsBtnBE";
+            this.tsBtnBE.Size = new System.Drawing.Size(23, 22);
+            this.tsBtnBE.Text = "BE";
+            this.tsBtnBE.ToolTipText = "BE";
+            this.tsBtnBE.Click += new System.EventHandler(this.tsBtnBE_Click);
+            // 
             // tsBtnMidLE
             // 
             this.tsBtnMidLE.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -792,6 +806,16 @@
             this.tsBtnMidLE.Text = "MidLE";
             this.tsBtnMidLE.Click += new System.EventHandler(this.tsBtnMidLE_Click);
             // 
+            // tsBtnMidBE
+            // 
+            this.tsBtnMidBE.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsBtnMidBE.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnMidBE.Image")));
+            this.tsBtnMidBE.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsBtnMidBE.Name = "tsBtnMidBE";
+            this.tsBtnMidBE.Size = new System.Drawing.Size(39, 22);
+            this.tsBtnMidBE.Text = "MidBE";
+            this.tsBtnMidBE.Click += new System.EventHandler(this.tsBtnMidBE_Click);
+            // 
             // toolStrip2
             // 
             this.toolStrip2.AllowDrop = true;
@@ -799,9 +823,9 @@
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsBtnStartPoll,
             this.tsTbPollInterval});
-            this.toolStrip2.Location = new System.Drawing.Point(3, 25);
+            this.toolStrip2.Location = new System.Drawing.Point(3, 0);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(206, 25);
+            this.toolStrip2.Size = new System.Drawing.Size(237, 25);
             this.toolStrip2.TabIndex = 3;
             this.toolStrip2.Text = "toolStrip2";
             // 
@@ -829,7 +853,7 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.splitContainer1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(732, 383);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(732, 408);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 24);
             this.toolStripContainer1.Name = "toolStripContainer1";
@@ -839,9 +863,9 @@
             // 
             // toolStripContainer1.TopToolStripPanel
             // 
-            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip2);
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip4);
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip3);
             // 
             // splitContainer1
@@ -861,7 +885,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.groupBox3);
             this.splitContainer1.Panel2MinSize = 355;
-            this.splitContainer1.Size = new System.Drawing.Size(732, 383);
+            this.splitContainer1.Size = new System.Drawing.Size(732, 408);
             this.splitContainer1.SplitterDistance = 355;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -879,7 +903,7 @@
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.cbConnectionList);
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Location = new System.Drawing.Point(3, 249);
+            this.groupBox2.Location = new System.Drawing.Point(3, 274);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(349, 131);
             this.groupBox2.TabIndex = 0;
@@ -1002,7 +1026,7 @@
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(349, 240);
+            this.groupBox1.Size = new System.Drawing.Size(349, 265);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Подключения";
@@ -1025,7 +1049,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(344, 215);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(344, 240);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // btnConnectionAdd
@@ -1082,7 +1106,7 @@
             treeNode1.Text = "Список подключений пуст";
             this.tvConnectionTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1});
-            this.tvConnectionTree.Size = new System.Drawing.Size(338, 180);
+            this.tvConnectionTree.Size = new System.Drawing.Size(338, 205);
             this.tvConnectionTree.TabIndex = 3;
             this.tvConnectionTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvConnectionTree_AfterSelect);
             this.tvConnectionTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvConnectionTree_NodeMouseClick);
@@ -1134,7 +1158,6 @@
             // 
             // обновитьToolStripMenuItem
             // 
-            this.обновитьToolStripMenuItem.Enabled = false;
             this.обновитьToolStripMenuItem.Name = "обновитьToolStripMenuItem";
             this.обновитьToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
             this.обновитьToolStripMenuItem.Text = "Обновить";
@@ -1200,7 +1223,7 @@
             this.groupBox3.Controls.Add(this.splitContainer2);
             this.groupBox3.Location = new System.Drawing.Point(0, 3);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(373, 380);
+            this.groupBox3.Size = new System.Drawing.Size(373, 405);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Регистры";
@@ -1224,8 +1247,8 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.btnConsoleClear);
             this.splitContainer2.Panel2.Controls.Add(this.rtbConsole);
-            this.splitContainer2.Size = new System.Drawing.Size(367, 361);
-            this.splitContainer2.SplitterDistance = 225;
+            this.splitContainer2.Size = new System.Drawing.Size(367, 386);
+            this.splitContainer2.SplitterDistance = 250;
             this.splitContainer2.TabIndex = 1;
             // 
             // dgvTable
@@ -1243,6 +1266,7 @@
             this.AdressCol,
             this.FormatCol,
             this.ByteOrderCol,
+            this.k,
             this.MulACol,
             this.MulBCol,
             this.RepresentCol,
@@ -1250,10 +1274,14 @@
             this.dgvTable.ContextMenuStrip = this.dataGridViewContextMenu;
             this.dgvTable.Location = new System.Drawing.Point(3, 35);
             this.dgvTable.Name = "dgvTable";
-            this.dgvTable.Size = new System.Drawing.Size(361, 187);
+            this.dgvTable.Size = new System.Drawing.Size(361, 212);
             this.dgvTable.TabIndex = 2;
             this.dgvTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellClick);
             this.dgvTable.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellDoubleClick);
+            this.dgvTable.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellEndEdit);
+            this.dgvTable.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvTable_CellMouseClick);
+            this.dgvTable.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellValidated);
+            this.dgvTable.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellValueChanged);
             this.dgvTable.SelectionChanged += new System.EventHandler(this.dgvTable_SelectionChanged);
             // 
             // RegisterCol
@@ -1287,6 +1315,12 @@
             this.ByteOrderCol.HeaderText = "Порядок байтов";
             this.ByteOrderCol.Name = "ByteOrderCol";
             // 
+            // k
+            // 
+            this.k.HeaderText = "Коэфф.";
+            this.k.MinimumWidth = 20;
+            this.k.Name = "k";
+            // 
             // MulACol
             // 
             this.MulACol.HeaderText = "A";
@@ -1302,6 +1336,7 @@
             // RepresentCol
             // 
             this.RepresentCol.HeaderText = "Представление";
+            this.RepresentCol.MinimumWidth = 20;
             this.RepresentCol.Name = "RepresentCol";
             // 
             // ValCol
@@ -1557,7 +1592,7 @@
             this.toolStripSeparator11,
             this.toolStripLabel1,
             this.tsLblLogRecordsNum});
-            this.toolStrip4.Location = new System.Drawing.Point(3, 50);
+            this.toolStrip4.Location = new System.Drawing.Point(3, 25);
             this.toolStrip4.Name = "toolStrip4";
             this.toolStrip4.Size = new System.Drawing.Size(400, 25);
             this.toolStrip4.TabIndex = 5;
@@ -1619,7 +1654,7 @@
             this.tsBtnShowText,
             this.tsBtnShowPack,
             this.tsBtnListenPort});
-            this.toolStrip3.Location = new System.Drawing.Point(3, 75);
+            this.toolStrip3.Location = new System.Drawing.Point(3, 50);
             this.toolStrip3.Name = "toolStrip3";
             this.toolStrip3.Size = new System.Drawing.Size(322, 25);
             this.toolStrip3.TabIndex = 4;
@@ -1678,17 +1713,6 @@
             this.PollTimer.Interval = 500;
             this.PollTimer.Tick += new System.EventHandler(this.PollTimer_Tick);
             // 
-            // tsBtnBE
-            // 
-            this.tsBtnBE.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsBtnBE.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnBE.Image")));
-            this.tsBtnBE.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsBtnBE.Name = "tsBtnBE";
-            this.tsBtnBE.Size = new System.Drawing.Size(23, 22);
-            this.tsBtnBE.Text = "BE";
-            this.tsBtnBE.ToolTipText = "BE";
-            this.tsBtnBE.Click += new System.EventHandler(this.tsBtnBE_Click);
-            // 
             // deviceBindingSource
             // 
             this.deviceBindingSource.DataSource = typeof(FreeModScan.Device);
@@ -1696,16 +1720,6 @@
             // mainFormBindingSource
             // 
             this.mainFormBindingSource.DataSource = typeof(FreeModScan.MainForm);
-            // 
-            // tsBtnMidBE
-            // 
-            this.tsBtnMidBE.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsBtnMidBE.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnMidBE.Image")));
-            this.tsBtnMidBE.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsBtnMidBE.Name = "tsBtnMidBE";
-            this.tsBtnMidBE.Size = new System.Drawing.Size(39, 22);
-            this.tsBtnMidBE.Text = "MidBE";
-            this.tsBtnMidBE.Click += new System.EventHandler(this.tsBtnMidBE_Click);
             // 
             // MainForm
             // 
@@ -1916,19 +1930,20 @@
         private System.Windows.Forms.ToolStripButton tsBtnLE;
         private System.Windows.Forms.ToolStripButton tsBtnMidLE;
         private System.Windows.Forms.Timer PollTimer;
+        private System.Windows.Forms.ToolStripButton tsBtnFloatDt;
+        private System.Windows.Forms.ToolStripButton tsBtnFloat;
+        private System.Windows.Forms.ToolStripButton tsBtnBE;
+        private System.Windows.Forms.ToolStripButton tsBtnMidBE;
         private System.Windows.Forms.DataGridViewTextBoxColumn RegisterCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn DeviceCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn AdressCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn FormatCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ByteOrderCol;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn k;
         private System.Windows.Forms.DataGridViewTextBoxColumn MulACol;
         private System.Windows.Forms.DataGridViewTextBoxColumn MulBCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn RepresentCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ValCol;
-        private System.Windows.Forms.ToolStripButton tsBtnFloatDt;
-        private System.Windows.Forms.ToolStripButton tsBtnFloat;
-        private System.Windows.Forms.ToolStripButton tsBtnBE;
-        private System.Windows.Forms.ToolStripButton tsBtnMidBE;
     }
 }
 

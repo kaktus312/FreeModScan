@@ -10,6 +10,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Threading;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace FreeModScan
 {
@@ -32,6 +34,8 @@ namespace FreeModScan
 
         public static CRC16 CRC = new CRC16();
 
+        string filePath = string.Empty;//путь к текущему файлу регистров
+
         public MainForm()
         {
             InitializeComponent();
@@ -45,6 +49,7 @@ namespace FreeModScan
 
             cbDataType.DataSource = Enum.GetNames(typeof(Register.DataType));
             cbDataType.SelectedIndex = (int) Register.DataType.Int16;
+            tslRequestTotalNum.Text = tslAnswerNum.Text = tsLblLogRecordsNum.Text = tslRequestTime.Text = "0";
         }
 
         private void Connections_ListChanged(object sender, ListChangedEventArgs e)
@@ -116,15 +121,6 @@ namespace FreeModScan
             openLogDialog.ShowDialog(this);
         }
 
-        private void tsmiMapOpen_Click(object sender, EventArgs e)
-        {
-            openMapDialog.ShowDialog(this);
-        }
-
-        private void tsmiMapSaveAs_Click(object sender, EventArgs e)
-        {
-            saveFileDialog.ShowDialog(this);
-        }
 
         private void tsmiCut_Click(object sender, EventArgs e)
         {
@@ -188,8 +184,9 @@ namespace FreeModScan
 
         private void tsMiMul_CheckStateChanged(object sender, EventArgs e)
         {
-            dgvTable.Columns["MulACol"].Visible = (tsMiMul.Checked) ? true : false;
-            dgvTable.Columns["MulBCol"].Visible = (tsMiMul.Checked) ? true : false;
+            dgvTable.Columns["MulACol"].Visible = 
+            dgvTable.Columns["MulBCol"].Visible = 
+            dgvTable.Columns["k"].Visible = tsMiMul.Checked;
 
         }
 
@@ -368,7 +365,7 @@ namespace FreeModScan
 
         private void обновитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            tvConnectionTree.Refresh();
         }
 
         private void изменитьToolStripMenuItem_Click(object sender, EventArgs e)
@@ -430,13 +427,10 @@ namespace FreeModScan
                     dgvTable.Columns["FormatCol"].DataPropertyName = "dataType";
                     dgvTable.Columns["RepresentCol"].DataPropertyName = "Represent";
                     dgvTable.Columns["ByteOrderCol"].DataPropertyName = "byteOrder";
+                    dgvTable.Columns["k"].DataPropertyName = "UseMults";
                     dgvTable.Columns["MulACol"].DataPropertyName = "strA";
                     dgvTable.Columns["MulBCol"].DataPropertyName = "strB";
-                    
-                    //TODO: Реализовать "сборку" значения из соседних регистров согласно его типу
-                    dgvTable.Columns["ValCol"].DataPropertyName = "stringVal";
-                    
-                    
+                    dgvTable.Columns["ValCol"].DataPropertyName = "stringVal";  
                 }
 
             }            
@@ -550,6 +544,7 @@ namespace FreeModScan
         {
             currRegister = e.RowIndex;
             //MessageBox.Show(currRegister.ToString());
+
         }
 
         private void tsmi_DelAllRegisters_Click(object sender, EventArgs e)
@@ -705,7 +700,7 @@ namespace FreeModScan
         {
             if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
             {
-                _conns[currConn].Devices[currDevice].Registers[currRegister].Represent = Register.Representation.Float;
+                //_conns[currConn].Devices[currDevice].Registers[currRegister].Represent = Register.Representation.Float;
                 dgvRowUpdate();
             }
         }
@@ -849,6 +844,86 @@ namespace FreeModScan
         private void tsMiHelp_Click(object sender, EventArgs e)
         {
             Help.ShowHelp(this, "Help.chm");
+        }
+
+        private void dgvTable_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            if ((dgvTable.Columns["k"]!=null) && (e.ColumnIndex == dgvTable.Columns["k"].Index))
+            {
+                dgvTable.UpdateCellValue(dgvTable.Columns["MulACol"].Index, e.RowIndex);
+                dgvTable.UpdateCellValue(dgvTable.Columns["MulBCol"].Index, e.RowIndex);
+
+            }
+        }
+
+        private void dgvTable_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dgvTable_CellValidated(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dgvTable_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+
+        }
+
+        private void tsmiMapSave_Click(object sender, EventArgs e)
+        {
+            string path = string.Empty;
+            if (filePath!= string.Empty)
+            {
+                path = filePath;
+            } else
+            {
+                if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
+                    path = filePath = saveFileDialog.FileName;
+                else
+                    return;
+            }
+            XmlSerializer ser = new XmlSerializer(typeof(BindingList<Device>));
+            using (FileStream file = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
+            { ser.Serialize(file, _conns[currConn].Devices); }
+            
+        }
+
+        private void tsmiMapSaveAs_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                string path = filePath = saveFileDialog.FileName;
+                XmlSerializer ser = new XmlSerializer(typeof(BindingList<Device>));
+                using (FileStream file = new FileStream(path, FileMode.Create, FileAccess.Write, FileShare.None))
+                { ser.Serialize(file, _conns[currConn].Devices); }
+            }
+        }
+
+        private void tsmiMapOpen_Click(object sender, EventArgs e)
+        {
+            if (openMapDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                tvConnectionTree.BeginUpdate();
+                BindingList<Device> tmpList;
+                XmlSerializer ser = new XmlSerializer(typeof(BindingList<Device>));
+                string path = openMapDialog.FileName;
+                using (FileStream file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    tmpList = (BindingList<Device>)ser.Deserialize(file);
+                }
+                TreeNode currNode = tvConnectionTree.Nodes[currConn];
+
+                foreach (Device device in tmpList)
+                {
+                    _conns[currConn].Devices.Add(device);
+                    TreeNode node = new TreeNode(device.deviceAdress + ":" + device.deviceName);
+                    currNode.Nodes.Add(node);
+                   
+                }
+                tvConnectionTree.EndUpdate();
+            }
         }
 
     }

@@ -10,6 +10,7 @@ namespace FreeModScan
 {
     public class Device:IEquatable<Device>
     {
+
         string _deviceName;
         public string deviceName{ get {return _deviceName; } set {_deviceName=value; } }
 
@@ -17,6 +18,11 @@ namespace FreeModScan
         public byte deviceAdress { get { return _deviceAdress; } set { _deviceAdress = value; } }
 
         public BindingList<Register> Registers = new BindingList<Register>();
+
+        public Device()
+        {
+            //для сериализации (при сохранении в XML) необходим конструктор без параметров 
+        }
 
         public Device(byte adress, string name){
             _deviceAdress = adress;

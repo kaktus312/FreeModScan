@@ -23,7 +23,7 @@ namespace FreeModScan
             HEX = 1,
             BIN = 2,
             OCT = 3,
-            Float = 4
+            //Float = 4
         }
 
         public enum DataType : byte
@@ -50,7 +50,8 @@ namespace FreeModScan
             set
             {
                 _useMults = value;
-                Represent = (value) ? Representation.Float : Represent;
+                //dataType = (value) ? DataType.Float: dataType;
+                //Represent = (value) ? Representation.Float : Represent;
             }
         }
         string _title = "Default Register Title";
@@ -68,31 +69,41 @@ namespace FreeModScan
         public float A { get { return _a; } set { _a = value; } }
         public string strA
         {
-            get { return (UseMults == true) ? A.ToString() : ""; }
-            set { A = float.Parse(value); }
+            get { return (UseMults == true) ? _a.ToString() : ""; }
+            set {
+                if (float.TryParse(value, out _a))
+                    _a = float.Parse(value, CultureInfo.InvariantCulture.NumberFormat);
+                else
+                    _a = 1;
+                }//комментировать для сохранения карты регистров
         }
 
         float _b = 0;
         public float B { get { return _b; } set { _b = value; } }
         public string strB
         {
-            get { return (UseMults == true) ? B.ToString() : ""; }
-            set { B = float.Parse(value); }
-        }
+            get { return (UseMults == true) ? _b.ToString() : ""; }
+            set {
+                if (float.TryParse(value, out _b))
+                    _b = float.Parse(value, CultureInfo.InvariantCulture.NumberFormat);
+                else
+                    _b = 0;
+            }//комментировать для сохранения карты регистров
+        } 
         bool _status = true;
         public bool Status { get { return _status; } set { _status = value; } }
 
         RegType _type = RegType.HOLDING_REGISTER;    //тип регистра
         public RegType Type { get { return _type; } set { _type = value; Offset = (uint)value; } }
 
-        DataType _dataType = DataType.Int16;           //тип данных регистра
+        DataType _dataType = DataType.Int16;           //тип данных регистра        TODO: привести к стандартным Int16, Int32, Float ?
         public DataType dataType
         {
             get { return _dataType; }
             set
             {
                 _dataType = value;
-                _represent = (value == DataType.Float) ? Representation.Float : _represent;
+                //_represent = (value == DataType.Float) ? Representation.Float : _represent;
                 _useMults = (value == DataType.Float) ? true : _useMults;
             }
         }
@@ -107,7 +118,7 @@ namespace FreeModScan
             set
             {
                 _represent = value;
-                _useMults = (value == Representation.Float);
+                //_useMults = (value == Representation.Float);
             }
         }
         byte[] _valArr;
@@ -116,7 +127,6 @@ namespace FreeModScan
             get { return _valArr; }
             set { _valArr = value; }
         }
-
 
 
         public string stringVal
@@ -183,6 +193,7 @@ namespace FreeModScan
         {
             string s = "???";
             byte[] ba = BitConverter.GetBytes(num);
+
             switch (Represent)
             {
                 case Representation.HEX:
@@ -196,14 +207,25 @@ namespace FreeModScan
                         s += Convert.ToString(tmpByte, 2).PadLeft(8, '0') + " ";
                     break;
                 case Representation.OCT:
-                    s = Convert.ToString(num, 8);
+                    if (num is float) 
+                        s = Convert.ToString((Int32)num, 8);
+                    else if (num is double)
+                        s = Convert.ToString((Int64)num, 8);
+                    else
+                        s = Convert.ToString(num, 8);
                     break;
                 case Representation.DEC:
-                    s = Convert.ToString(num, 10);
+                default:
+                    //Type numtype = ((System.Runtime.Remoting.ObjectHandle)num).Unwrap().GetType();
+                    if ((num is float) || (num is double))
+                        s = ((num < 0.000001) || (num > Int32.MaxValue)) ? num.ToString("E5") : num.ToString("F2");
+                    else
+                        s = Convert.ToString(num, 10);
                     break;
-                case Representation.Float:
-                    s = ((num < 0.000001) || (num > Int32.MaxValue)) ? num.ToString("E5") : num.ToString("F2");
-                    break;
+                //case Representation.Float:
+                //    if (num.GetType() is float)
+                //        s = ((num < 0.000001) || (num > Int32.MaxValue)) ? num.ToString("E5") : num.ToString("F2");
+                //    break;
             }
             return s;
         }
@@ -211,6 +233,7 @@ namespace FreeModScan
 
         public Register()
         {
+            //для сериализации (при сохранении в XML) необходим конструктор без параметров 
         }
 
         public Register(uint regNum)

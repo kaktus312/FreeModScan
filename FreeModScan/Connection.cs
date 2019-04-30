@@ -49,7 +49,9 @@ namespace FreeModScan
         int totalRCV;//общая длина ответа, которая должна равнятся buffSize при приёме в несколько этапов
 
         public Stopwatch sw;
-
+        public Connection() {
+            //для сериализации (при сохранении в XML) необходим конструктор без параметров 
+        }
         public Connection(int ConnType, string ConName, SerialPort sp, uint readTout, uint writeTout)
         {
             this.ConnType = ConnType;
@@ -126,13 +128,14 @@ namespace FreeModScan
         private void spDataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             byte[] buff = new byte[buffSize];
-            //Console.Out.WriteLine(DateTime.Now + " << " + Port.BytesToRead);
+            //Console.Out.WriteLine(DateTime.Now + " << [" + Port.BytesToRead + "]");
             //TODO предусмотреть прием ответа частями
             if (Port.BytesToRead >= buffSize)
             {
                 //ответ полный, проверяем контрольную сумму и анализируем ответ
                 Port.Read(buff, 0, buffSize);
                 Console.Out.WriteLine(DateTime.Now + " << " + BitConverter.ToString(buff));
+                MainForm.console.Add(DateTime.Now + " >> [" + BitConverter.ToString(buff) + "] \n");
                 byte[] resp = buff.Take(buffSize - 2).ToArray();//без 2-х последних байтов ответа (CRC16)
                 byte[] crc = buff.Skip(buffSize - 2).Take(2).ToArray();//2 последних байта ответа (CRC16)
                 ushort crcRCV = BitConverter.ToUInt16(crc, 0);
@@ -162,31 +165,20 @@ namespace FreeModScan
                         switch (r.dataType)
                         {
                             case Register.DataType.Int16:
+                            default:
                                 bytesNum = 2;
                                 break;
                             case Register.DataType.Int32:
-                                bytesNum = 4;
-                                break;
                             case Register.DataType.Float:
                                 bytesNum = 4;
                                 break;
-                            case Register.DataType.Int64:                        
+                            case Register.DataType.Int64:
+                            case Register.DataType.Double:
                                 bytesNum = 8;
-                                break;
-                            default:
-                                bytesNum = 2;
                                 break;
                         }
 
                         skip = bytesNum / 2 - 1;//сколько регистров необходимо пропустить для случая, если значение занимает несколько регистров
-
-                        //TODO Проверить необходимость изменения последовательности байтов
-                        //NOTE Платформа работает в режиме LittleEndian, ответы приходят в том же режиме
-                        //выбираемые дайты записываются в массив начиная с 0, т.е. старшего и таким образом в результирующем массиве наблюдаем BigEndian
-                        //пример: отобрано 08-A1 (изменяются чаще A1, значит LittleEndian)
-                        //записываем в 8-ми байтный регистр - 08-A1-00-00-00-00-00-00 и имеем BigEndian
-                        //этот массив нужно привести к виду 00-00-00-00-00-00-08-A1 для чего понадобиться обратить массив A1-08
-                        //а затем обратить A1-08-00-00-00-00-00-00 до 00-00-00-00-00-00-08-A1
                         byte[] tmp = buff.Skip(index).Take(bytesNum).ToArray();
 
                         r.ValArr = tmp;
@@ -219,8 +211,8 @@ namespace FreeModScan
                     buffSize = buffSize * 2 + 5;
                     //Console.Out.WriteLine(DateTime.Now + " >> " + buffSize.ToString());
                     QueriesNumSND++;
-                    Console.Out.WriteLine(DateTime.Now + " >> " + BitConverter.ToString(tmp));
-                    MainForm.console.Add(BitConverter.ToString(tmp) + "\n");
+                    Console.Out.WriteLine(DateTime.Now + " >> [" + BitConverter.ToString(tmp) + "]");
+                    MainForm.console.Add(DateTime.Now + " >> [" + BitConverter.ToString(tmp) + "] \n");
                 }
                 spDataReceived();
             }
@@ -231,12 +223,12 @@ namespace FreeModScan
         {
             //Эмулятор ответов
             byte[] buff = new byte[45] { 0x01, 0x03, 0x28, 0x00, 0x00, 0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0E, 0x08, 0xA1, 0x09, 0xA2, 0xAB, 0xCD, 0x01, 0x02, 0x03, 0xE8, 0x13, 0x8A, 0x00, 0x00, 0x00, 0x00, 0x74, 0x40 };
-            Console.Out.WriteLine(DateTime.Now + " << " + BitConverter.ToString(buff, 0));
+            Console.Out.WriteLine(DateTime.Now + " << [" + BitConverter.ToString(buff, 0)+"]");
+            MainForm.console.Add(DateTime.Now + " >> [" + BitConverter.ToString(buff) + "] \n");
 
             if (buff.Count() >= buffSize)
             {
                 //ответ полный, проверяем контрольную сумму и анализируем ответ
-                Console.Out.WriteLine(DateTime.Now + " << " + BitConverter.ToString(buff));
                 byte[] resp = buff.Take(buffSize - 2).ToArray();//без 2-х последних байтов ответа (CRC16)
                 byte[] crc = buff.Skip(buffSize - 2).Take(2).ToArray();//2 последних байта ответа (CRC16)
                 ushort crcRCV = BitConverter.ToUInt16(crc, 0);
@@ -266,31 +258,21 @@ namespace FreeModScan
                         switch (r.dataType)
                         {
                             case Register.DataType.Int16:
+                            default:
                                 bytesNum = 2;
                                 break;
                             case Register.DataType.Int32:
-                                bytesNum = 4;
-                                break;
                             case Register.DataType.Float:
                                 bytesNum = 4;
                                 break;
                             case Register.DataType.Int64:
+                            case Register.DataType.Double:
                                 bytesNum = 8;
-                                break;
-                            default:
-                                bytesNum = 2;
                                 break;
                         }
 
                         skip = bytesNum / 2 - 1;//сколько регистров необходимо пропустить для случая, если значение занимает несколько регистров
 
-                        //TODO Проверить необходимость изменения последовательности байтов
-                        //NOTE Платформа работает в режиме LittleEndian, ответы приходят в том же режиме
-                        //выбираемые дайты записываются в массив начиная с 0, т.е. старшего и таким образом в результирующем массиве наблюдаем BigEndian
-                        //пример: отобрано 08-A1 (изменяются чаще A1, значит LittleEndian)
-                        //записываем в 8-ми байтный регистр - 08-A1-00-00-00-00-00-00 и имеем BigEndian
-                        //этот массив нужно привести к виду 00-00-00-00-00-00-08-A1 для чего понадобиться обратить массив A1-08
-                        //а затем обратить A1-08-00-00-00-00-00-00 до 00-00-00-00-00-00-08-A1
                         byte[] tmp = buff.Skip(index).Take(bytesNum).ToArray();
 
                         r.ValArr = tmp;
@@ -324,6 +306,8 @@ namespace FreeModScan
             //6. Формируем массив байтов для отправки запроса в порт, связанный с текущим соединением
             //7. Анализируем ответ        
 
+
+            //TODO Формировать запрос с  учётом типа регистра
             foreach (Register.RegType tmp in Enum.GetValues(typeof(Register.RegType)))
             {
                 //Console.Out.WriteLine(tmp);
