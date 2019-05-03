@@ -54,6 +54,7 @@
     <Compile Include="ConnectionForm.Designer.cs">
       <DependentUpon>ConnectionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConsoleStreamWriter.cs" />
     <Compile Include="CRC16.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="DeviceEditForm.cs">

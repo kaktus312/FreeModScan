@@ -6,7 +6,7 @@
         <UseMults>false</UseMults>
         <Title>Default Register Title</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>1</Adress>
         <A>1</A>
         <strA />
@@ -14,31 +14,33 @@
         <strB />
         <Status>true</Status>
         <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
+        <dataType>Int32</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>AAAAEQ==</ValArr>
       </Register>
       <Register>
         <UseMults>false</UseMults>
         <Title>Default Register Title</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>2</Adress>
         <A>1</A>
         <strA />
         <B>0</B>
         <strB />
-        <Status>true</Status>
+        <Status>false</Status>
         <Type>HOLDING_REGISTER</Type>
         <dataType>Int16</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>ABE=</ValArr>
       </Register>
       <Register>
         <UseMults>false</UseMults>
         <Title>Default Register Title</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>3</Adress>
         <A>1</A>
         <strA />
@@ -49,12 +51,13 @@
         <dataType>Int16</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>AAA=</ValArr>
       </Register>
       <Register>
         <UseMults>false</UseMults>
         <Title>Default Register Title</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>4</Adress>
         <A>1</A>
         <strA />
@@ -65,12 +68,13 @@
         <dataType>Int16</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>AAA=</ValArr>
       </Register>
       <Register>
         <UseMults>false</UseMults>
         <Title>Default Register Title</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>5</Adress>
         <A>1</A>
         <strA />
@@ -81,12 +85,13 @@
         <dataType>Int16</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>AAA=</ValArr>
       </Register>
       <Register>
         <UseMults>false</UseMults>
         <Title>Default Register Title</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>6</Adress>
         <A>1</A>
         <strA />
@@ -97,12 +102,13 @@
         <dataType>Int16</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>AAA=</ValArr>
       </Register>
       <Register>
         <UseMults>false</UseMults>
         <Title>Default Register Title</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>7</Adress>
         <A>1</A>
         <strA />
@@ -113,12 +119,13 @@
         <dataType>Int16</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>AAA=</ValArr>
       </Register>
       <Register>
         <UseMults>false</UseMults>
         <Title>Default Register Title</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>8</Adress>
         <A>1</A>
         <strA />
@@ -129,12 +136,13 @@
         <dataType>Int16</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>AAA=</ValArr>
       </Register>
       <Register>
         <UseMults>false</UseMults>
         <Title>Default Register Title</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>9</Adress>
         <A>1</A>
         <strA />
@@ -145,12 +153,13 @@
         <dataType>Int16</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>AAA=</ValArr>
       </Register>
       <Register>
         <UseMults>false</UseMults>
         <Title>Default Register Title</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>10</Adress>
         <A>1</A>
         <strA />
@@ -161,12 +170,13 @@
         <dataType>Int16</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>AAA=</ValArr>
       </Register>
       <Register>
         <UseMults>false</UseMults>
         <Title>Default Register Title</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>11</Adress>
         <A>1</A>
         <strA />
@@ -174,47 +184,50 @@
         <strB />
         <Status>true</Status>
         <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
+        <dataType>Int32</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>AAAAEQ==</ValArr>
       </Register>
       <Register>
         <UseMults>false</UseMults>
         <Title>Default Register Title</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>12</Adress>
         <A>1</A>
         <strA />
         <B>0</B>
         <strB />
-        <Status>true</Status>
+        <Status>false</Status>
         <Type>HOLDING_REGISTER</Type>
         <dataType>Int16</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>ABE=</ValArr>
       </Register>
       <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
+        <UseMults>true</UseMults>
+        <Title>Напряжение</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>13</Adress>
-        <A>1</A>
-        <strA />
+        <A>0.1</A>
+        <strA>0,1</strA>
         <B>0</B>
-        <strB />
+        <strB>0</strB>
         <Status>true</Status>
         <Type>HOLDING_REGISTER</Type>
         <dataType>Int16</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>CRc=</ValArr>
       </Register>
       <Register>
         <UseMults>false</UseMults>
         <Title>Default Register Title</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>14</Adress>
         <A>1</A>
         <strA />
@@ -225,12 +238,13 @@
         <dataType>Int16</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>AAA=</ValArr>
       </Register>
       <Register>
         <UseMults>false</UseMults>
         <Title>Default Register Title</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>15</Adress>
         <A>1</A>
         <strA />
@@ -241,12 +255,13 @@
         <dataType>Int16</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>AAA=</ValArr>
       </Register>
       <Register>
         <UseMults>false</UseMults>
         <Title>Default Register Title</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>16</Adress>
         <A>1</A>
         <strA />
@@ -257,44 +272,47 @@
         <dataType>Int16</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>AAA=</ValArr>
       </Register>
       <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
+        <UseMults>true</UseMults>
+        <Title>Косинус</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>17</Adress>
-        <A>1</A>
-        <strA />
+        <A>0.001</A>
+        <strA>0,001</strA>
         <B>0</B>
-        <strB />
+        <strB>0</strB>
         <Status>true</Status>
         <Type>HOLDING_REGISTER</Type>
         <dataType>Int16</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>A+g=</ValArr>
       </Register>
       <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
+        <UseMults>true</UseMults>
+        <Title>Частота</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>18</Adress>
-        <A>1</A>
-        <strA />
+        <A>0.01</A>
+        <strA>0,01</strA>
         <B>0</B>
-        <strB />
+        <strB>0</strB>
         <Status>true</Status>
         <Type>HOLDING_REGISTER</Type>
         <dataType>Int16</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>E4k=</ValArr>
       </Register>
       <Register>
         <UseMults>false</UseMults>
         <Title>Default Register Title</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>19</Adress>
         <A>1</A>
         <strA />
@@ -305,12 +323,13 @@
         <dataType>Int16</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>AAA=</ValArr>
       </Register>
       <Register>
         <UseMults>false</UseMults>
         <Title>Default Register Title</Title>
         <devName>devName</devName>
-        <Offset>300000</Offset>
+        <Offset>300001</Offset>
         <Adress>20</Adress>
         <A>1</A>
         <strA />
@@ -321,664 +340,11 @@
         <dataType>Int16</dataType>
         <byteOrder>BIGENDIAN</byteOrder>
         <Represent>DEC</Represent>
+        <ValArr>AAA=</ValArr>
       </Register>
     </Registers>
     <deviceName>devName</deviceName>
     <deviceAdress>1</deviceAdress>
-    <Status>true</Status>
-  </Device>
-  <Device>
-    <Registers>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>1</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>2</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>3</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>4</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>5</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>6</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>7</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>8</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>9</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>10</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>11</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>12</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>13</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>14</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>15</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>16</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>17</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>18</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>19</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName2</devName>
-        <Offset>300000</Offset>
-        <Adress>20</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-    </Registers>
-    <deviceName>devName2</deviceName>
-    <deviceAdress>2</deviceAdress>
-    <Status>true</Status>
-  </Device>
-  <Device>
-    <Registers>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>1</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>2</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>3</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>4</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>5</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>6</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>7</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>8</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>9</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>10</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>11</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>12</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>13</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>14</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>15</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>16</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>17</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>18</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>19</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-      <Register>
-        <UseMults>false</UseMults>
-        <Title>Default Register Title</Title>
-        <devName>devName3</devName>
-        <Offset>300000</Offset>
-        <Adress>20</Adress>
-        <A>1</A>
-        <strA />
-        <B>0</B>
-        <strB />
-        <Status>true</Status>
-        <Type>HOLDING_REGISTER</Type>
-        <dataType>Int16</dataType>
-        <byteOrder>BIGENDIAN</byteOrder>
-        <Represent>DEC</Represent>
-      </Register>
-    </Registers>
-    <deviceName>devName3</deviceName>
-    <deviceAdress>3</deviceAdress>
     <Status>true</Status>
   </Device>
 </ArrayOfDevice>

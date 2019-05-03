@@ -44,10 +44,10 @@
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiLogShow = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmiNewMap = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiMapOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiMapSave = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiMapSaveAs = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiNewMap = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiExit = new System.Windows.Forms.ToolStripMenuItem();
             this.правкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -160,6 +160,7 @@
             this.dECToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.hEXToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bINToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.oCTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.iNTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.uINTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -177,6 +178,11 @@
             this.btnTableClear = new System.Windows.Forms.Button();
             this.btnConsoleClear = new System.Windows.Forms.Button();
             this.rtbConsole = new System.Windows.Forms.RichTextBox();
+            this.toolStrip3 = new System.Windows.Forms.ToolStrip();
+            this.tsBtnShowTable = new System.Windows.Forms.ToolStripButton();
+            this.tsBtnShowText = new System.Windows.Forms.ToolStripButton();
+            this.tsBtnShowPack = new System.Windows.Forms.ToolStripButton();
+            this.tsBtnListenPort = new System.Windows.Forms.ToolStripButton();
             this.toolStrip4 = new System.Windows.Forms.ToolStrip();
             this.tsBtnLogStart = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
@@ -185,15 +191,11 @@
             this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.tsLblLogRecordsNum = new System.Windows.Forms.ToolStripLabel();
-            this.toolStrip3 = new System.Windows.Forms.ToolStrip();
-            this.tsBtnShowTable = new System.Windows.Forms.ToolStripButton();
-            this.tsBtnShowText = new System.Windows.Forms.ToolStripButton();
-            this.tsBtnShowPack = new System.Windows.Forms.ToolStripButton();
-            this.tsBtnListenPort = new System.Windows.Forms.ToolStripButton();
             this.openLogDialog = new System.Windows.Forms.OpenFileDialog();
             this.openMapDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.PollTimer = new System.Windows.Forms.Timer(this.components);
+            this.PollDelayTimer = new System.Windows.Forms.Timer(this.components);
             this.deviceBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.mainFormBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.statusStrip1.SuspendLayout();
@@ -218,8 +220,8 @@
             this.splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTable)).BeginInit();
             this.dataGridViewContextMenu.SuspendLayout();
-            this.toolStrip4.SuspendLayout();
             this.toolStrip3.SuspendLayout();
+            this.toolStrip4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.deviceBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainFormBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -309,10 +311,10 @@
             this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiLogShow,
             this.toolStripSeparator1,
-            this.tsmiNewMap,
             this.tsmiMapOpen,
             this.tsmiMapSave,
             this.tsmiMapSaveAs,
+            this.tsmiNewMap,
             this.toolStripSeparator2,
             this.tsmiExit});
             this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
@@ -331,14 +333,6 @@
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(229, 6);
-            // 
-            // tsmiNewMap
-            // 
-            this.tsmiNewMap.Image = global::FreeModScan.Resource._new;
-            this.tsmiNewMap.Name = "tsmiNewMap";
-            this.tsmiNewMap.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.tsmiNewMap.Size = new System.Drawing.Size(232, 22);
-            this.tsmiNewMap.Text = "&Новая карта регистров";
             // 
             // tsmiMapOpen
             // 
@@ -367,6 +361,15 @@
             this.tsmiMapSaveAs.Size = new System.Drawing.Size(232, 22);
             this.tsmiMapSaveAs.Text = "Сохранить &как...";
             this.tsmiMapSaveAs.Click += new System.EventHandler(this.tsmiMapSaveAs_Click);
+            // 
+            // tsmiNewMap
+            // 
+            this.tsmiNewMap.Image = global::FreeModScan.Resource._new;
+            this.tsmiNewMap.Name = "tsmiNewMap";
+            this.tsmiNewMap.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.tsmiNewMap.Size = new System.Drawing.Size(232, 22);
+            this.tsmiNewMap.Text = "&Новая карта регистров";
+            this.tsmiNewMap.Click += new System.EventHandler(this.tsmiNewMap_Click);
             // 
             // toolStripSeparator2
             // 
@@ -397,6 +400,7 @@
             // 
             // tsmiCancel
             // 
+            this.tsmiCancel.Enabled = false;
             this.tsmiCancel.Name = "tsmiCancel";
             this.tsmiCancel.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
             this.tsmiCancel.Size = new System.Drawing.Size(174, 22);
@@ -404,6 +408,7 @@
             // 
             // tsmiRet
             // 
+            this.tsmiRet.Enabled = false;
             this.tsmiRet.Name = "tsmiRet";
             this.tsmiRet.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
             this.tsmiRet.Size = new System.Drawing.Size(174, 22);
@@ -416,6 +421,7 @@
             // 
             // tsmiCut
             // 
+            this.tsmiCut.Enabled = false;
             this.tsmiCut.Image = global::FreeModScan.Resource.cut;
             this.tsmiCut.Name = "tsmiCut";
             this.tsmiCut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
@@ -425,6 +431,7 @@
             // 
             // tsmiCopy
             // 
+            this.tsmiCopy.Enabled = false;
             this.tsmiCopy.Image = global::FreeModScan.Resource.copy;
             this.tsmiCopy.Name = "tsmiCopy";
             this.tsmiCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
@@ -434,6 +441,7 @@
             // 
             // tsmiIns
             // 
+            this.tsmiIns.Enabled = false;
             this.tsmiIns.Image = global::FreeModScan.Resource.insert;
             this.tsmiIns.Name = "tsmiIns";
             this.tsmiIns.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
@@ -469,6 +477,7 @@
             // 
             // tsMiText
             // 
+            this.tsMiText.Enabled = false;
             this.tsMiText.Image = global::FreeModScan.Resource.text_ab;
             this.tsMiText.Name = "tsMiText";
             this.tsMiText.Size = new System.Drawing.Size(213, 22);
@@ -476,12 +485,14 @@
             // 
             // tsMiShowPack
             // 
+            this.tsMiShowPack.Enabled = false;
             this.tsMiShowPack.Name = "tsMiShowPack";
             this.tsMiShowPack.Size = new System.Drawing.Size(213, 22);
             this.tsMiShowPack.Text = "П&росмотр пакетов";
             // 
             // tsMiListenPort
             // 
+            this.tsMiListenPort.Enabled = false;
             this.tsMiListenPort.Name = "tsMiListenPort";
             this.tsMiListenPort.Size = new System.Drawing.Size(213, 22);
             this.tsMiListenPort.Text = "Слушать &порт";
@@ -558,6 +569,7 @@
             // 
             // tsmiWidthReset
             // 
+            this.tsmiWidthReset.Enabled = false;
             this.tsmiWidthReset.Name = "tsmiWidthReset";
             this.tsmiWidthReset.Size = new System.Drawing.Size(213, 22);
             this.tsmiWidthReset.Text = "&Сбросить ширину столбцов";
@@ -578,12 +590,14 @@
             // 
             // tsMiRecordRegister
             // 
+            this.tsMiRecordRegister.Enabled = false;
             this.tsMiRecordRegister.Name = "tsMiRecordRegister";
             this.tsMiRecordRegister.Size = new System.Drawing.Size(201, 22);
             this.tsMiRecordRegister.Text = "&Записать регистр";
             // 
             // tsMiSendReq
             // 
+            this.tsMiSendReq.Enabled = false;
             this.tsMiSendReq.Name = "tsMiSendReq";
             this.tsMiSendReq.Size = new System.Drawing.Size(201, 22);
             this.tsMiSendReq.Text = "&Отправить запрос";
@@ -595,12 +609,14 @@
             // 
             // tsMiErrorsLogShow
             // 
+            this.tsMiErrorsLogShow.Enabled = false;
             this.tsMiErrorsLogShow.Name = "tsMiErrorsLogShow";
             this.tsMiErrorsLogShow.Size = new System.Drawing.Size(201, 22);
             this.tsMiErrorsLogShow.Text = "Просмотреть &лог ошибок";
             // 
             // tsMiLogClear
             // 
+            this.tsMiLogClear.Enabled = false;
             this.tsMiLogClear.Name = "tsMiLogClear";
             this.tsMiLogClear.Size = new System.Drawing.Size(201, 22);
             this.tsMiLogClear.Text = "Очи&стить лог ошибок";
@@ -667,9 +683,9 @@
             this.tsBtnBE,
             this.tsBtnMidLE,
             this.tsBtnMidBE});
-            this.toolStrip1.Location = new System.Drawing.Point(403, 25);
+            this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(329, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(412, 25);
             this.toolStrip1.TabIndex = 2;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -681,7 +697,7 @@
             this.tsBtnInt16.Name = "tsBtnInt16";
             this.tsBtnInt16.Size = new System.Drawing.Size(37, 22);
             this.tsBtnInt16.Text = "Int16";
-            this.tsBtnInt16.Click += new System.EventHandler(this.tsBtnWord_Click);
+            this.tsBtnInt16.Click += new System.EventHandler(this.tsBtnInt16_Click);
             // 
             // tsBtnInt32
             // 
@@ -691,7 +707,7 @@
             this.tsBtnInt32.Name = "tsBtnInt32";
             this.tsBtnInt32.Size = new System.Drawing.Size(37, 22);
             this.tsBtnInt32.Text = "Int32";
-            this.tsBtnInt32.Click += new System.EventHandler(this.tsBtnDWord_Click);
+            this.tsBtnInt32.Click += new System.EventHandler(this.tsBtnInt32_Click);
             // 
             // tsBtnInt64
             // 
@@ -701,7 +717,7 @@
             this.tsBtnInt64.Name = "tsBtnInt64";
             this.tsBtnInt64.Size = new System.Drawing.Size(37, 22);
             this.tsBtnInt64.Text = "Int64";
-            this.tsBtnInt64.Click += new System.EventHandler(this.tsBtnIEEE754_Click);
+            this.tsBtnInt64.Click += new System.EventHandler(this.tsBtnInt64_Click);
             // 
             // tsBtnFloatDt
             // 
@@ -823,19 +839,20 @@
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsBtnStartPoll,
             this.tsTbPollInterval});
-            this.toolStrip2.Location = new System.Drawing.Point(3, 0);
+            this.toolStrip2.Location = new System.Drawing.Point(325, 25);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(237, 25);
+            this.toolStrip2.Size = new System.Drawing.Size(222, 25);
             this.toolStrip2.TabIndex = 3;
             this.toolStrip2.Text = "toolStrip2";
             // 
             // tsBtnStartPoll
             // 
+            this.tsBtnStartPoll.AutoSize = false;
             this.tsBtnStartPoll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tsBtnStartPoll.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnStartPoll.Image")));
             this.tsBtnStartPoll.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsBtnStartPoll.Name = "tsBtnStartPoll";
-            this.tsBtnStartPoll.Size = new System.Drawing.Size(94, 22);
+            this.tsBtnStartPoll.Size = new System.Drawing.Size(110, 22);
             this.tsBtnStartPoll.Text = "Включить опрос";
             this.tsBtnStartPoll.Click += new System.EventHandler(this.tsBtnStartPoll_Click);
             // 
@@ -863,10 +880,10 @@
             // 
             // toolStripContainer1.TopToolStripPanel
             // 
-            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip2);
-            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip4);
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip3);
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip2);
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip4);
             // 
             // splitContainer1
             // 
@@ -903,7 +920,7 @@
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.cbConnectionList);
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Location = new System.Drawing.Point(3, 274);
+            this.groupBox2.Location = new System.Drawing.Point(3, 249);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(349, 131);
             this.groupBox2.TabIndex = 0;
@@ -1026,7 +1043,7 @@
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(349, 265);
+            this.groupBox1.Size = new System.Drawing.Size(349, 240);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Подключения";
@@ -1049,7 +1066,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(344, 240);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(344, 190);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // btnConnectionAdd
@@ -1106,7 +1123,7 @@
             treeNode1.Text = "Список подключений пуст";
             this.tvConnectionTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1});
-            this.tvConnectionTree.Size = new System.Drawing.Size(338, 205);
+            this.tvConnectionTree.Size = new System.Drawing.Size(338, 155);
             this.tvConnectionTree.TabIndex = 3;
             this.tvConnectionTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvConnectionTree_AfterSelect);
             this.tvConnectionTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvConnectionTree_NodeMouseClick);
@@ -1128,7 +1145,7 @@
             this.удалитьToolStripMenuItem,
             this.удалитьВсеПодключенияToolStripMenuItem});
             this.cMSConnTree.Name = "cMSConnTree";
-            this.cMSConnTree.Size = new System.Drawing.Size(212, 242);
+            this.cMSConnTree.Size = new System.Drawing.Size(212, 264);
             // 
             // добавитьToolStripMenuItem
             // 
@@ -1223,7 +1240,7 @@
             this.groupBox3.Controls.Add(this.splitContainer2);
             this.groupBox3.Location = new System.Drawing.Point(0, 3);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(373, 405);
+            this.groupBox3.Size = new System.Drawing.Size(373, 380);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Регистры";
@@ -1247,8 +1264,8 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.btnConsoleClear);
             this.splitContainer2.Panel2.Controls.Add(this.rtbConsole);
-            this.splitContainer2.Size = new System.Drawing.Size(367, 386);
-            this.splitContainer2.SplitterDistance = 250;
+            this.splitContainer2.Size = new System.Drawing.Size(367, 361);
+            this.splitContainer2.SplitterDistance = 225;
             this.splitContainer2.TabIndex = 1;
             // 
             // dgvTable
@@ -1274,7 +1291,7 @@
             this.dgvTable.ContextMenuStrip = this.dataGridViewContextMenu;
             this.dgvTable.Location = new System.Drawing.Point(3, 35);
             this.dgvTable.Name = "dgvTable";
-            this.dgvTable.Size = new System.Drawing.Size(361, 212);
+            this.dgvTable.Size = new System.Drawing.Size(361, 162);
             this.dgvTable.TabIndex = 2;
             this.dgvTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellClick);
             this.dgvTable.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellDoubleClick);
@@ -1418,8 +1435,8 @@
             this.toolStripMenuItem7.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.dECToolStripMenuItem,
             this.hEXToolStripMenuItem,
-            this.bINToolStripMenuItem});
-            this.toolStripMenuItem7.Enabled = false;
+            this.bINToolStripMenuItem,
+            this.oCTToolStripMenuItem});
             this.toolStripMenuItem7.Name = "toolStripMenuItem7";
             this.toolStripMenuItem7.Size = new System.Drawing.Size(160, 22);
             this.toolStripMenuItem7.Text = "Представление";
@@ -1427,20 +1444,30 @@
             // dECToolStripMenuItem
             // 
             this.dECToolStripMenuItem.Name = "dECToolStripMenuItem";
-            this.dECToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
+            this.dECToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
             this.dECToolStripMenuItem.Text = "DEC";
+            this.dECToolStripMenuItem.Click += new System.EventHandler(this.tsBtnDec_Click);
             // 
             // hEXToolStripMenuItem
             // 
             this.hEXToolStripMenuItem.Name = "hEXToolStripMenuItem";
-            this.hEXToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
+            this.hEXToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
             this.hEXToolStripMenuItem.Text = "HEX";
+            this.hEXToolStripMenuItem.Click += new System.EventHandler(this.tsBtnHex_Click);
             // 
             // bINToolStripMenuItem
             // 
             this.bINToolStripMenuItem.Name = "bINToolStripMenuItem";
-            this.bINToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
+            this.bINToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
             this.bINToolStripMenuItem.Text = "BIN";
+            this.bINToolStripMenuItem.Click += new System.EventHandler(this.tsBtnBin_Click);
+            // 
+            // oCTToolStripMenuItem
+            // 
+            this.oCTToolStripMenuItem.Name = "oCTToolStripMenuItem";
+            this.oCTToolStripMenuItem.Size = new System.Drawing.Size(95, 22);
+            this.oCTToolStripMenuItem.Text = "OCT";
+            this.oCTToolStripMenuItem.Click += new System.EventHandler(this.tsBtnOct_Click);
             // 
             // toolStripMenuItem3
             // 
@@ -1449,7 +1476,6 @@
             this.uINTToolStripMenuItem,
             this.dOUBLEToolStripMenuItem,
             this.lONGToolStripMenuItem});
-            this.toolStripMenuItem3.Enabled = false;
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
             this.toolStripMenuItem3.Size = new System.Drawing.Size(160, 22);
             this.toolStripMenuItem3.Text = "Тип данных";
@@ -1457,26 +1483,30 @@
             // iNTToolStripMenuItem
             // 
             this.iNTToolStripMenuItem.Name = "iNTToolStripMenuItem";
-            this.iNTToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
-            this.iNTToolStripMenuItem.Text = "INT";
+            this.iNTToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
+            this.iNTToolStripMenuItem.Text = "INT16";
+            this.iNTToolStripMenuItem.Click += new System.EventHandler(this.tsBtnInt16_Click);
             // 
             // uINTToolStripMenuItem
             // 
             this.uINTToolStripMenuItem.Name = "uINTToolStripMenuItem";
-            this.uINTToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
-            this.uINTToolStripMenuItem.Text = "UINT";
+            this.uINTToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
+            this.uINTToolStripMenuItem.Text = "INT32";
+            this.uINTToolStripMenuItem.Click += new System.EventHandler(this.tsBtnInt32_Click);
             // 
             // dOUBLEToolStripMenuItem
             // 
             this.dOUBLEToolStripMenuItem.Name = "dOUBLEToolStripMenuItem";
-            this.dOUBLEToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
-            this.dOUBLEToolStripMenuItem.Text = "DOUBLE";
+            this.dOUBLEToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
+            this.dOUBLEToolStripMenuItem.Text = "INT64";
+            this.dOUBLEToolStripMenuItem.Click += new System.EventHandler(this.tsBtnInt64_Click);
             // 
             // lONGToolStripMenuItem
             // 
             this.lONGToolStripMenuItem.Name = "lONGToolStripMenuItem";
-            this.lONGToolStripMenuItem.Size = new System.Drawing.Size(113, 22);
-            this.lONGToolStripMenuItem.Text = "LONG";
+            this.lONGToolStripMenuItem.Size = new System.Drawing.Size(106, 22);
+            this.lONGToolStripMenuItem.Text = "FLOAT";
+            this.lONGToolStripMenuItem.Click += new System.EventHandler(this.tsBtnFloat_Click);
             // 
             // toolStripMenuItem11
             // 
@@ -1581,6 +1611,56 @@
             this.rtbConsole.TabIndex = 4;
             this.rtbConsole.Text = "";
             // 
+            // toolStrip3
+            // 
+            this.toolStrip3.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsBtnShowTable,
+            this.tsBtnShowText,
+            this.tsBtnShowPack,
+            this.tsBtnListenPort});
+            this.toolStrip3.Location = new System.Drawing.Point(3, 25);
+            this.toolStrip3.Name = "toolStrip3";
+            this.toolStrip3.Size = new System.Drawing.Size(322, 25);
+            this.toolStrip3.TabIndex = 4;
+            // 
+            // tsBtnShowTable
+            // 
+            this.tsBtnShowTable.Image = global::FreeModScan.Resource.table;
+            this.tsBtnShowTable.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsBtnShowTable.Name = "tsBtnShowTable";
+            this.tsBtnShowTable.Size = new System.Drawing.Size(69, 22);
+            this.tsBtnShowTable.Text = "Таблица";
+            // 
+            // tsBtnShowText
+            // 
+            this.tsBtnShowText.Enabled = false;
+            this.tsBtnShowText.Image = global::FreeModScan.Resource.text_ab;
+            this.tsBtnShowText.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsBtnShowText.Name = "tsBtnShowText";
+            this.tsBtnShowText.Size = new System.Drawing.Size(56, 22);
+            this.tsBtnShowText.Text = "Текст";
+            // 
+            // tsBtnShowPack
+            // 
+            this.tsBtnShowPack.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsBtnShowPack.Enabled = false;
+            this.tsBtnShowPack.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnShowPack.Image")));
+            this.tsBtnShowPack.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsBtnShowPack.Name = "tsBtnShowPack";
+            this.tsBtnShowPack.Size = new System.Drawing.Size(104, 22);
+            this.tsBtnShowPack.Text = "Просмотр пакетов";
+            // 
+            // tsBtnListenPort
+            // 
+            this.tsBtnListenPort.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.tsBtnListenPort.Enabled = false;
+            this.tsBtnListenPort.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnListenPort.Image")));
+            this.tsBtnListenPort.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsBtnListenPort.Name = "tsBtnListenPort";
+            this.tsBtnListenPort.Size = new System.Drawing.Size(83, 22);
+            this.tsBtnListenPort.Text = "Слушать порт";
+            // 
             // toolStrip4
             // 
             this.toolStrip4.Dock = System.Windows.Forms.DockStyle.None;
@@ -1592,7 +1672,7 @@
             this.toolStripSeparator11,
             this.toolStripLabel1,
             this.tsLblLogRecordsNum});
-            this.toolStrip4.Location = new System.Drawing.Point(3, 25);
+            this.toolStrip4.Location = new System.Drawing.Point(3, 50);
             this.toolStrip4.Name = "toolStrip4";
             this.toolStrip4.Size = new System.Drawing.Size(400, 25);
             this.toolStrip4.TabIndex = 5;
@@ -1646,53 +1726,6 @@
             this.tsLblLogRecordsNum.Size = new System.Drawing.Size(43, 22);
             this.tsLblLogRecordsNum.Text = "500000";
             // 
-            // toolStrip3
-            // 
-            this.toolStrip3.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsBtnShowTable,
-            this.tsBtnShowText,
-            this.tsBtnShowPack,
-            this.tsBtnListenPort});
-            this.toolStrip3.Location = new System.Drawing.Point(3, 50);
-            this.toolStrip3.Name = "toolStrip3";
-            this.toolStrip3.Size = new System.Drawing.Size(322, 25);
-            this.toolStrip3.TabIndex = 4;
-            // 
-            // tsBtnShowTable
-            // 
-            this.tsBtnShowTable.Image = global::FreeModScan.Resource.table;
-            this.tsBtnShowTable.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsBtnShowTable.Name = "tsBtnShowTable";
-            this.tsBtnShowTable.Size = new System.Drawing.Size(69, 22);
-            this.tsBtnShowTable.Text = "Таблица";
-            // 
-            // tsBtnShowText
-            // 
-            this.tsBtnShowText.Image = global::FreeModScan.Resource.text_ab;
-            this.tsBtnShowText.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsBtnShowText.Name = "tsBtnShowText";
-            this.tsBtnShowText.Size = new System.Drawing.Size(56, 22);
-            this.tsBtnShowText.Text = "Текст";
-            // 
-            // tsBtnShowPack
-            // 
-            this.tsBtnShowPack.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsBtnShowPack.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnShowPack.Image")));
-            this.tsBtnShowPack.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsBtnShowPack.Name = "tsBtnShowPack";
-            this.tsBtnShowPack.Size = new System.Drawing.Size(104, 22);
-            this.tsBtnShowPack.Text = "Просмотр пакетов";
-            // 
-            // tsBtnListenPort
-            // 
-            this.tsBtnListenPort.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsBtnListenPort.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnListenPort.Image")));
-            this.tsBtnListenPort.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsBtnListenPort.Name = "tsBtnListenPort";
-            this.tsBtnListenPort.Size = new System.Drawing.Size(83, 22);
-            this.tsBtnListenPort.Text = "Слушать порт";
-            // 
             // openLogDialog
             // 
             this.openLogDialog.FileName = "FreeModscanLog";
@@ -1712,6 +1745,10 @@
             // 
             this.PollTimer.Interval = 500;
             this.PollTimer.Tick += new System.EventHandler(this.PollTimer_Tick);
+            // 
+            // PollDelayTimer
+            // 
+            this.PollDelayTimer.Interval = 1000;
             // 
             // deviceBindingSource
             // 
@@ -1766,10 +1803,10 @@
             this.splitContainer2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvTable)).EndInit();
             this.dataGridViewContextMenu.ResumeLayout(false);
-            this.toolStrip4.ResumeLayout(false);
-            this.toolStrip4.PerformLayout();
             this.toolStrip3.ResumeLayout(false);
             this.toolStrip3.PerformLayout();
+            this.toolStrip4.ResumeLayout(false);
+            this.toolStrip4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.deviceBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainFormBindingSource)).EndInit();
             this.ResumeLayout(false);
@@ -1944,6 +1981,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn MulBCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn RepresentCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ValCol;
+        private System.Windows.Forms.ToolStripMenuItem oCTToolStripMenuItem;
+        public System.Windows.Forms.Timer PollDelayTimer;
     }
 }
 

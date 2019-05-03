@@ -49,6 +49,9 @@ namespace FreeModScan
         int totalRCV;//общая длина ответа, которая должна равнятся buffSize при приёме в несколько этапов
 
         public Stopwatch sw;
+
+        public bool dataProcessed=false;
+
         public Connection() {
             //для сериализации (при сохранении в XML) необходим конструктор без параметров 
         }
@@ -128,7 +131,14 @@ namespace FreeModScan
         private void spDataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             byte[] buff = new byte[buffSize];
+            //byte[] buff = new byte[Port.BytesToRead];
             //Console.Out.WriteLine(DateTime.Now + " << [" + Port.BytesToRead + "]");
+            //Port.Read(buff, 0, Port.BytesToRead);
+            //Console.Out.WriteLine(DateTime.Now + " << " + BitConverter.ToString(buff));
+
+
+            //byte[] resp = buff.Take(buffSize - 2).ToArray();//без 2-х последних байтов ответа (CRC16)
+            //byte[] crc = buff.Skip(buffSize - 2).Take(2).ToArray();//2 последних байта ответа (CRC16)
             //TODO предусмотреть прием ответа частями
             if (Port.BytesToRead >= buffSize)
             {
@@ -141,7 +151,7 @@ namespace FreeModScan
                 ushort crcRCV = BitConverter.ToUInt16(crc, 0);
                 ushort _crc16 = MainForm.CRC.ComputeChecksum(resp);
                 Console.Out.WriteLine(DateTime.Now + " << " + crcRCV + " / " + _crc16);
-                
+
                 if (crcRCV != _crc16)
                     return;
                 if (resp[2] != 0x28)
@@ -191,6 +201,7 @@ namespace FreeModScan
                 QueriesNumRCV++;
 
                 totalRCV = 0;
+                dataProcessed = true;
             }
         }
 
@@ -206,15 +217,19 @@ namespace FreeModScan
                 if (this.status)
                 {
                     sw.Restart();
-                    this.Port.Write(tmp, 0, 8);
+
                     buffSize = BitConverter.ToUInt16(tmp.Skip(4).Take(2).Reverse().ToArray(), 0);//BIG ENDIAN
                     buffSize = buffSize * 2 + 5;
-                    //Console.Out.WriteLine(DateTime.Now + " >> " + buffSize.ToString());
+                    Console.Out.WriteLine(DateTime.Now + " >> " + buffSize.ToString());
+                    this.Port.Write(tmp, 0, 8);
+                    dataProcessed = false;
                     QueriesNumSND++;
                     Console.Out.WriteLine(DateTime.Now + " >> [" + BitConverter.ToString(tmp) + "]");
-                    MainForm.console.Add(DateTime.Now + " >> [" + BitConverter.ToString(tmp) + "] \n");
+                    //MainForm.console.Add(DateTime.Now + " >> [" + BitConverter.ToString(tmp) + "] \n");
+                    //ожидаем ответа или окончания времени его ожидания
+                    //while ((!dataProcessed)) { }
                 }
-                spDataReceived();
+                //spDataReceived();
             }
             //requests.Clear();//или очищать или формировать запросы один раз и перегенерировать их при необходимости
         }
@@ -255,7 +270,7 @@ namespace FreeModScan
                     {
                         r.Status = true;
                         int bytesNum;
-                        switch (r.dataType)
+                        switch (r.dataType)//TODO см метод в register
                         {
                             case Register.DataType.Int16:
                             default:
@@ -311,48 +326,33 @@ namespace FreeModScan
             foreach (Register.RegType tmp in Enum.GetValues(typeof(Register.RegType)))
             {
                 //Console.Out.WriteLine(tmp);
-                var tmpColl = Devices[ID].Registers.Where(T => T.Type == tmp);
+                var tmpColl = Devices[ID].Registers.Where(T => T.Type == tmp);//TODO реализовать опрос регистров других типов
 
-                int counter = 0;
+                uint counter = 0;
                 uint minAddr = 999999;
                 uint maxAddr = 0;
-                for (int j = 0; j < tmpColl.Count(); j++)
+                int numRegs = tmpColl.Count();
+                //int sh = 0;
+                for (int j = 0; j < numRegs; j++)
                 {
-                    if (counter == 0)
+                    uint regSize = tmpColl.ElementAt(j).RegSize();
+                    long adr = tmpColl.ElementAt(j).Adress;
+                    long delta = adr - maxAddr;
+                    if (Math.Abs(delta) == 1)
                     {
-                        minAddr = (uint)tmpColl.ElementAt(j).Adress;
-                        maxAddr = (uint)tmpColl.ElementAt(j).Adress;
-                        counter++;
+                        if (adr < minAddr)
+                            minAddr = (uint)(adr-1);
+                        maxAddr += regSize;
+                        counter += regSize;
                     }
                     else
                     {
-                        long diff = (tmpColl.ElementAt(j).FullAdress - tmpColl.ElementAt(j - 1).FullAdress);
-                        if (Math.Abs(diff) == 1)
+                        if ((delta > 1) && (counter >= 1))
                         {
-                            if (tmpColl.ElementAt(j).Adress < minAddr)
-                                minAddr = (uint)tmpColl.ElementAt(j).Adress;
-                            if (tmpColl.ElementAt(j).Adress > maxAddr)
-                                maxAddr = (uint)tmpColl.ElementAt(j).Adress;
-                            counter++;
-                        }
-                        else
-                        {
-                            if (counter > 1)
-                            {
-                                CreateRequest(Devices[ID].deviceAdress, (byte)tmp, counter, minAddr);//для группы регистров с неприрывным диапазоном адресов
-                                //CreateRequest(Devices[ID].deviceAdress, (byte)tmp, 1, (uint)tmpColl.ElementAt(j).Adress);//индивидуальный запрос для регистра вне группы
-                                //counter = 0;
-                                counter = 1;
-                                minAddr = (uint)tmpColl.ElementAt(j).Adress;
-                                maxAddr = (uint)tmpColl.ElementAt(j).Adress;
-                            }
-                            else
-                            {
-                                CreateRequest(Devices[ID].deviceAdress, (byte)tmp, 1, (uint)tmpColl.ElementAt(j - 1).Adress);//индивидуальный запрос для регистра вне группы
-                                counter = 1;
-                                minAddr = (uint)tmpColl.ElementAt(j).Adress;
-                                maxAddr = (uint)tmpColl.ElementAt(j).Adress;
-                            }
+                            CreateRequest(Devices[ID].deviceAdress, (byte)tmp, counter, minAddr); //создаём запрос для группы регистров с неприрывным диапазоном адресов
+                            minAddr = (uint)(adr - 1);
+                            maxAddr = minAddr+regSize;
+                            counter = regSize;
                         }
                     }
                 }
@@ -363,7 +363,19 @@ namespace FreeModScan
             }
         }
 
-        private void CreateRequest(byte devAdr, byte command, int counter, uint minAddr)
+        public void ClearRequests()
+        {
+            this.requests.Clear();
+        }
+
+        public void UpdateRequests()
+        {
+            ClearRequests();
+            for (int i = 0; i < Devices.Count(); i++)
+                QueryGen(i);
+        }
+        
+        private void CreateRequest(byte devAdr, byte command, uint counter, uint minAddr)
         {
             if (counter > 0)
             {

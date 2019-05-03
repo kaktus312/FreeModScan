@@ -30,9 +30,9 @@ namespace FreeModScan
         {
             Int16 = 0,
             Int32 = 1,
-            Int64 = 3,
-            Float = 4,
-            Double = 5
+            Int64 = 2,
+            Float = 3,
+            Double = 4
         }
 
         public enum ByteOrder : byte
@@ -59,11 +59,11 @@ namespace FreeModScan
         public string devName { get; set; }
 
         uint _offset;
-        public uint Offset { get { return _offset; } set { _offset = value * 100000; } }
+        public uint Offset { get { return _offset; } set { _offset = value * 100000+1; } }
 
         long _adress = 0;
         public long Adress { get { return _adress; } set { _adress = value; } }
-        public long FullAdress { get { return Offset + Adress; } }
+        public long FullAdress { get { return Offset + Adress-1; } }
 
         float _a = 1;
         public float A { get { return _a; } set { _a = value; } }
@@ -285,6 +285,27 @@ namespace FreeModScan
         {
             byteOrder = bOrder;
         }
+
+        public uint RegSize()
+        {
+            uint regSize = 1;
+            switch (this.dataType)
+            {
+                case Register.DataType.Int16:
+                default:
+                    regSize = 2 / 2;
+                    break;
+                case Register.DataType.Int32:
+                case Register.DataType.Float:
+                    regSize = 4 / 2;
+                    break;
+                case Register.DataType.Int64:
+                case Register.DataType.Double:
+                    regSize = 8 / 2;
+                    break;
+            }
+            return regSize;
+        } 
 
     }
 }
