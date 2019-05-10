@@ -35,11 +35,12 @@ namespace FreeModScan
 
             cbConnectionList.DataSource = MainForm._conns;
             cbConnectionList.DisplayMember = "ConnName";
+            cbByteOrder.SelectedIndex = (int)Register.ByteOrder.BIGENDIAN;
         }
 
         private void cbConnectionList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            cbDeviceList.DataSource = MainForm._conns[cbConnectionList.SelectedIndex].Devices;
+            cbDeviceList.DataSource = MainForm._conns[MainForm.currConn].Devices;
             cbDeviceList.DisplayMember = "deviceName";
             cbDeviceList.ValueMember = "deviceName";
             cbDeviceList.SelectedIndex = 0;
@@ -48,11 +49,12 @@ namespace FreeModScan
         private void btnAdd_Click(object sender, EventArgs e)
         {
             //Connection selectedConn = _conns[cbConnectionList.SelectedIndex];
-            Connection selectedConn = MainForm._conns[cbConnectionList.SelectedIndex];
+            Connection selectedConn = MainForm._conns[MainForm.currConn];
 
-            Device selectedDev = selectedConn.Devices[cbDeviceList.SelectedIndex];
+            Device selectedDev = selectedConn.Devices[MainForm.currDevice];
             MessageBox.Show(((Register.RegType)cbRegisterType.SelectedIndex+1).ToString());
-            MainForm.addRegisters(selectedDev, tbRegisterList.Text, cbRegisterType.SelectedIndex+1, cbByteOrder.SelectedIndex, cbDataType.SelectedIndex);
+            selectedDev.addRegisters(tbRegisterList.Text, cbRegisterType.SelectedIndex + 1, cbDataType.SelectedIndex, cbByteOrder.SelectedIndex);
+            //MainForm.addRegisters(selectedDev, tbRegisterList.Text, cbRegisterType.SelectedIndex+1, cbDataType.SelectedIndex, cbByteOrder.SelectedIndex);
         }
 
     }

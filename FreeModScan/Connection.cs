@@ -44,7 +44,7 @@ namespace FreeModScan
 
         public BindingList<Device> Devices = new BindingList<Device>();
 
-        List<byte[]> requests = new List<byte[]>();
+        Queue<byte[]> requests = new Queue<byte[]>();
         int buffSize = 0;//требуемый размер буфера для полного ответа на текущий запрос
         int totalRCV;//общая длина ответа, которая должна равнятся buffSize при приёме в несколько этапов
 
@@ -52,9 +52,22 @@ namespace FreeModScan
 
         public bool dataProcessed=false;
 
+        public delegate void ConnectionEventHandler(Connection c);
+        public event ConnectionEventHandler Create;
+        public event ConnectionEventHandler StateChanged;
+        public event ConnectionEventHandler Delete;
+
+        public delegate void ConnectionErrorHandler(Exception err);
+        public event ConnectionErrorHandler Error;
+
+
+
+
         public Connection() {
             //для сериализации (при сохранении в XML) необходим конструктор без параметров 
         }
+
+
         public Connection(int ConnType, string ConName, SerialPort sp, uint readTout, uint writeTout)
         {
             this.ConnType = ConnType;
@@ -69,11 +82,20 @@ namespace FreeModScan
 
         private void Devices_ListChanged(object sender, ListChangedEventArgs e)
         {
+            Device dev = null;
+            int devsNum = Devices.Count();//поличество подключений после изменения
+
+            if (e.NewIndex != devsNum)
+                dev = Devices[e.NewIndex];//объект с которым производились манипуляции
+           
             switch (e.ListChangedType)
             {
                 case ListChangedType.ItemAdded:
                     //Add item here.
                     MessageBox.Show("Device Added");
+
+                    //запуск события Создания для других подписчиков
+                    dev.OnCreate();
                     break;
 
                 case ListChangedType.ItemChanged:
@@ -97,6 +119,24 @@ namespace FreeModScan
             }
         }
 
+        //Методы On.....() - для запуска события из внешних классов
+        public void OnCreate() {
+            if (Create != null) Create(this);
+        }
+        public void OnStateChanged()
+        {
+            if (StateChanged != null) StateChanged(this);
+        }
+        public void OnDelete()
+        {
+            if (Delete != null) Delete(this);
+        }
+
+        public void OnError(Exception e)
+        {
+            if (Error != null) Error(e);
+        }
+
         public void Open()
         {
             try
@@ -105,25 +145,29 @@ namespace FreeModScan
                 if (_port.IsOpen)
                 {
                     _status = true;
-                    //MessageBox.Show("Соединение установлено");
-                    MainForm.console.Add("** " + DateTime.Now.ToString() + " - " + ConnName + " : Соединение по " + Port.PortName + " установлено. **" + "\n");
+                    OnStateChanged();
                 }
             }
             catch (Exception err)
             {
-                //MessageBox.Show(err.Message);
-                MainForm.console.Add("** " + DateTime.Now.ToString() + " - " + ConnName + "-" + Port.PortName + " : " + err.Message + " **" + "\n");
+                OnError(err);
             }
         }
 
         public void Close()
         {
-            _port.Close();
-            if (!_port.IsOpen)
+            try
             {
-                _status = false;
-                //MessageBox.Show("Соединение отключено");
-                MainForm.console.Add("** " + DateTime.Now.ToString() + " - " + ConnName + " : Соединение по " + Port.PortName + " отключено. **" + "\n");
+                _port.Close();
+                if (!_port.IsOpen)
+                {
+                    _status = false;
+                    OnStateChanged();
+                }
+            }
+            catch (Exception err)
+            {
+                OnError(err);
             }
 
         }
@@ -145,7 +189,7 @@ namespace FreeModScan
                 //ответ полный, проверяем контрольную сумму и анализируем ответ
                 Port.Read(buff, 0, buffSize);
                 Console.Out.WriteLine(DateTime.Now + " << " + BitConverter.ToString(buff));
-                MainForm.console.Add(DateTime.Now + " >> [" + BitConverter.ToString(buff) + "] \n");
+                //MainForm.console.Add(DateTime.Now + " >> [" + BitConverter.ToString(buff) + "] \n");
                 byte[] resp = buff.Take(buffSize - 2).ToArray();//без 2-х последних байтов ответа (CRC16)
                 byte[] crc = buff.Skip(buffSize - 2).Take(2).ToArray();//2 последних байта ответа (CRC16)
                 ushort crcRCV = BitConverter.ToUInt16(crc, 0);
@@ -154,8 +198,6 @@ namespace FreeModScan
 
                 if (crcRCV != _crc16)
                     return;
-                if (resp[2] != 0x28)
-                    return;//TODO сделать анализ ошибок modbus
                 sw.Stop();
                 Register.RegType rT = (Register.RegType)BitConverter.ToInt16(resp, 1);
                 var tmpColl = Devices[MainForm.currDevice].Registers.Where(r => r.Type == rT);
@@ -171,23 +213,7 @@ namespace FreeModScan
                     else
                     {
                         r.Status = true;
-                        int bytesNum;
-                        switch (r.dataType)
-                        {
-                            case Register.DataType.Int16:
-                            default:
-                                bytesNum = 2;
-                                break;
-                            case Register.DataType.Int32:
-                            case Register.DataType.Float:
-                                bytesNum = 4;
-                                break;
-                            case Register.DataType.Int64:
-                            case Register.DataType.Double:
-                                bytesNum = 8;
-                                break;
-                        }
-
+                        int bytesNum = Convert.ToInt32(r.ByteNum());
                         skip = bytesNum / 2 - 1;//сколько регистров необходимо пропустить для случая, если значение занимает несколько регистров
                         byte[] tmp = buff.Skip(index).Take(bytesNum).ToArray();
 
@@ -203,35 +229,7 @@ namespace FreeModScan
                 totalRCV = 0;
                 dataProcessed = true;
             }
-        }
-
-
-        public void Poll(int ID)
-        {
-            if (requests.Count <= 0)
-                QueryGen(ID);
-
-            foreach (byte[] tmp in requests)
-            {
-                //Console.Out.WriteLine(DateTime.Now + " >> ");
-                if (this.status)
-                {
-                    sw.Restart();
-
-                    buffSize = BitConverter.ToUInt16(tmp.Skip(4).Take(2).Reverse().ToArray(), 0);//BIG ENDIAN
-                    buffSize = buffSize * 2 + 5;
-                    Console.Out.WriteLine(DateTime.Now + " >> " + buffSize.ToString());
-                    this.Port.Write(tmp, 0, 8);
-                    dataProcessed = false;
-                    QueriesNumSND++;
-                    Console.Out.WriteLine(DateTime.Now + " >> [" + BitConverter.ToString(tmp) + "]");
-                    //MainForm.console.Add(DateTime.Now + " >> [" + BitConverter.ToString(tmp) + "] \n");
-                    //ожидаем ответа или окончания времени его ожидания
-                    //while ((!dataProcessed)) { }
-                }
-                //spDataReceived();
-            }
-            //requests.Clear();//или очищать или формировать запросы один раз и перегенерировать их при необходимости
+            //OnDataReady();
         }
 
         private void spDataReceived()
@@ -269,23 +267,7 @@ namespace FreeModScan
                     else
                     {
                         r.Status = true;
-                        int bytesNum;
-                        switch (r.dataType)//TODO см метод в register
-                        {
-                            case Register.DataType.Int16:
-                            default:
-                                bytesNum = 2;
-                                break;
-                            case Register.DataType.Int32:
-                            case Register.DataType.Float:
-                                bytesNum = 4;
-                                break;
-                            case Register.DataType.Int64:
-                            case Register.DataType.Double:
-                                bytesNum = 8;
-                                break;
-                        }
-
+                        int bytesNum = Convert.ToInt32(r.ByteNum());
                         skip = bytesNum / 2 - 1;//сколько регистров необходимо пропустить для случая, если значение занимает несколько регистров
 
                         byte[] tmp = buff.Skip(index).Take(bytesNum).ToArray();
@@ -301,6 +283,62 @@ namespace FreeModScan
 
                 totalRCV = 0;
             }
+        }
+
+        public void Poll(int ID)
+        {
+            if (requests.Count <= 0)
+                QueryGen(ID);
+
+            foreach (byte[] tmp in requests)
+            {
+                //Console.Out.WriteLine(DateTime.Now + " >> ");
+                if (this.status)
+                {
+                    sw.Restart();
+
+                    buffSize = BitConverter.ToUInt16(tmp.Skip(4).Take(2).Reverse().ToArray(), 0);//BIG ENDIAN
+                    buffSize = buffSize * 2 + 5;
+                    Console.Out.WriteLine(DateTime.Now + " >> " + buffSize.ToString());
+                    this.Port.Write(tmp, 0, 8);
+                    dataProcessed = false;
+                    QueriesNumSND++;
+                    Console.Out.WriteLine(DateTime.Now + " >> [" + BitConverter.ToString(tmp) + "]");
+                    //MainForm.console.Add(DateTime.Now + " >> [" + BitConverter.ToString(tmp) + "] \n");
+                    //ожидаем ответа или окончания времени его ожидания
+                    //while ((!dataProcessed)) { }
+                }
+                spDataReceived();
+            }
+            //requests.Clear();//или очищать или формировать запросы один раз и перегенерировать их при необходимости
+        }
+
+        public void Poll()
+        {
+            //if (requests.Count <= 0)
+            //    QueryGen(ID);
+            
+            //foreach (byte[] tmp in requests)
+            //{
+                //Console.Out.WriteLine(DateTime.Now + " >> ");
+                if (this.status)
+                {
+                    byte[] tmp = requests.Peek();
+                    sw.Restart();
+
+                    buffSize = BitConverter.ToUInt16(tmp.Skip(4).Take(2).Reverse().ToArray(), 0);//BIG ENDIAN
+                    buffSize = buffSize * 2 + 5;
+                    Console.Out.WriteLine(DateTime.Now + " >> " + buffSize.ToString());
+                    this.Port.Write(tmp, 0, 8);
+                    dataProcessed = false;
+                    QueriesNumSND++;
+                    Console.Out.WriteLine(DateTime.Now + " >> [" + BitConverter.ToString(tmp) + "]");
+                    MainForm.console.Add(DateTime.Now + " >> [" + BitConverter.ToString(tmp) + "] \n");
+                }
+                
+            //}
+            //spDataReceived();
+            //requests.Clear();//или очищать или формировать запросы один раз и перегенерировать их при необходимости
         }
 
         private void QueryGen(int ID)
@@ -389,7 +427,7 @@ namespace FreeModScan
                 //подсчитываем CRC            
                 ushort _crc16 = MainForm.CRC.ComputeChecksum(_dataBuff);
                 byte[] _crcBUFF = BitConverter.GetBytes(_crc16);
-                requests.Add(_dataBuff.Concat(_crcBUFF).ToArray());
+                requests.Enqueue(_dataBuff.Concat(_crcBUFF).ToArray());
             }
         }
 
@@ -410,6 +448,6 @@ namespace FreeModScan
                 }
             }
             return crc;
-        }
+        }   
     }
 }

@@ -35,10 +35,12 @@ namespace FreeModScan
         {
             if (dev == null){
                 dev = new Device((byte)nUpDnDevicAdress.Value, tbDeviceName.Text);
+                dev.Create += new Device.DeviceEventHandler(((MainForm)this.Owner).deviceAdded);
                 conn.Devices.Add(dev);
             } 
             dev.deviceAdress = (byte)nUpDnDevicAdress.Value;
             dev.deviceName = tbDeviceName.Text;
         }
+
     }
 }

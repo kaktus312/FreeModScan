@@ -122,19 +122,18 @@
             this.btnConnect = new System.Windows.Forms.Button();
             this.tvConnectionTree = new System.Windows.Forms.TreeView();
             this.cMSConnTree = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.добавитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.добавитьУстройствоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.добавитьЯчейкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiAddConnection = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiAddDevice = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiAddRegisters = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator12 = new System.Windows.Forms.ToolStripSeparator();
-            this.обновитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.показатьЯчейкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiUpdate = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
-            this.подключитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.отключитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiConnect = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDisconnect = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
-            this.изменитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.удалитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.удалитьВсеПодключенияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiEdit = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDel = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDelAll = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.dgvTable = new System.Windows.Forms.DataGridView();
@@ -194,8 +193,8 @@
             this.openLogDialog = new System.Windows.Forms.OpenFileDialog();
             this.openMapDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.PollTimer = new System.Windows.Forms.Timer(this.components);
             this.PollDelayTimer = new System.Windows.Forms.Timer(this.components);
+            this.PollTimer = new System.Windows.Forms.Timer(this.components);
             this.deviceBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.mainFormBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.statusStrip1.SuspendLayout();
@@ -839,7 +838,7 @@
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsBtnStartPoll,
             this.tsTbPollInterval});
-            this.toolStrip2.Location = new System.Drawing.Point(325, 25);
+            this.toolStrip2.Location = new System.Drawing.Point(3, 75);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Size = new System.Drawing.Size(222, 25);
             this.toolStrip2.TabIndex = 3;
@@ -870,7 +869,7 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.splitContainer1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(732, 408);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(732, 383);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 24);
             this.toolStripContainer1.Name = "toolStripContainer1";
@@ -882,8 +881,8 @@
             // 
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip3);
-            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip2);
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip4);
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip2);
             // 
             // splitContainer1
             // 
@@ -902,7 +901,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.groupBox3);
             this.splitContainer1.Panel2MinSize = 355;
-            this.splitContainer1.Size = new System.Drawing.Size(732, 408);
+            this.splitContainer1.Size = new System.Drawing.Size(732, 383);
             this.splitContainer1.SplitterDistance = 355;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -1043,7 +1042,7 @@
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(349, 240);
+            this.groupBox1.Size = new System.Drawing.Size(349, 248);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Подключения";
@@ -1066,7 +1065,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(344, 190);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(344, 223);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // btnConnectionAdd
@@ -1123,7 +1122,7 @@
             treeNode1.Text = "Список подключений пуст";
             this.tvConnectionTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1});
-            this.tvConnectionTree.Size = new System.Drawing.Size(338, 155);
+            this.tvConnectionTree.Size = new System.Drawing.Size(338, 188);
             this.tvConnectionTree.TabIndex = 3;
             this.tvConnectionTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvConnectionTree_AfterSelect);
             this.tvConnectionTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvConnectionTree_NodeMouseClick);
@@ -1131,106 +1130,100 @@
             // cMSConnTree
             // 
             this.cMSConnTree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.добавитьToolStripMenuItem,
-            this.добавитьУстройствоToolStripMenuItem,
-            this.добавитьЯчейкиToolStripMenuItem,
+            this.tsmiAddConnection,
+            this.tsmiAddDevice,
+            this.tsmiAddRegisters,
             this.toolStripSeparator12,
-            this.обновитьToolStripMenuItem,
-            this.показатьЯчейкиToolStripMenuItem,
+            this.tsmiUpdate,
             this.toolStripSeparator13,
-            this.подключитьToolStripMenuItem,
-            this.отключитьToolStripMenuItem,
+            this.tsmiConnect,
+            this.tsmiDisconnect,
             this.toolStripSeparator14,
-            this.изменитьToolStripMenuItem,
-            this.удалитьToolStripMenuItem,
-            this.удалитьВсеПодключенияToolStripMenuItem});
+            this.tsmiEdit,
+            this.tsmiDel,
+            this.tsmiDelAll});
             this.cMSConnTree.Name = "cMSConnTree";
-            this.cMSConnTree.Size = new System.Drawing.Size(212, 264);
+            this.cMSConnTree.Size = new System.Drawing.Size(212, 242);
+            this.cMSConnTree.Opening += new System.ComponentModel.CancelEventHandler(this.cMSConnTree_Opening);
             // 
-            // добавитьToolStripMenuItem
+            // tsmiAddConnection
             // 
-            this.добавитьToolStripMenuItem.Name = "добавитьToolStripMenuItem";
-            this.добавитьToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
-            this.добавитьToolStripMenuItem.Text = "Добавить подключение";
-            this.добавитьToolStripMenuItem.Click += new System.EventHandler(this.ConnectionAddForm_Show);
+            this.tsmiAddConnection.Name = "tsmiAddConnection";
+            this.tsmiAddConnection.Size = new System.Drawing.Size(211, 22);
+            this.tsmiAddConnection.Tag = "";
+            this.tsmiAddConnection.Text = "Добавить подключение";
+            this.tsmiAddConnection.Click += new System.EventHandler(this.ConnectionAddForm_Show);
             // 
-            // добавитьУстройствоToolStripMenuItem
+            // tsmiAddDevice
             // 
-            this.добавитьУстройствоToolStripMenuItem.Name = "добавитьУстройствоToolStripMenuItem";
-            this.добавитьУстройствоToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
-            this.добавитьУстройствоToolStripMenuItem.Text = "Добавить устройство";
-            this.добавитьУстройствоToolStripMenuItem.Click += new System.EventHandler(this.добавитьУстройствоToolStripMenuItem_Click);
+            this.tsmiAddDevice.Name = "tsmiAddDevice";
+            this.tsmiAddDevice.Size = new System.Drawing.Size(211, 22);
+            this.tsmiAddDevice.Text = "Добавить устройство";
+            this.tsmiAddDevice.Click += new System.EventHandler(this.tsmiAddDevice_Click);
             // 
-            // добавитьЯчейкиToolStripMenuItem
+            // tsmiAddRegisters
             // 
-            this.добавитьЯчейкиToolStripMenuItem.Name = "добавитьЯчейкиToolStripMenuItem";
-            this.добавитьЯчейкиToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
-            this.добавитьЯчейкиToolStripMenuItem.Text = "Добавить ячейки";
-            this.добавитьЯчейкиToolStripMenuItem.Click += new System.EventHandler(this.добавитьЯчейкиToolStripMenuItem_Click);
+            this.tsmiAddRegisters.Name = "tsmiAddRegisters";
+            this.tsmiAddRegisters.Size = new System.Drawing.Size(211, 22);
+            this.tsmiAddRegisters.Text = "Добавить ячейки";
+            this.tsmiAddRegisters.Click += new System.EventHandler(this.добавитьЯчейкиToolStripMenuItem_Click);
             // 
             // toolStripSeparator12
             // 
             this.toolStripSeparator12.Name = "toolStripSeparator12";
             this.toolStripSeparator12.Size = new System.Drawing.Size(208, 6);
             // 
-            // обновитьToolStripMenuItem
+            // tsmiUpdate
             // 
-            this.обновитьToolStripMenuItem.Name = "обновитьToolStripMenuItem";
-            this.обновитьToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
-            this.обновитьToolStripMenuItem.Text = "Обновить";
-            this.обновитьToolStripMenuItem.Click += new System.EventHandler(this.обновитьToolStripMenuItem_Click);
-            // 
-            // показатьЯчейкиToolStripMenuItem
-            // 
-            this.показатьЯчейкиToolStripMenuItem.Enabled = false;
-            this.показатьЯчейкиToolStripMenuItem.Name = "показатьЯчейкиToolStripMenuItem";
-            this.показатьЯчейкиToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
-            this.показатьЯчейкиToolStripMenuItem.Text = "Показать ячейки";
+            this.tsmiUpdate.Name = "tsmiUpdate";
+            this.tsmiUpdate.Size = new System.Drawing.Size(211, 22);
+            this.tsmiUpdate.Text = "Обновить";
+            this.tsmiUpdate.Click += new System.EventHandler(this.обновитьToolStripMenuItem_Click);
             // 
             // toolStripSeparator13
             // 
             this.toolStripSeparator13.Name = "toolStripSeparator13";
             this.toolStripSeparator13.Size = new System.Drawing.Size(208, 6);
             // 
-            // подключитьToolStripMenuItem
+            // tsmiConnect
             // 
-            this.подключитьToolStripMenuItem.Name = "подключитьToolStripMenuItem";
-            this.подключитьToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
-            this.подключитьToolStripMenuItem.Text = "Подключить";
-            this.подключитьToolStripMenuItem.Click += new System.EventHandler(this.подключитьToolStripMenuItem_Click);
+            this.tsmiConnect.Name = "tsmiConnect";
+            this.tsmiConnect.Size = new System.Drawing.Size(211, 22);
+            this.tsmiConnect.Text = "Подключить";
+            this.tsmiConnect.Click += new System.EventHandler(this.подключитьToolStripMenuItem_Click);
             // 
-            // отключитьToolStripMenuItem
+            // tsmiDisconnect
             // 
-            this.отключитьToolStripMenuItem.Name = "отключитьToolStripMenuItem";
-            this.отключитьToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
-            this.отключитьToolStripMenuItem.Text = "Отключить";
-            this.отключитьToolStripMenuItem.Click += new System.EventHandler(this.отключитьToolStripMenuItem_Click);
+            this.tsmiDisconnect.Name = "tsmiDisconnect";
+            this.tsmiDisconnect.Size = new System.Drawing.Size(211, 22);
+            this.tsmiDisconnect.Text = "Отключить";
+            this.tsmiDisconnect.Click += new System.EventHandler(this.отключитьToolStripMenuItem_Click);
             // 
             // toolStripSeparator14
             // 
             this.toolStripSeparator14.Name = "toolStripSeparator14";
             this.toolStripSeparator14.Size = new System.Drawing.Size(208, 6);
             // 
-            // изменитьToolStripMenuItem
+            // tsmiEdit
             // 
-            this.изменитьToolStripMenuItem.Name = "изменитьToolStripMenuItem";
-            this.изменитьToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
-            this.изменитьToolStripMenuItem.Text = "Изменить";
-            this.изменитьToolStripMenuItem.Click += new System.EventHandler(this.изменитьToolStripMenuItem_Click);
+            this.tsmiEdit.Name = "tsmiEdit";
+            this.tsmiEdit.Size = new System.Drawing.Size(211, 22);
+            this.tsmiEdit.Text = "Изменить";
+            this.tsmiEdit.Click += new System.EventHandler(this.изменитьToolStripMenuItem_Click);
             // 
-            // удалитьToolStripMenuItem
+            // tsmiDel
             // 
-            this.удалитьToolStripMenuItem.Name = "удалитьToolStripMenuItem";
-            this.удалитьToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
-            this.удалитьToolStripMenuItem.Text = "Удалить";
-            this.удалитьToolStripMenuItem.Click += new System.EventHandler(this.удалитьToolStripMenuItem_Click);
+            this.tsmiDel.Name = "tsmiDel";
+            this.tsmiDel.Size = new System.Drawing.Size(211, 22);
+            this.tsmiDel.Text = "Удалить";
+            this.tsmiDel.Click += new System.EventHandler(this.удалитьToolStripMenuItem_Click);
             // 
-            // удалитьВсеПодключенияToolStripMenuItem
+            // tsmiDelAll
             // 
-            this.удалитьВсеПодключенияToolStripMenuItem.Name = "удалитьВсеПодключенияToolStripMenuItem";
-            this.удалитьВсеПодключенияToolStripMenuItem.Size = new System.Drawing.Size(211, 22);
-            this.удалитьВсеПодключенияToolStripMenuItem.Text = "Удалить все подключения";
-            this.удалитьВсеПодключенияToolStripMenuItem.Click += new System.EventHandler(this.удалитьВсеПодключенияToolStripMenuItem_Click);
+            this.tsmiDelAll.Name = "tsmiDelAll";
+            this.tsmiDelAll.Size = new System.Drawing.Size(211, 22);
+            this.tsmiDelAll.Text = "Удалить все подключения";
+            this.tsmiDelAll.Click += new System.EventHandler(this.удалитьВсеПодключенияToolStripMenuItem_Click);
             // 
             // groupBox3
             // 
@@ -1265,7 +1258,7 @@
             this.splitContainer2.Panel2.Controls.Add(this.btnConsoleClear);
             this.splitContainer2.Panel2.Controls.Add(this.rtbConsole);
             this.splitContainer2.Size = new System.Drawing.Size(367, 361);
-            this.splitContainer2.SplitterDistance = 225;
+            this.splitContainer2.SplitterDistance = 224;
             this.splitContainer2.TabIndex = 1;
             // 
             // dgvTable
@@ -1289,9 +1282,9 @@
             this.RepresentCol,
             this.ValCol});
             this.dgvTable.ContextMenuStrip = this.dataGridViewContextMenu;
-            this.dgvTable.Location = new System.Drawing.Point(3, 35);
+            this.dgvTable.Location = new System.Drawing.Point(3, 36);
             this.dgvTable.Name = "dgvTable";
-            this.dgvTable.Size = new System.Drawing.Size(361, 162);
+            this.dgvTable.Size = new System.Drawing.Size(361, 182);
             this.dgvTable.TabIndex = 2;
             this.dgvTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellClick);
             this.dgvTable.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellDoubleClick);
@@ -1594,7 +1587,7 @@
             this.btnConsoleClear.AutoSize = true;
             this.btnConsoleClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnConsoleClear.Image = global::FreeModScan.Resource.erase;
-            this.btnConsoleClear.Location = new System.Drawing.Point(317, 105);
+            this.btnConsoleClear.Location = new System.Drawing.Point(317, 106);
             this.btnConsoleClear.Name = "btnConsoleClear";
             this.btnConsoleClear.Size = new System.Drawing.Size(30, 24);
             this.btnConsoleClear.TabIndex = 0;
@@ -1607,7 +1600,7 @@
             this.rtbConsole.Location = new System.Drawing.Point(0, 0);
             this.rtbConsole.Name = "rtbConsole";
             this.rtbConsole.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical;
-            this.rtbConsole.Size = new System.Drawing.Size(367, 132);
+            this.rtbConsole.Size = new System.Drawing.Size(367, 133);
             this.rtbConsole.TabIndex = 4;
             this.rtbConsole.Text = "";
             // 
@@ -1741,14 +1734,14 @@
             this.saveFileDialog.FileName = "Registers";
             this.saveFileDialog.Filter = "Карта регистров (*.map)|*.map|Карта регистров (*.mapx)|*.mapx";
             // 
+            // PollDelayTimer
+            // 
+            this.PollDelayTimer.Interval = 1000;
+            // 
             // PollTimer
             // 
             this.PollTimer.Interval = 500;
             this.PollTimer.Tick += new System.EventHandler(this.PollTimer_Tick);
-            // 
-            // PollDelayTimer
-            // 
-            this.PollDelayTimer.Interval = 1000;
             // 
             // deviceBindingSource
             // 
@@ -1771,6 +1764,7 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Free Modbus Scanner";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -1920,19 +1914,18 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.ToolStripMenuItem tsmiAdress;
         private System.Windows.Forms.ContextMenuStrip cMSConnTree;
-        private System.Windows.Forms.ToolStripMenuItem добавитьToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem добавитьУстройствоToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem добавитьЯчейкиToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAddConnection;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAddDevice;
+        private System.Windows.Forms.ToolStripMenuItem tsmiAddRegisters;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator12;
-        private System.Windows.Forms.ToolStripMenuItem обновитьToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem показатьЯчейкиToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmiUpdate;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator13;
-        private System.Windows.Forms.ToolStripMenuItem подключитьToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem отключитьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmiConnect;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDisconnect;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator14;
-        private System.Windows.Forms.ToolStripMenuItem изменитьToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem удалитьToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem удалитьВсеПодключенияToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmiEdit;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDel;
+        private System.Windows.Forms.ToolStripMenuItem tsmiDelAll;
         private System.Windows.Forms.BindingSource mainFormBindingSource;
         private System.Windows.Forms.BindingSource deviceBindingSource;
         private System.Windows.Forms.ContextMenuStrip dataGridViewContextMenu;
@@ -1966,7 +1959,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator19;
         private System.Windows.Forms.ToolStripButton tsBtnLE;
         private System.Windows.Forms.ToolStripButton tsBtnMidLE;
-        private System.Windows.Forms.Timer PollTimer;
         private System.Windows.Forms.ToolStripButton tsBtnFloatDt;
         private System.Windows.Forms.ToolStripButton tsBtnFloat;
         private System.Windows.Forms.ToolStripButton tsBtnBE;
@@ -1983,6 +1975,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ValCol;
         private System.Windows.Forms.ToolStripMenuItem oCTToolStripMenuItem;
         public System.Windows.Forms.Timer PollDelayTimer;
+        private System.Windows.Forms.Timer PollTimer;
     }
 }
 

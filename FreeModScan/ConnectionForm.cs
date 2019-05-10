@@ -14,13 +14,16 @@ namespace FreeModScan
     public partial class ConnectionForm : Form
     {
         Connection conn;
+        BindingList<Connection> refConns;
 
-        public ConnectionForm()
+        public ConnectionForm(ref BindingList<Connection> conns)//вызывается в случае создания подключения
         {
             InitializeComponent();
+            refConns = conns;
             this.Text = "Добавить подключение";
         }
-        public ConnectionForm(ref Connection conn)
+
+        public ConnectionForm(ref Connection conn)//вызывается в случае редактирования подключения
         {
             InitializeComponent();
             this.conn = conn;
@@ -52,7 +55,7 @@ namespace FreeModScan
                         cbStopBits.SelectedIndex = 1;
                         cbDataBits.SelectedIndex = 1;
                         tbComPort.Text = cbConnType.Text;
-                        tbConnectionName.Text = tbComPort.Text + "-WS-N01-" + cbDataBits.Text;//TODO автоматическая генерация имени соединения
+                        tbConnectionName.Text ="WS-N01-" + cbDataBits.Text;//TODO автоматическая генерация имени соединения
                     } else {
                         cbBaudrate.Text = conn.Port.BaudRate.ToString();
                         cbParity.Text = conn.Port.Parity.ToString();
@@ -73,12 +76,33 @@ namespace FreeModScan
             //cbHandshake.Items.AddRange(Enum.GetNames(typeof(Handshake)));
             cbConnType.SelectedIndex = (conn == null) ? 0 : conn.ConnType;
         }
+        
+        private Connection CreateConnection()//Создание нового подключения
+        {
+            Connection tmpC = null;
+            if (cbConnType.SelectedIndex==0)
+            {
+                MessageBox.Show("Создаём подключение TCP/IP");
+            } else
+            {
+                string portName = tbComPort.Text;
+                int baudRate = Convert.ToInt32(cbBaudrate.SelectedItem);
+                Parity parity = (Parity)cbParity.SelectedIndex;
+                StopBits stopBits = (StopBits)cbStopBits.SelectedIndex;
+                int dataBits = Convert.ToInt32(cbDataBits.SelectedItem);
 
+                SerialPort sp = new SerialPort(portName, baudRate, parity, dataBits, stopBits);
+                tmpC = new Connection(cbConnType.SelectedIndex, tbConnectionName.Text, sp, 
+                                                    Convert.ToUInt32(tbDelayRead.Text), Convert.ToUInt32(tbDelayWrite.Text));
+            }
+            return tmpC;
+        }
+        
         private void btnAddConnection_Click(object sender, EventArgs e)
         {
             if (conn == null)
             {
-                CreateConnection();
+                refConns.Add(CreateConnection());
             } else
             {
                 conn.ConnType = cbConnType.SelectedIndex;
@@ -91,35 +115,16 @@ namespace FreeModScan
                 conn.WriteTimeout = Convert.ToUInt32(tbDelayWrite.Text);
                 conn.ReadTimeout = Convert.ToUInt32(tbDelayRead.Text);
             }
-            
             this.Close();
-        }
-
-        private void CreateConnection()
-        {
-            if (cbConnType.SelectedIndex==0)
-            {
-                MessageBox.Show("Создаём подключение TCP/IP");
-            } else
-            {
-             string portName = tbComPort.Text;
-            int baudRate = Convert.ToInt32(cbBaudrate.SelectedItem);
-            Parity parity = (Parity)cbParity.SelectedIndex;
-            StopBits stopBits = (StopBits)cbStopBits.SelectedIndex;
-            int dataBits = Convert.ToInt32(cbDataBits.SelectedItem);
-
-            SerialPort sp = new SerialPort(portName, baudRate, parity, dataBits, stopBits);
-                //MainForm mf = (MainForm)Application.OpenForms["MainForm"];
-                MainForm._conns.Add( new Connection(cbConnType.SelectedIndex, tbConnectionName.Text, sp, Convert.ToUInt32(tbDelayRead.Text), Convert.ToUInt32(tbDelayWrite.Text)));
-       
-            }
         }
 
         private void btnAddAndConnect_Click(object sender, EventArgs e)
         {
-            CreateConnection();
-            MainForm mf = (MainForm)Application.OpenForms["MainForm"];
-            mf.ConnectAll();
+            refConns.Add(CreateConnection());       //создаём новое подключение
+            
+            foreach (Connection tmp in refConns)
+                if ((tmp != null) && (!tmp.status))
+                    tmp.Open();                         //подключаем все доступные    
             this.Close();
         }
 

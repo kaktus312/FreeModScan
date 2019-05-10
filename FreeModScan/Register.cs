@@ -72,7 +72,8 @@ namespace FreeModScan
             get { return (UseMults == true) ? _a.ToString() : ""; }
             set {
                 if (float.TryParse(value, out _a))
-                    _a = float.Parse(value, CultureInfo.InvariantCulture.NumberFormat);
+                    //_a = float.Parse(value, CultureInfo.InvariantCulture.NumberFormat);
+                    _a = float.Parse(value);
                 else
                     _a = 1;
                 }//комментировать для сохранения карты регистров
@@ -230,6 +231,15 @@ namespace FreeModScan
             return s;
         }
 
+        public delegate void RegisterEventHandler(Register r);
+        public event RegisterEventHandler Create;
+        public event RegisterEventHandler StateChanged;
+        public event RegisterEventHandler Delete;
+
+        public delegate void RegisterErrorHandler(Exception e);
+        public event RegisterErrorHandler Error;//нужны для работы с событием в главной форме и прочих классах
+
+
 
         public Register()
         {
@@ -305,7 +315,46 @@ namespace FreeModScan
                     break;
             }
             return regSize;
-        } 
+        }
+        public uint ByteNum()
+        {
+            uint byteNum = 2;
+            switch (this.dataType)
+            {
+                case Register.DataType.Int16:
+                default:
+                    byteNum = 2;
+                    break;
+                case Register.DataType.Int32:
+                case Register.DataType.Float:
+                    byteNum = 4;
+                    break;
+                case Register.DataType.Int64:
+                case Register.DataType.Double:
+                    byteNum = 8;
+                    break;
+            }
+            return byteNum;
+        }
 
+        //Методы On.....() - для запуска события из внешних классов
+        public void OnCreate()
+        {
+            if (Create != null) Create(this);
+        }
+        public void OnStateChanged()
+        {
+            if (StateChanged != null) StateChanged(this);
+        }
+        public void OnDelete()
+        {
+            if (Delete != null) Delete(this);
+        }
+
+        public void OnError(Exception e)
+        {
+            if (Error != null) Error(e);
+        }
+    
     }
 }

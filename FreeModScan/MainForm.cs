@@ -47,33 +47,47 @@ namespace FreeModScan
             cbConnectionList.DisplayMember = "PortName";
             cbConnectionList.ValueMember = "ConnName";
 
-            PollTimer.Interval = int.Parse(tsTbPollInterval.Text);
-
             cbDataType.DataSource = Enum.GetNames(typeof(Register.DataType));
             cbDataType.SelectedIndex = (int)Register.DataType.Int16;
             tslRequestTotalNum.Text = tslAnswerNum.Text = tsLblLogRecordsNum.Text = tslRequestTime.Text = "0";
 
+
             // Инстанциируем writer
             //_writer = new ConsoleStreamWriter(rtbConsole);
-	        // Перенаправляем выходной поток консоли
+            // Перенаправляем выходной поток консоли
             //Console.SetOut(_writer);
         }
 
         private void Connections_ListChanged(object sender, ListChangedEventArgs e)
         {
+            Connection conn = null;
+            int connsNum = _conns.Count();//поличество подключений после изменения
+
+            if (e.NewIndex != connsNum)
+                conn = _conns[e.NewIndex];//объект с которым производились манипуляции
+            
             switch (e.ListChangedType)
             {
                 case ListChangedType.ItemAdded:
                     //Add item here.
-                    if (tvConnectionTree.Nodes[0].Text == EMPTY_CONN_LIST_MSG)
-                        tvConnectionTree.Nodes.Clear();
-
-                    Connection conn = _conns.Last();
-                    tvConnectionTree.Nodes.Add(conn.ConnName + " - " + conn.Port.PortName + " - " + conn.statusString);
                     currConn = e.NewIndex;
 
-                    break;
+                    if (tvConnectionTree.Nodes[0].Text == EMPTY_CONN_LIST_MSG)//удаляем текст, отображаемый при отсутствии соединений
+                        tvConnectionTree.Nodes.Clear();
+                    tvConnectionTree.Nodes.Add(_conns[currConn].ConnName + " (" + _conns[currConn].Port.PortName + "): " + _conns[currConn].statusString);
+                    console.Add("** " + DateTime.Now + " - " + _conns[currConn].ConnName + " (" + _conns[currConn].Port.PortName + "): Соединение создано**\n");
 
+                    //подписываемся на события
+                    conn.StateChanged += new Connection.ConnectionEventHandler(ConnStateChanged);
+                    //conn.Delete += new Connection.ConnectionEventHandler(ConnDelete);
+                    conn.Error += new Connection.ConnectionErrorHandler(ConnError);
+
+                    //запуск события Создания для других подписчиков
+                    conn.OnCreate();
+                    break;
+                case ListChangedType.PropertyDescriptorChanged:
+                    MessageBox.Show("1561");
+                    break;
                 case ListChangedType.ItemChanged:
                     //Change node associated with this item
                     MessageBox.Show("State changed");
@@ -87,16 +101,17 @@ namespace FreeModScan
                 case ListChangedType.ItemDeleted:
                     //Item removed
                     //MessageBox.Show("Deleted");
-                    if (_conns.Count == 0)
-                        setConnTreeDefaults();
-                    else
-                        tvConnectionTree.Nodes[e.NewIndex].Remove();
-
-                    if (e.NewIndex == currConn)
+                    if (connsNum == 0)
                     {
-                        PollTimer.Enabled = false;
-                        tsBtnStartPoll.Text = (PollTimer.Enabled) ? "Остановить опрос" : "Начать опрос";
-                        currConn = 0;
+                        setConnTreeDefaults();
+                        currConn = -1;
+                    }
+                    else
+                    {
+                        tvConnectionTree.Nodes[e.NewIndex].Remove();
+                        if (e.NewIndex == currConn)//если удаляется текущее соединение, то делаем текущим предыдущее
+                            if (currConn >= connsNum)
+                                currConn--;
                     }
                     break;
 
@@ -108,12 +123,13 @@ namespace FreeModScan
             }
         }
 
+
         private void ConsoleMsg_Changes(object sender, ListChangedEventArgs e)
         {
             switch (e.ListChangedType)
             {
                 case ListChangedType.ItemAdded:
-                    //rtbConsole.Text = console.Last() + rtbConsole.Text;
+                    rtbConsole.Text = console.Last() + rtbConsole.Text;
                     //rtbConsole.ScrollToCaret;
                     break;
             }
@@ -154,45 +170,63 @@ namespace FreeModScan
 
         private void ConnectionAddForm_Show(object sender, EventArgs e)
         {
-            ConnectionForm connForm = new ConnectionForm();
-            connForm.ShowDialog(this);
+            ConnectionForm connForm = new ConnectionForm(ref _conns);
+            if (connForm.ShowDialog(this) == DialogResult.OK)
+            {
+                //_conns.Last().OnStateChanged += new Connection.ConnectionEventHandler(ConnStateChanged);
+                //_conns.Last().OnError += new Connection.ConnectionErrorHandler(ConnError);
+                tvConnectionTree.SelectedNode = tvConnectionTree.Nodes[currConn];
+                tvConnectionTree.Focus();
+            }
+
+
+        }
+
+        private void dataReady()
+        {
+            //rtbConsole.Text = _conns[currConn] + rtbConsole.Text;
+        }
+
+        public void ConnError(Exception e)
+        {
+            TreeNode currNode = tvConnectionTree.Nodes[currConn];
+            Connection conn = _conns[currConn];
+            //currNode.ForeColor = Color.DarkRed;
+            rtbConsole.Text = "** " + DateTime.Now.ToString() + " - " + conn.ConnName + "-" + conn.Port.PortName + " : " + e.Message + " **" + "\n" + rtbConsole.Text;
+            //console.Add("** " + DateTime.Now.ToString() + " - " + conn.ConnName + "-" + conn.Port.PortName + " : " + e.Message + " **" + "\n");
+            //MessageBox.Show(conn.ConnName + " - Ошибка. " + e.Message);
+        }
+
+        public void ConnStateChanged(Connection c)
+        {
+            TreeNode currNode = tvConnectionTree.Nodes[currConn];
+            currNode.Text = c.ConnName + " - " + c.Port.PortName + " - " + c.statusString;
+            //rtbConsole.Text = "** " + DateTime.Now.ToString() + " - " + conn.ConnName + " : Соединение по " + conn.Port.PortName + " " + conn.statusString + ". **" + "\n" + rtbConsole.Text;
+            console.Add("** " + DateTime.Now.ToString() + " - " + c.ConnName + " : Соединение по " + c.Port.PortName + " " + c.statusString + ". **" + "\n");
+            //currNode.ForeColor = (conn.status)? Color.Black : Color.DarkGray;
+            //MessageBox.Show(conn.ConnName + " - " + conn.statusString);
+            //_conns.Last().OnDataReady += new Connection.PollEventHandler(dataReady);
+            var tmpColl = _conns.Where(tmpConn => c.status == true);
+            if (tmpColl.Count() <= 0)
+            {
+                PollTimer.Enabled = false;
+                tsBtnStartPoll.Text = "Начать опрос";
+            }
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            ConnectAll();
-        }
-
-        public void ConnectAll()
-        {
-            foreach (Connection conn in _conns)
-            {
-                if ((conn != null) && (!conn.status))
-                    conn.Open();
-                tvConnectionStateUpdate(conn);
-                //rtbConsole.Text += "** " + DateTime.Now.ToString() + " - " + _conns[currConn].ConnName + " : Соединение COM подключено. **"+"\n";
-            }
-        }
-
-        private void tvConnectionStateUpdate(Connection conn)
-        {
-            TreeNode currNode = tvConnectionTree.Nodes[_conns.IndexOf(conn)];
-            currNode.Text = conn.ConnName + " - " + conn.Port.PortName + " - " + conn.statusString;
+            foreach (Connection tmp in _conns)
+                if ((tmp != null) && (!tmp.status))
+                    tmp.Open();
         }
 
         private void btnDisconnect_Click(object sender, EventArgs e)
         {
-            DisconnectAll();
-        }
-
-        public void DisconnectAll()
-        {
-            foreach (Connection conn in _conns)
+            foreach (Connection tmp in _conns)
             {
-                if ((conn != null) && (conn.status))
-                    conn.Close();
-                tvConnectionStateUpdate(conn);
-                //rtbConsole.Text += "** " + DateTime.Now.ToString() + " - " + _conns[currConn].ConnName + " : Соединение COM отключено. **" + "\n";
+                if ((tmp != null) && (tmp.status))
+                    tmp.Close();
             }
         }
 
@@ -221,73 +255,73 @@ namespace FreeModScan
 
         private void btnCellAddSide_Click(object sender, EventArgs e)
         {
-            if (_conns.Count > 0)
+
+            if (_conns.Count <= 0){
+                MessageBox.Show(NO_CONN_ADD_MSG, MSG_INFO_TITLE);
+                return;
+            }
+
+            Connection currCon = _conns[cbConnectionList.SelectedIndex];
+
+            byte devAdress = byte.Parse(tbDeviceId.Text);
+            Device dev = new Device(devAdress, tbDeviceName.Text);
+            dev.Create += new Device.DeviceEventHandler(deviceAdded);//подписка на событие Создания устройства
+
+            int devId = currCon.Devices.IndexOf(dev);
+            MessageBox.Show("Device ID=" + devId.ToString());
+
+            if (devId >= 0)//устройство существует, не добавляем нового
             {
-
-                Connection currCon = _conns[cbConnectionList.SelectedIndex];
-                TreeNode currNode = tvConnectionTree.Nodes[cbConnectionList.SelectedIndex];
-
-                byte devAdress = byte.Parse(tbDeviceId.Text);
-                Device dev = new Device(devAdress, tbDeviceName.Text);
-
-                int devId = currCon.Devices.IndexOf(dev);
-                MessageBox.Show("Device ID=" + devId.ToString());
-
-                //if (currCon.Devices.Contains(dev))
-                if (devId >= 0)
-                {
-                    MessageBox.Show("Device Exists" + devId.ToString());
-                    dev = currCon.Devices[devId];
-                }
-                else
-                {
-                    currCon.Devices.Add(dev);
-                    currNode.Nodes.Add(tbDeviceId.Text + ": " + tbDeviceName.Text);
-
-                }
-
-                addRegisters(dev, tbRegisterList.Text, cbRegisterType.SelectedIndex + 1, cbDataType.SelectedIndex);
-
-                if (!currNode.IsExpanded)
-                    currNode.Expand();
-                tvConnectionTree.SelectedNode = currNode.LastNode;
-                dgvTable.Rows[0].Cells[0].Selected = true;
-                currDevice = currNode.LastNode.Index;
-                currRegister = 0;
+                MessageBox.Show("Device Exists" + devId.ToString());
+                dev = currCon.Devices[devId];
             }
             else
-            {
-                MessageBox.Show(NO_CONN_ADD_MSG, MSG_INFO_TITLE);
-            }
+                currCon.Devices.Add(dev);
+
+            //добавляем регистры
+            dev.addRegisters(tbRegisterList.Text, cbRegisterType.SelectedIndex + 1, cbDataType.SelectedIndex);
+            //addRegisters(dev, tbRegisterList.Text, cbRegisterType.SelectedIndex + 1, cbDataType.SelectedIndex);
+            //dgvTable.Rows[0].Cells[0].Selected = true;
+
         }
 
-        static public void addRegisters(Device dev, string regString, int rType, int dType, int bOrder = 1)
-        {
-            MatchCollection matches = Regex.Matches(regString, "((?<s>\\d+)-(?<e>\\d+))|(?<r>\\d+)");
+        //public void addRegisters(Device dev, string regString, int rType, int dType, int bOrder = 1)
+        //{
+        //    MatchCollection matches = Regex.Matches(regString, "((?<s>\\d+)-(?<e>\\d+))|(?<r>\\d+)");
 
-            foreach (Match match in matches)
-            {
-                Register tmpReg = null;
-                if (match.Groups["r"].Value != "")
-                {
-                    //MessageBox.Show(uint.Parse(match.Groups["r"].Value).ToString());
-                    uint i = uint.Parse(match.Groups["r"].Value);
+        //    foreach (Match match in matches)
+        //    {
+        //        Register tmpReg = null;
+        //        int startIndex = 0;
+        //        int endIndex = -1;
 
-                    tmpReg = new Register(dev.deviceName, i, (Register.RegType)rType, (Register.DataType)dType, (Register.ByteOrder)bOrder);
-                    if (tmpReg != null) dev.Registers.Add(tmpReg);
-                }
-                if ((match.Groups["s"].Value != "") && (match.Groups["e"].Value != ""))
-                {
-                    for (uint i = uint.Parse(match.Groups["s"].Value); i <= uint.Parse(match.Groups["e"].Value); i++)
-                    {
-                        tmpReg = new Register(dev.deviceName, i, (Register.RegType)rType, (Register.DataType)dType, (Register.ByteOrder)bOrder);
-                        //MessageBox.Show(i.ToString());
-                        dev.Registers.Add(tmpReg);
-                    }
-                }
+        //        if (match.Groups["r"].Value != "")
+        //        {
+        //            //MessageBox.Show(uint.Parse(match.Groups["r"].Value).ToString());
+        //            startIndex = endIndex = int.Parse(match.Groups["r"].Value);
+        //        }
 
-            }
-        }
+        //        if ((match.Groups["s"].Value != "") && (match.Groups["e"].Value != ""))
+        //        {
+        //            startIndex = int.Parse(match.Groups["s"].Value);
+        //            endIndex = int.Parse(match.Groups["e"].Value);
+        //        }
+
+        //        for (int i = startIndex; i <= endIndex; i++)
+        //        {
+        //            tmpReg = new Register(dev.deviceName, (uint)i, (Register.RegType)rType, (Register.DataType)dType, (Register.ByteOrder)bOrder);
+        //            tmpReg.Create += new Register.RegisterEventHandler(RegisterAdded);//подписываемся на событие Создания
+        //            //MessageBox.Show(i.ToString());
+        //            dev.Registers.Add(tmpReg);
+        //        }
+        //    }
+        //}
+
+        //public void RegisterAdded(Register r)
+        //{
+        //    rtbConsole.Text = "Register was Added" + rtbConsole.Text;
+        //    MessageBox.Show("Register was Added");
+        //}
 
         private void удалитьВсеПодключенияToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -298,7 +332,7 @@ namespace FreeModScan
                 if (res == DialogResult.Yes)
                 {
                     PollTimer.Enabled = false;
-                    tsBtnStartPoll.Text = (PollTimer.Enabled) ? "Остановить опрос" : "Начать опрос";
+                    //tsBtnStartPoll.Text = (PollTimer.Enabled) ? "Остановить опрос" : "Начать опрос";
                     currConn = currDevice = currRegister = -1;
                     _conns.Clear();
                     cbConnectionList.Text = tvConnectionTree.SelectedNode.Text;
@@ -329,11 +363,7 @@ namespace FreeModScan
                     currConn = tvConnectionTree.SelectedNode.Parent.Index;
 
                 _conns[currConn].Open();
-                tvConnectionStateUpdate(_conns[currConn]);
-                //if (_conns[currConn].Port.IsOpen)
-                //    rtbConsole.Text += "** " + DateTime.Now.ToString() + " - " + _conns[currConn].ConnName + " : Соединение COM подключено. **" + "\n";
-                //else
-                //    rtbConsole.Text += "** " + DateTime.Now.ToString() + " - " + _conns[currConn].ConnName + " : Соединение COM неподключено. **" + "\n";
+                //tvConnectionStateUpdate(_conns[currConn]);
             }
 
 
@@ -351,7 +381,7 @@ namespace FreeModScan
                     currConn = tvConnectionTree.SelectedNode.Parent.Index;
 
                 _conns[currConn].Close();
-                tvConnectionStateUpdate(_conns[currConn]);
+                //tvConnectionStateUpdate(_conns[currConn]);
             }
         }
 
@@ -359,8 +389,6 @@ namespace FreeModScan
         {
             if (_conns.Count > 0)
             {
-
-
                 int lvl = tvConnectionTree.SelectedNode.Level;
                 int selectedNodeIndex = tvConnectionTree.SelectedNode.Index;
                 if (lvl > 0)
@@ -378,8 +406,10 @@ namespace FreeModScan
                         PollTimer.Enabled = false;
                         tsBtnStartPoll.Text = (PollTimer.Enabled) ? "Остановить опрос" : "Начать опрос";
                     }
-
+                    _conns[currConn].OnDelete();//запуск события Удаления соединения для прочих подписчиков
+                    string msg = "** " + DateTime.Now + " - " + _conns[currConn].ConnName + " (" + _conns[currConn].Port.PortName + "): удалено**\n";
                     _conns.RemoveAt(selectedNodeIndex);
+                    console.Add(msg);
                     cbConnectionList.Text = tvConnectionTree.SelectedNode.Text;
                     currConn = currDevice = currRegister = -1;
                 }
@@ -387,7 +417,7 @@ namespace FreeModScan
             }
             else
             {
-
+                console.Add("**Список подключений пуст**\n");
             }
         }
 
@@ -436,7 +466,7 @@ namespace FreeModScan
                 if (e.Node.Level == 0)
                 {
                     currConn = e.Node.Index;
-                    currDevice = 0;
+                    currDevice = -1;
                     cbConnectionList.SelectedIndex = e.Node.Index;
                     tbDeviceId.Text = Convert.ToString(1);
                     tbDeviceName.Text = "devName";
@@ -470,34 +500,44 @@ namespace FreeModScan
             }
         }
 
-        private void добавитьУстройствоToolStripMenuItem_Click(object sender, EventArgs e)
+        private void tsmiAddDevice_Click(object sender, EventArgs e)
         {
 
-            if (_conns.Count > 0)
-            {
-                int selectedConn = (tvConnectionTree.SelectedNode.Level == 0) ? tvConnectionTree.SelectedNode.Index : tvConnectionTree.SelectedNode.Parent.Index;
-                Connection currConn = _conns[selectedConn];
-                TreeNode currNode = tvConnectionTree.Nodes[selectedConn];
-                DeviceEditForm devEditForm = new DeviceEditForm(currConn);
-                DialogResult res = devEditForm.ShowDialog(this);
-                if (res == DialogResult.OK)
-                {
-                    Device currDev = currConn.Devices.Last();
-                    currNode.Nodes.Add(currDev.deviceAdress + ": " + currDev.deviceName);
-                    if (!currNode.IsExpanded)
-                        currNode.Expand();
-                }
-            }
-            else
+            if (_conns.Count <= 0)
             {
                 MessageBox.Show(NO_CONN_ADD_MSG, MSG_INFO_TITLE);
+                return;
             }
+
+            int selectedConn = (tvConnectionTree.SelectedNode.Level == 0) ? tvConnectionTree.SelectedNode.Index : tvConnectionTree.SelectedNode.Parent.Index;
+            Connection currConn = _conns[selectedConn];
+            TreeNode currNode = tvConnectionTree.Nodes[selectedConn];
+            DeviceEditForm devEditForm = new DeviceEditForm(currConn);
+            DialogResult res = devEditForm.ShowDialog(this);
+            //if (res == DialogResult.OK)
+            //{
+            //    Device currDev = currConn.Devices.Last();
+            //}
+        }
+
+        internal void deviceAdded(Device d)
+        {
+            MessageBox.Show("Bingo!");
+           
+            TreeNode currNode = tvConnectionTree.Nodes[cbConnectionList.SelectedIndex];
+            currNode.Nodes.Add(d.deviceAdress + ": " + d.deviceName);
+            if (!currNode.IsExpanded)
+                currNode.Expand();
+            tvConnectionTree.SelectedNode = currNode.LastNode;
+            tvConnectionTree.Focus();
+            currDevice = currNode.LastNode.Index;
+            currRegister = 0;
+            console.Add("** " + DateTime.Now.ToString() + " - " + _conns[currConn].ConnName + " (" + _conns[currConn].Port.PortName + "): Добавлено устройство " + d.deviceName + " **" + "\n");
         }
 
         private void добавитьЯчейкиToolStripMenuItem_Click(object sender, EventArgs e)
         {
             addRegisterDialog();
-
         }
 
         private void addRegisterDialog()
@@ -822,10 +862,14 @@ namespace FreeModScan
                 _conns[currConn].UpdateRequests();
                 PollTimer.Enabled = !PollTimer.Enabled;
                 tsBtnStartPoll.Text = (PollTimer.Enabled) ? "Остановить опрос" : "Начать опрос";
+
             }
             else
             {
-                MessageBox.Show(NO_ACTIVE_CONN_MSG, MSG_INFO_TITLE);
+                if (_conns[currConn].status)
+                    tsBtnStartPoll.Text = "Начать опрос";
+                else
+                    MessageBox.Show(NO_ACTIVE_CONN_MSG, MSG_INFO_TITLE);
             }
 
         }
@@ -855,7 +899,8 @@ namespace FreeModScan
                         tslAnswerNum.Text = _conns[currConn].QueriesNumRCV.ToString();
 
                         //новый запрос
-                        _conns[currConn].Poll(_conns[currConn].Devices.IndexOf(d));
+                        //_conns[currConn].Poll(_conns[currConn].Devices.IndexOf(d));
+                        _conns[currConn].Poll();
 
                         //обновление колонки значений
                         try
@@ -988,5 +1033,41 @@ namespace FreeModScan
             currDevice = -1;//текущее устройство
             currRegister = -1;//текущий регистр
         }
+
+        private void cMSConnTree_Opening(object sender, CancelEventArgs e)
+        {
+            if (_conns.Count() > 0)
+            {
+                cMSConnTree.Items["tsmiAddDevice"].Enabled =
+                cMSConnTree.Items["tsmiEdit"].Enabled =
+                cMSConnTree.Items["tsmiDel"].Enabled =
+                cMSConnTree.Items["tsmiDelAll"].Enabled = true;
+
+                cMSConnTree.Items["tsmiAddRegisters"].Enabled = (currDevice >= 0);
+
+                if (_conns[tvConnectionTree.SelectedNode.Index].status)
+                {
+                    cMSConnTree.Items["tsmiDisconnect"].Enabled = true;
+                    cMSConnTree.Items["tsmiConnect"].Enabled = false;
+                }
+                else
+                {
+                    cMSConnTree.Items["tsmiDisconnect"].Enabled = false;
+                    cMSConnTree.Items["tsmiConnect"].Enabled = true;
+                }
+            }
+            else
+            {
+                cMSConnTree.Items["tsmiAddDevice"].Enabled =
+                cMSConnTree.Items["tsmiEdit"].Enabled =
+                cMSConnTree.Items["tsmiDel"].Enabled =
+                cMSConnTree.Items["tsmiConnect"].Enabled =
+                cMSConnTree.Items["tsmiDisconnect"].Enabled =
+                cMSConnTree.Items["tsmiAddRegisters"].Enabled=
+                cMSConnTree.Items["tsmiDelAll"].Enabled = false;
+            }
+        }
+
+
     }
 }
