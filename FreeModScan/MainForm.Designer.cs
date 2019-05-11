@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Список подключений пуст");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Список подключений пуст");
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tslRequestTime = new System.Windows.Forms.ToolStripStatusLabel();
@@ -840,7 +840,7 @@
             this.tsTbPollInterval});
             this.toolStrip2.Location = new System.Drawing.Point(3, 75);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(222, 25);
+            this.toolStrip2.Size = new System.Drawing.Size(253, 25);
             this.toolStrip2.TabIndex = 3;
             this.toolStrip2.Text = "toolStrip2";
             // 
@@ -1118,10 +1118,10 @@
             this.tvConnectionTree.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tvConnectionTree.Location = new System.Drawing.Point(3, 32);
             this.tvConnectionTree.Name = "tvConnectionTree";
-            treeNode1.Name = "Узел0";
-            treeNode1.Text = "Список подключений пуст";
+            treeNode2.Name = "Узел0";
+            treeNode2.Text = "Список подключений пуст";
             this.tvConnectionTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1});
+            treeNode2});
             this.tvConnectionTree.Size = new System.Drawing.Size(338, 188);
             this.tvConnectionTree.TabIndex = 3;
             this.tvConnectionTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvConnectionTree_AfterSelect);
@@ -1143,7 +1143,7 @@
             this.tsmiDel,
             this.tsmiDelAll});
             this.cMSConnTree.Name = "cMSConnTree";
-            this.cMSConnTree.Size = new System.Drawing.Size(212, 242);
+            this.cMSConnTree.Size = new System.Drawing.Size(212, 220);
             this.cMSConnTree.Opening += new System.ComponentModel.CancelEventHandler(this.cMSConnTree_Opening);
             // 
             // tsmiAddConnection

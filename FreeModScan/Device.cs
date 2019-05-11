@@ -11,6 +11,8 @@ namespace FreeModScan
 {
     public class Device:IEquatable<Device>
     {
+        private const string NO_REGS_MSG = "Регистры устройства не определены";
+        private const string MSG_INFO_TITLE = "Информация";
 
         string _deviceName;
         public string deviceName{ get {return _deviceName; } set {_deviceName=value; } }
@@ -21,9 +23,10 @@ namespace FreeModScan
         public BindingList<Register> Registers = new BindingList<Register>();
        
         public delegate void DeviceEventHandler(Device d);
-        public event DeviceEventHandler Create;
-        public event DeviceEventHandler StateChanged;
-        public event DeviceEventHandler Delete;
+        public static event DeviceEventHandler Create;
+        public static event DeviceEventHandler Change;
+        public static event DeviceEventHandler DeleteAll;
+        public static event DeviceEventHandler Delete;
 
         public delegate void DeviceErrorHandler(Exception err);
         public event DeviceErrorHandler Error;
@@ -32,7 +35,17 @@ namespace FreeModScan
         {
             //для сериализации (при сохранении в XML) необходим конструктор без параметров 
             Registers.ListChanged += new ListChangedEventHandler(Registers_ListChanged);
+            DeleteAll += new DeviceEventHandler(RegistersDeleted);//подписываемся на событие Удаления
+            Register.Delete += new Register.RegisterEventHandler(RegisterDeleted);
+            Register.Create += new Register.RegisterEventHandler(RegisterAdded);//подписываемся на событие Создания
+            Register.Change += new Register.RegisterEventHandler(RegisterChanged);//подписываемся на событие Изменения
 
+            Delete += new DeviceEventHandler(DeviceDeleted);
+        }
+
+        private void DeviceDeleted(Device d)
+        {
+            Console.Write("Class Device: device "+ _deviceName + " deleted");
         }
 
         public Device(byte adress, string name):this(){
@@ -47,18 +60,15 @@ namespace FreeModScan
 
         private void Registers_ListChanged(object sender, ListChangedEventArgs e)
         {
-            Register reg = null;
             int regsNum = Registers.Count();//поличество подключений после изменения
-
-            if (e.NewIndex != regsNum)
-                reg = Registers[e.NewIndex];//объект с которым производились манипуляции
+            Register reg = ((regsNum > 0) && (e.NewIndex != regsNum)) ? Registers[e.NewIndex] : null;//объект с которым производились манипуляции
 
             switch (e.ListChangedType)
             {
                 case ListChangedType.ItemAdded:
                     //Add item here.
                     reg.OnCreate();
-                    MessageBox.Show("Register Added");
+                    //MessageBox.Show("Register Added");
                     //MessageBox.Show(Registers.Last().Val.ToString("X2"));
                     break;
 
@@ -73,7 +83,8 @@ namespace FreeModScan
                     break;
 
                 case ListChangedType.ItemDeleted:
-                    MessageBox.Show("Register deleted");
+                    //MessageBox.Show("Register deleted");
+                    //reg.OnDelete();
                     break;
 
                 case ListChangedType.Reset:
@@ -93,13 +104,17 @@ namespace FreeModScan
         {
             if (Create != null) Create(this);
         }
-        public void OnStateChanged()
+        public void OnChange()
         {
-            if (StateChanged != null) StateChanged(this);
+            if (Change != null) Change(this);
         }
         public void OnDelete()
         {
             if (Delete != null) Delete(this);
+        }
+        public void OnDeleteAll()
+        {
+            if (DeleteAll != null) DeleteAll(this);
         }
 
         public void OnError(Exception e)
@@ -132,7 +147,10 @@ namespace FreeModScan
                 for (int i = startIndex; i <= endIndex; i++)
                 {
                     tmpReg = new Register(deviceName, (uint)i, (Register.RegType)rType, (Register.DataType)dType, (Register.ByteOrder)bOrder);
-                    tmpReg.Create += new Register.RegisterEventHandler(RegisterAdded);//подписываемся на событие Создания
+                    //tmpReg.Create += new Register.RegisterEventHandler(RegisterAdded);//подписываемся на событие Создания
+                    //Register.Delete += new Register.RegisterEventHandler(RegisterDeleted);//подписываемся на событие Удаления
+                    
+                    //tmpReg.Change += new Register.RegisterEventHandler(RegisterChanged);//подписываемся на событие Изменения
                     //MessageBox.Show(i.ToString());
                     //dev.Registers.Add(tmpReg);
                     Registers.Add(tmpReg);
@@ -140,9 +158,32 @@ namespace FreeModScan
             }
         }
 
+        private void RegistersDeleted(Device d)
+        {
+            if (Registers.Count > 0)
+            {
+                Registers.Clear();
+                Console.Write("Class Device: All registers deleted");
+            }
+            else
+            {
+                MessageBox.Show(NO_REGS_MSG, MSG_INFO_TITLE);
+            }
+        }
+
+        private void RegisterChanged(Register r)
+        {
+           Console.Write("Class Device: register changed");
+        }
+
+        private void RegisterDeleted(Register r)
+        {
+           Console.Write("Class Device: register deleted");
+        }
+
         private void RegisterAdded(Register r)
         {
-            MainForm.console.Add("Class Device: register added\n");
+           Console.Write("Class Device: register added");
             //MessageBox.Show("Register was Added");
         }
     }

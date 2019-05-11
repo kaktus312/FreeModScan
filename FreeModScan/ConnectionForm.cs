@@ -92,6 +92,8 @@ namespace FreeModScan
                 int dataBits = Convert.ToInt32(cbDataBits.SelectedItem);
 
                 SerialPort sp = new SerialPort(portName, baudRate, parity, dataBits, stopBits);
+                sp.ReadTimeout = int.Parse(tbDelayRead.Text);
+                sp.WriteTimeout = int.Parse(tbDelayWrite.Text);
                 tmpC = new Connection(cbConnType.SelectedIndex, tbConnectionName.Text, sp, 
                                                     Convert.ToUInt32(tbDelayRead.Text), Convert.ToUInt32(tbDelayWrite.Text));
             }

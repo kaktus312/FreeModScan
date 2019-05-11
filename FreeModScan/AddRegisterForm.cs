@@ -40,7 +40,8 @@ namespace FreeModScan
 
         private void cbConnectionList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            cbDeviceList.DataSource = MainForm._conns[MainForm.currConn].Devices;
+            //cbDeviceList.DataSource = MainForm._conns[MainForm.currConn].Devices;
+            cbDeviceList.DataSource = MainForm.currConn.Devices;
             cbDeviceList.DisplayMember = "deviceName";
             cbDeviceList.ValueMember = "deviceName";
             cbDeviceList.SelectedIndex = 0;
@@ -49,9 +50,11 @@ namespace FreeModScan
         private void btnAdd_Click(object sender, EventArgs e)
         {
             //Connection selectedConn = _conns[cbConnectionList.SelectedIndex];
-            Connection selectedConn = MainForm._conns[MainForm.currConn];
+            //Connection selectedConn = MainForm._conns[MainForm.currConn];
+            Connection selectedConn = MainForm.currConn;
 
-            Device selectedDev = selectedConn.Devices[MainForm.currDevice];
+            //Device selectedDev = selectedConn.Devices[MainForm.currDevice];
+            Device selectedDev = MainForm.currDevice;
             MessageBox.Show(((Register.RegType)cbRegisterType.SelectedIndex+1).ToString());
             selectedDev.addRegisters(tbRegisterList.Text, cbRegisterType.SelectedIndex + 1, cbDataType.SelectedIndex, cbByteOrder.SelectedIndex);
             //MainForm.addRegisters(selectedDev, tbRegisterList.Text, cbRegisterType.SelectedIndex+1, cbDataType.SelectedIndex, cbByteOrder.SelectedIndex);

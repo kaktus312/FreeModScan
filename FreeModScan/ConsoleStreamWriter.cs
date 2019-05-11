@@ -15,12 +15,11 @@ namespace FreeModScan
         {
             _output = output;
         }
-        public override void Write(char value)
+        public override void Write(string value)
         {
-            base.Write(value);
-            //_output.Text = value + _output.Text;// Когда символ записывается в поток, добавляем его в textbox.
-            //_output.Last() + value;
-            //_output.AppendText(value.ToString()); 
+            string tmp = "** " + DateTime.Now.ToString() + " - " + value + " **" + "\n";
+            base.Write(tmp);
+            _output.Text = tmp + _output.Text;// Когда символ записывается в поток, добавляем его в textbox/RichTextBox.
         }
         public override Encoding Encoding
         {

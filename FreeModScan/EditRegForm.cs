@@ -23,9 +23,10 @@ namespace FreeModScan
             cbConnectionList.DataSource = MainForm._conns;
             cbConnectionList.DisplayMember = "ConnName";
 
-            currReg = MainForm._conns[MainForm.currConn].Devices[MainForm.currDevice].Registers[MainForm.currRegister];
-            cbConnectionList.SelectedIndex = MainForm.currConn;
-            cbDeviceList.SelectedIndex = MainForm.currDevice;
+            //currReg = MainForm._conns[MainForm.currConn].Devices[MainForm.currDevice].Registers[MainForm.currRegister];
+            currReg = MainForm.currRegister;
+            //cbConnectionList.SelectedIndex = MainForm._conns.currConn;
+            //cbDeviceList.SelectedIndex = MainForm.currDevice;
             cbRegState.Checked = currReg.Status;
             cbDataType.SelectedIndex = (int) currReg.dataType;
             cbRegisterType.SelectedIndex = (int) currReg.Type-1;
@@ -73,8 +74,10 @@ namespace FreeModScan
                 Connection destConn = MainForm._conns[cbConnectionList.SelectedIndex];
                 Device destDevice = destConn.Devices[cbDeviceList.SelectedIndex];
                 destDevice.Registers.Add(currReg);
-                MainForm._conns[MainForm.currConn].Devices[MainForm.currDevice].Registers.RemoveAt(MainForm.currRegister);
+                //MainForm._conns[MainForm.currConn].Devices[MainForm.currDevice].Registers.RemoveAt(MainForm.currRegister);
             }
+
+            currReg.OnChange();
         }
 
         private void cbConnectionList_SelectedIndexChanged(object sender, EventArgs e)

@@ -53,9 +53,10 @@ namespace FreeModScan
         public bool dataProcessed=false;
 
         public delegate void ConnectionEventHandler(Connection c);
-        public event ConnectionEventHandler Create;
-        public event ConnectionEventHandler StateChanged;
-        public event ConnectionEventHandler Delete;
+        public static event ConnectionEventHandler Create;
+        public static event ConnectionEventHandler StateChanged;
+        public static event ConnectionEventHandler BeforeDelete;
+        public static event ConnectionEventHandler Delete;
 
         public delegate void ConnectionErrorHandler(Exception err);
         public event ConnectionErrorHandler Error;
@@ -200,7 +201,8 @@ namespace FreeModScan
                     return;
                 sw.Stop();
                 Register.RegType rT = (Register.RegType)BitConverter.ToInt16(resp, 1);
-                var tmpColl = Devices[MainForm.currDevice].Registers.Where(r => r.Type == rT);
+                //var tmpColl = Devices[MainForm.currDevice].Registers.Where(r => r.Type == rT);
+                var tmpColl = MainForm.currDevice.Registers.Where(r => r.Type == rT);
                 int index = 3;//первые 3 байта ответа - номер устройства, номер команды, признак ошибки/корректного ответа - пропускаем
                 int skip = 0;
                 foreach (Register r in tmpColl)
@@ -237,7 +239,7 @@ namespace FreeModScan
             //Эмулятор ответов
             byte[] buff = new byte[45] { 0x01, 0x03, 0x28, 0x00, 0x00, 0x00, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0E, 0x08, 0xA1, 0x09, 0xA2, 0xAB, 0xCD, 0x01, 0x02, 0x03, 0xE8, 0x13, 0x8A, 0x00, 0x00, 0x00, 0x00, 0x74, 0x40 };
             Console.Out.WriteLine(DateTime.Now + " << [" + BitConverter.ToString(buff, 0)+"]");
-            MainForm.console.Add(DateTime.Now + " >> [" + BitConverter.ToString(buff) + "] \n");
+            Console.Write(" >> [" + BitConverter.ToString(buff) + "]");
 
             if (buff.Count() >= buffSize)
             {
@@ -254,7 +256,8 @@ namespace FreeModScan
                     return;//TODO сделать анализ ошибок modbus
                 sw.Stop();
                 Register.RegType rT = (Register.RegType)BitConverter.ToInt16(resp, 1);
-                var tmpColl = Devices[MainForm.currDevice].Registers.Where(r => r.Type == rT);
+                //var tmpColl = Devices[MainForm.currDevice].Registers.Where(r => r.Type == rT);
+                var tmpColl = MainForm.currDevice.Registers.Where(r => r.Type == rT);
                 int index = 3;//первые 3 байта ответа - номер устройства, номер команды, признак ошибки/корректного ответа - пропускаем
                 int skip = 0;
                 foreach (Register r in tmpColl)
@@ -333,7 +336,7 @@ namespace FreeModScan
                     dataProcessed = false;
                     QueriesNumSND++;
                     Console.Out.WriteLine(DateTime.Now + " >> [" + BitConverter.ToString(tmp) + "]");
-                    MainForm.console.Add(DateTime.Now + " >> [" + BitConverter.ToString(tmp) + "] \n");
+                    Console.Write(" >> [" + BitConverter.ToString(tmp) + "]");
                 }
                 
             //}

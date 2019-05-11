@@ -232,9 +232,10 @@ namespace FreeModScan
         }
 
         public delegate void RegisterEventHandler(Register r);
-        public event RegisterEventHandler Create;
-        public event RegisterEventHandler StateChanged;
-        public event RegisterEventHandler Delete;
+        public static event RegisterEventHandler Create;
+        public static event RegisterEventHandler Change;
+        public static event RegisterEventHandler DeleteAll;
+        public static event RegisterEventHandler Delete;
 
         public delegate void RegisterErrorHandler(Exception e);
         public event RegisterErrorHandler Error;//нужны для работы с событием в главной форме и прочих классах
@@ -342,9 +343,9 @@ namespace FreeModScan
         {
             if (Create != null) Create(this);
         }
-        public void OnStateChanged()
+        public void OnChange()
         {
-            if (StateChanged != null) StateChanged(this);
+            if (Change != null) Change(this);
         }
         public void OnDelete()
         {
