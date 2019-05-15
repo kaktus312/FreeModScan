@@ -18,6 +18,7 @@ namespace FreeModScan
     public partial class MainForm : Form
     {
         TextWriter _writer = null;// Это специальный класс TextWriter для вывода сообщений консоли в Textbox
+        public static object locker = new object();
 
         private const string NO_CONN_ADD_MSG = "Для добавления устройства создайте новое подключение";
         private const string EMPTY_CONN_LIST_MSG = "Список подключений пуст";
@@ -35,6 +36,8 @@ namespace FreeModScan
         public static Device currDevice = null;//текущее устройство
         public static Register currRegister = null;//текущий регистр
 
+        public static bool registerDelitting = false;
+
         //public static BindingList<string> console = new BindingList<string>();
 
         public static CRC16 CRC = new CRC16();
@@ -46,19 +49,22 @@ namespace FreeModScan
             InitializeComponent();
             _conns.ListChanged += new ListChangedEventHandler(Connections_ListChanged);
             //console.ListChanged += new ListChangedEventHandler(ConsoleMsg_Changes);
-            cbConnectionList.DataSource = _conns;
-            cbConnectionList.DisplayMember = "PortName";
-            cbConnectionList.ValueMember = "ConnName";
+                cbConnectionList.DataSource = _conns;
+                cbConnectionList.DisplayMember = "ConnName";
+                cbConnectionList.ValueMember = "ConnName";
 
             cbDataType.DataSource = Enum.GetNames(typeof(Register.DataType));
             cbDataType.SelectedIndex = (int)Register.DataType.Int16;
             tslRequestTotalNum.Text = tslAnswerNum.Text = tsLblLogRecordsNum.Text = tslRequestTime.Text = "0";
 
             Register.Create += new Register.RegisterEventHandler(registerCreated);
+            Register.ChangeType += new Register.RegisterEventHandler(registerDeleted);
             Register.Delete += new Register.RegisterEventHandler(registerDeleted);
             Device.Create += new Device.DeviceEventHandler(deviceAdded);
             Device.Delete += new Device.DeviceEventHandler(deviceDeleted);
             Connection.StateChanged += new Connection.ConnectionEventHandler(ConnStateChanged);
+            Connection.Error += new Connection.ConnectionErrorHandler(ConnError);
+            dgvTable.DataError += new DataGridViewDataErrorEventHandler(test);//для подавления ошибки при удалении последних строк DataGridView
 
             // Инстанциируем writer
             _writer = new ConsoleStreamWriter(rtbConsole);
@@ -78,11 +84,18 @@ namespace FreeModScan
 
         private void registerDeleted(Register r)
         {
-            Console.Write("Class MainForm: Register Deleted");
+            Console.Write("Class MainForm: After Register Deleting");
+            //bool PollTimerState = PollTimer.Enabled;//сосояние опроса до удаления регистра
+            //PollTimer.Enabled = false;//остановка опроса
+            //currConn.UpdateRequests();//обновление запроса
+            ////foreach (byte[] tmpReq in currConn.requests)
+            ////    Console.Write(Convert.ToString(tmpReq));
+            //PollTimer.Enabled = PollTimerState;//восстановление состояния 
         }
-
+   
         private void Connections_ListChanged(object sender, ListChangedEventArgs e)
         {
+
             Connection conn = null;
             int connsNum = _conns.Count();//поличество подключений после изменения
 
@@ -101,12 +114,7 @@ namespace FreeModScan
                     //tvConnectionTree.Nodes.Add(_conns[currConn].ConnName + " (" + _conns[currConn].Port.PortName + "): " + _conns[currConn].statusString);
                     //console.Add("** " + DateTime.Now + " - " + _conns[currConn].ConnName + " (" + _conns[currConn].Port.PortName + "): Соединение создано**\n");
                     tvConnectionTree.Nodes.Add(currConn.ConnName + " (" + currConn.Port.PortName + "): " +currConn.statusString);
-                    Console.Write(currConn.ConnName + " (" + currConn.Port.PortName + "): Соединение создано");
-
-                    //подписываемся на события
-                    //conn.StateChanged += new Connection.ConnectionEventHandler(ConnStateChanged);
-                    //conn.Delete += new Connection.ConnectionEventHandler(ConnDelete);
-                    conn.Error += new Connection.ConnectionErrorHandler(ConnError);
+                    Console.Write(currConn.ConnName + " (" + currConn.Port.PortName + "): Соединение создано");                   
 
                     //запуск события Создания для других подписчиков
                     conn.OnCreate();
@@ -200,11 +208,9 @@ namespace FreeModScan
 
         private void ConnectionAddForm_Show(object sender, EventArgs e)
         {
-            ConnectionForm connForm = new ConnectionForm(ref _conns);
-            if (connForm.ShowDialog(this) == DialogResult.OK)
+            ConnectionForm connForm = new ConnectionForm();
+            if (connForm.ShowDialog() == DialogResult.OK)
             {
-                //_conns.Last().OnStateChanged += new Connection.ConnectionEventHandler(ConnStateChanged);
-                //_conns.Last().OnError += new Connection.ConnectionErrorHandler(ConnError);
                 tvConnectionTree.SelectedNode = tvConnectionTree.Nodes[_conns.IndexOf(currConn)];
                 tvConnectionTree.Focus();
             }
@@ -234,12 +240,8 @@ namespace FreeModScan
             //TreeNode currNode = tvConnectionTree.Nodes[currConn];
             TreeNode currNode = tvConnectionTree.Nodes[_conns.IndexOf(currConn)];
             currNode.Text = c.ConnName + " - " + c.Port.PortName + " - " + c.statusString;
-            //rtbConsole.Text = "** " + DateTime.Now.ToString() + " - " + conn.ConnName + " : Соединение по " + conn.Port.PortName + " " + conn.statusString + ". **" + "\n" + rtbConsole.Text;
-            //console.Add("** " + DateTime.Now.ToString() + " - " + c.ConnName + " : Соединение по " + c.Port.PortName + " " + c.statusString + ". **" + "\n");
             Console.Write(c.ConnName + " ("+c.Port.PortName+"): Соединение " + c.statusString);
-            //currNode.ForeColor = (conn.status)? Color.Black : Color.DarkGray;
-            //MessageBox.Show(conn.ConnName + " - " + conn.statusString);
-            //_conns.Last().OnDataReady += new Connection.PollEventHandler(dataReady);
+
             var tmpColl = _conns.Where(tmpConn => c.status == true);
             if (tmpColl.Count() <= 0)
             {
@@ -319,44 +321,6 @@ namespace FreeModScan
             //dgvTable.Rows[0].Cells[0].Selected = true;
 
         }
-
-        //public void addRegisters(Device dev, string regString, int rType, int dType, int bOrder = 1)
-        //{
-        //    MatchCollection matches = Regex.Matches(regString, "((?<s>\\d+)-(?<e>\\d+))|(?<r>\\d+)");
-
-        //    foreach (Match match in matches)
-        //    {
-        //        Register tmpReg = null;
-        //        int startIndex = 0;
-        //        int endIndex = -1;
-
-        //        if (match.Groups["r"].Value != "")
-        //        {
-        //            //MessageBox.Show(uint.Parse(match.Groups["r"].Value).ToString());
-        //            startIndex = endIndex = int.Parse(match.Groups["r"].Value);
-        //        }
-
-        //        if ((match.Groups["s"].Value != "") && (match.Groups["e"].Value != ""))
-        //        {
-        //            startIndex = int.Parse(match.Groups["s"].Value);
-        //            endIndex = int.Parse(match.Groups["e"].Value);
-        //        }
-
-        //        for (int i = startIndex; i <= endIndex; i++)
-        //        {
-        //            tmpReg = new Register(dev.deviceName, (uint)i, (Register.RegType)rType, (Register.DataType)dType, (Register.ByteOrder)bOrder);
-        //            tmpReg.Create += new Register.RegisterEventHandler(RegisterAdded);//подписываемся на событие Создания
-        //            //MessageBox.Show(i.ToString());
-        //            dev.Registers.Add(tmpReg);
-        //        }
-        //    }
-        //}
-
-        //public void RegisterAdded(Register r)
-        //{
-        //    rtbConsole.Text = "Register was Added" + rtbConsole.Text;
-        //    MessageBox.Show("Register was Added");
-        //}
 
         private void удалитьВсеПодключенияToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -566,8 +530,15 @@ namespace FreeModScan
             //if (res == DialogResult.OK)
             //{
             //    Device currDev = currConn.Devices.Last();
+            //    currDev.Registers.ListChanged += new ListChangedEventHandler(RegistersListChanged);
             //}
         }
+
+        //private void RegistersListChanged(object sender, ListChangedEventArgs e)
+        //{
+        //    if (PollTimer.Enabled)
+        //        MessageBox.Show("Bingo2!");
+        //}
 
         internal void deviceAdded(Device d)
         {
@@ -583,6 +554,7 @@ namespace FreeModScan
             //currRegister = 0;
             //console.Add("** " + DateTime.Now.ToString() + " - " + _conns[currConn].ConnName + " (" + _conns[currConn].Port.PortName + "): Добавлено устройство " + d.deviceName + " **" + "\n");
             currDevice = currConn.Devices[currNode.LastNode.Index];
+            //currDevice.Registers.ListChanged += new ListChangedEventHandler(RegistersListChanged);
             currRegister = (currDevice.Registers.Count()>0)?currDevice.Registers.First():null;
             Console.Write(currConn.ConnName + " (" + currConn.Port.PortName + "): Устройство " + d.deviceName + " добавлено");
         }
@@ -646,32 +618,39 @@ namespace FreeModScan
 
         private void tsmi_DelCurrRegister_Click(object sender, EventArgs e)
         {
-            DataGridViewSelectedRowCollection selRows = dgvTable.SelectedRows;
-            if (selRows.Count == 0)
+            lock (locker)
             {
-                 dgvTable.CurrentRow.Selected = true;
-                selRows = dgvTable.SelectedRows;
-            }
+                bool PollTimerState = PollTimer.Enabled;//сосояние опроса до удаления регистра
+                PollTimer.Enabled = false;//остановка опроса
 
-            foreach (DataGridViewRow tmpRow in selRows)
-            {
-                Register tmpR = (Register)tmpRow.DataBoundItem;
-                tmpR.OnDelete();
-                currDevice.Registers.Remove(tmpR);//или вариант ниже
-                //dgvTable.Rows.RemoveAt(tmpRow.Index);//или вариант ниже
-                //_conns[currConn].Devices[currDevice].Registers.RemoveAt(tmpRow.Index);
-                dgvTable.Update();//необходимо для исключения возникновения ошибки при удалении строк, видимых на экране
-            }
+                DataGridViewSelectedRowCollection selRows = dgvTable.SelectedRows;
+                if (selRows.Count == 0)
+                {
+                    dgvTable.CurrentRow.Selected = true;
+                    selRows = dgvTable.SelectedRows;
+                }
 
-            if (dgvTable.SelectedCells.Count > 0)
-                //currRegister = dgvTable.SelectedCells[0].RowIndex;
-                currRegister = currDevice.Registers[dgvTable.SelectedCells[0].RowIndex];
-            else
-            {
-                //currRegister = -1;
-                currRegister = null;
+                foreach (DataGridViewRow tmpRow in selRows)
+                {
+                    Register tmpR = (Register)tmpRow.DataBoundItem;//текущий объект, связанный с активно строкой
+                    currDevice.Registers.Remove(tmpR);
+                }
+
+                if (dgvTable.CurrentRow != null)
+                    currRegister = (Register)dgvTable.CurrentRow.DataBoundItem;
+                else
+                    currRegister = null;
+                //MessageBox.Show(currRegister.ToString());
+                dgvTable.Update();
+                currConn.UpdateRequests();//обновление запроса
+                registerDelitting = false;
+                PollTimer.Enabled = PollTimerState;//восстановление состояния 
             }
-            //MessageBox.Show(currRegister.ToString());
+        }
+
+        private void test(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            //e.Cancel = true;
         }
 
         private void btnTableUpdate_Click(object sender, EventArgs e)
@@ -902,6 +881,7 @@ namespace FreeModScan
                 currRegister.dataType = Register.DataType.Int16;
                 currRegister.ValArr = new byte[2];
                 dgvRowUpdate();
+                currRegister.OnChangeType();
             }
         }
 
@@ -915,6 +895,7 @@ namespace FreeModScan
                 currRegister.dataType = Register.DataType.Int32;
                 currRegister.ValArr = new byte[4];
                 dgvRowUpdate();
+                currRegister.OnChangeType();
             }
         }
 
@@ -928,6 +909,7 @@ namespace FreeModScan
                 currRegister.dataType = Register.DataType.Int64;
                 currRegister.ValArr = new byte[8];
                 dgvRowUpdate();
+                currRegister.OnChangeType();
             }
         }
 
@@ -941,6 +923,7 @@ namespace FreeModScan
                 currRegister.dataType = Register.DataType.Float;
                 currRegister.ValArr = new byte[8];
                 dgvRowUpdate();
+                currRegister.OnChangeType();
             }
         }
 
@@ -1046,12 +1029,8 @@ namespace FreeModScan
                         currConn.Poll();
 
                         //обновление колонки значений
-                        try
-                        {
-                            for (int i = 0; i < dgvTable.RowCount; i++)
-                                dgvTable.UpdateCellValue((dgvTable.ColumnCount - 1), i);
-                        }
-                        catch { }
+                                for (int i = 0; i < dgvTable.RowCount; i++)
+                                    dgvTable.UpdateCellValue((dgvTable.ColumnCount - 1), i);
                     }
             }
         }
@@ -1221,6 +1200,12 @@ namespace FreeModScan
                 cMSConnTree.Items["tsmiAddRegisters"].Enabled =
                 cMSConnTree.Items["tsmiDelAll"].Enabled = false;
             }
+        }
+
+        private void dgvTable_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e)
+        {
+            dgvTable.RefreshEdit();
+            dgvTable.Update();
         }
 
 

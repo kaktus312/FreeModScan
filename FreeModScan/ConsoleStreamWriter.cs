@@ -19,7 +19,11 @@ namespace FreeModScan
         {
             string tmp = "** " + DateTime.Now.ToString() + " - " + value + " **" + "\n";
             base.Write(tmp);
-            _output.Text = tmp + _output.Text;// Когда символ записывается в поток, добавляем его в textbox/RichTextBox.
+            if (_output.InvokeRequired)//для доступа к RichTextBox не из того потока в котором он был создан
+                _output.Invoke(new Action<string>((s) => _output.Text = s+ _output.Text), tmp);
+            else
+                _output.Text = tmp + _output.Text;// Когда символ записывается в поток, добавляем его в textbox/RichTextBox.
+            //_output.Text = tmp + _output.Text;
         }
         public override Encoding Encoding
         {

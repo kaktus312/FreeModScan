@@ -77,7 +77,7 @@ namespace FreeModScan
                 //MainForm._conns[MainForm.currConn].Devices[MainForm.currDevice].Registers.RemoveAt(MainForm.currRegister);
             }
 
-            currReg.OnChange();
+            
         }
 
         private void cbConnectionList_SelectedIndexChanged(object sender, EventArgs e)

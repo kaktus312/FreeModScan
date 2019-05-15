@@ -44,7 +44,7 @@ namespace FreeModScan
 
         public BindingList<Device> Devices = new BindingList<Device>();
 
-        Queue<byte[]> requests = new Queue<byte[]>();
+        public Queue<byte[]> requests = new Queue<byte[]>();
         int buffSize = 0;//требуемый размер буфера для полного ответа на текущий запрос
         int totalRCV;//общая длина ответа, которая должна равнятся buffSize при приёме в несколько этапов
 
@@ -59,7 +59,7 @@ namespace FreeModScan
         public static event ConnectionEventHandler Delete;
 
         public delegate void ConnectionErrorHandler(Exception err);
-        public event ConnectionErrorHandler Error;
+        public static event ConnectionErrorHandler Error;
 
 
 
@@ -78,7 +78,19 @@ namespace FreeModScan
             ReadTimeout = readTout;
             Devices.ListChanged += new ListChangedEventHandler(Devices_ListChanged);
             Port.DataReceived += new SerialDataReceivedEventHandler(spDataReceived);
+            Register.Delete += new Register.RegisterEventHandler(RegisterDeleted);
             sw = new Stopwatch();
+        }
+
+        private void RegisterDeleted(Register r)
+        {
+            /*
+             * 1. Остановить опрос
+             * 2. Обновить запрос в соответствии с новым набором регистров
+             * 3. Запустить опрос
+             * Аналогично - для случая добавления регистра
+             */
+            Console.Write("Class Connection: Register Deleted");
         }
 
         private void Devices_ListChanged(object sender, ListChangedEventArgs e)
@@ -94,7 +106,7 @@ namespace FreeModScan
                 case ListChangedType.ItemAdded:
                     //Add item here.
                     MessageBox.Show("Device Added");
-
+                    dev.Registers.ListChanged += new ListChangedEventHandler(RegistersListChanged);
                     //запуск события Создания для других подписчиков
                     dev.OnCreate();
                     break;
@@ -118,6 +130,13 @@ namespace FreeModScan
                     MessageBox.Show("Reset");
                     break;
             }
+            
+        }
+
+        private void RegistersListChanged(object sender, ListChangedEventArgs e)
+        {
+            //UpdateRequests();
+           //MessageBox.Show("Bingo2!");//не выводить Messagebox иначе - ошибка при удалении строк в dgvTable
         }
 
         //Методы On.....() - для запуска события из внешних классов
@@ -175,62 +194,72 @@ namespace FreeModScan
 
         private void spDataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            byte[] buff = new byte[buffSize];
-            //byte[] buff = new byte[Port.BytesToRead];
-            //Console.Out.WriteLine(DateTime.Now + " << [" + Port.BytesToRead + "]");
-            //Port.Read(buff, 0, Port.BytesToRead);
-            //Console.Out.WriteLine(DateTime.Now + " << " + BitConverter.ToString(buff));
-
-
-            //byte[] resp = buff.Take(buffSize - 2).ToArray();//без 2-х последних байтов ответа (CRC16)
-            //byte[] crc = buff.Skip(buffSize - 2).Take(2).ToArray();//2 последних байта ответа (CRC16)
-            //TODO предусмотреть прием ответа частями
-            if (Port.BytesToRead >= buffSize)
+            //try
+            //{
+            lock (MainForm.locker)
             {
-                //ответ полный, проверяем контрольную сумму и анализируем ответ
-                Port.Read(buff, 0, buffSize);
-                Console.Out.WriteLine(DateTime.Now + " << " + BitConverter.ToString(buff));
-                //MainForm.console.Add(DateTime.Now + " >> [" + BitConverter.ToString(buff) + "] \n");
-                byte[] resp = buff.Take(buffSize - 2).ToArray();//без 2-х последних байтов ответа (CRC16)
-                byte[] crc = buff.Skip(buffSize - 2).Take(2).ToArray();//2 последних байта ответа (CRC16)
-                ushort crcRCV = BitConverter.ToUInt16(crc, 0);
-                ushort _crc16 = MainForm.CRC.ComputeChecksum(resp);
-                Console.Out.WriteLine(DateTime.Now + " << " + crcRCV + " / " + _crc16);
 
-                if (crcRCV != _crc16)
-                    return;
-                sw.Stop();
-                Register.RegType rT = (Register.RegType)BitConverter.ToInt16(resp, 1);
-                //var tmpColl = Devices[MainForm.currDevice].Registers.Where(r => r.Type == rT);
-                var tmpColl = MainForm.currDevice.Registers.Where(r => r.Type == rT);
-                int index = 3;//первые 3 байта ответа - номер устройства, номер команды, признак ошибки/корректного ответа - пропускаем
-                int skip = 0;
-                foreach (Register r in tmpColl)
+            
+            byte[] buff = new byte[buffSize];
+                //byte[] buff = new byte[Port.BytesToRead];
+                //Console.Out.WriteLine(DateTime.Now + " << [" + Port.BytesToRead + "]");
+                //Port.Read(buff, 0, Port.BytesToRead);
+                //Console.Out.WriteLine(DateTime.Now + " << " + BitConverter.ToString(buff));
+
+
+                //byte[] resp = buff.Take(buffSize - 2).ToArray();//без 2-х последних байтов ответа (CRC16)
+                //byte[] crc = buff.Skip(buffSize - 2).Take(2).ToArray();//2 последних байта ответа (CRC16)
+                //TODO предусмотреть прием ответа частями
+                if (Port.BytesToRead >= buffSize)
                 {
-                    if (skip > 0)
+                    //ответ полный, проверяем контрольную сумму и анализируем ответ
+                    Port.Read(buff, 0, buffSize);
+                    Console.Write(" << " + BitConverter.ToString(buff));
+
+                    byte[] resp = buff.Take(buffSize - 2).ToArray();//без 2-х последних байтов ответа (CRC16)
+                    byte[] crc = buff.Skip(buffSize - 2).Take(2).ToArray();//2 последних байта ответа (CRC16)
+                    ushort crcRCV = BitConverter.ToUInt16(crc, 0);
+                    ushort _crc16 = MainForm.CRC.ComputeChecksum(resp);
+
+                    if (crcRCV != _crc16)
+                        return;
+
+                    sw.Stop();
+                    Register.RegType rT = (Register.RegType)BitConverter.ToInt16(resp, 1);
+                    var tmpColl = MainForm.currDevice.Registers.Where(r => r.Type == rT);
+                    int index = 3;//первые 3 байта ответа - номер устройства, номер команды, признак ошибки/корректного ответа - пропускаем
+                    int skip = 0;
+                    int skipRegs = 0;
+                    int startAdrr = 0;
+                    foreach (Register r in tmpColl)
                     {
-                        r.Status = false;
-                        skip--;
-                    }
-                    else
-                    {
-                        r.Status = true;
                         int bytesNum = Convert.ToInt32(r.ByteNum());
-                        skip = bytesNum / 2 - 1;//сколько регистров необходимо пропустить для случая, если значение занимает несколько регистров
-                        byte[] tmp = buff.Skip(index).Take(bytesNum).ToArray();
-
-                        r.ValArr = tmp;
-                        //Console.Out.Write(BitConverter.ToString(r.ValArr)+"\n");
-                        index += bytesNum;
+                        int adr = (int) r.Adress;
+                        if ((adr - startAdrr) <= (skipRegs))
+                        {
+                            r.Status = false;
+                        }
+                        else
+                        { 
+                            r.Status = true;
+                            skip = (int) (r.Adress - 1) * 2 + 3;//сколько регистров необходимо пропустить для случая, если значение занимает несколько регистров
+                            byte[] tmp = buff.Skip(skip).Take(bytesNum).ToArray();
+                            r.ValArr = tmp;
+                            skipRegs = bytesNum/2-1;
+                            startAdrr = adr;
+                        } 
                     }
 
+                    QueriesNumRCV++;
+
+                    totalRCV = 0;
+                    dataProcessed = true;
                 }
-
-                QueriesNumRCV++;
-
-                totalRCV = 0;
-                dataProcessed = true;
             }
+            //} catch(Exception exept)
+            //{
+            //    Console.Write(exept.Message);
+            //}
             //OnDataReady();
         }
 
@@ -288,34 +317,6 @@ namespace FreeModScan
             }
         }
 
-        public void Poll(int ID)
-        {
-            if (requests.Count <= 0)
-                QueryGen(ID);
-
-            foreach (byte[] tmp in requests)
-            {
-                //Console.Out.WriteLine(DateTime.Now + " >> ");
-                if (this.status)
-                {
-                    sw.Restart();
-
-                    buffSize = BitConverter.ToUInt16(tmp.Skip(4).Take(2).Reverse().ToArray(), 0);//BIG ENDIAN
-                    buffSize = buffSize * 2 + 5;
-                    Console.Out.WriteLine(DateTime.Now + " >> " + buffSize.ToString());
-                    this.Port.Write(tmp, 0, 8);
-                    dataProcessed = false;
-                    QueriesNumSND++;
-                    Console.Out.WriteLine(DateTime.Now + " >> [" + BitConverter.ToString(tmp) + "]");
-                    //MainForm.console.Add(DateTime.Now + " >> [" + BitConverter.ToString(tmp) + "] \n");
-                    //ожидаем ответа или окончания времени его ожидания
-                    //while ((!dataProcessed)) { }
-                }
-                spDataReceived();
-            }
-            //requests.Clear();//или очищать или формировать запросы один раз и перегенерировать их при необходимости
-        }
-
         public void Poll()
         {
             //if (requests.Count <= 0)
@@ -326,14 +327,16 @@ namespace FreeModScan
                 //Console.Out.WriteLine(DateTime.Now + " >> ");
                 if (this.status)
                 {
-                    byte[] tmp = requests.Peek();
-                    sw.Restart();
+                byte[] tmp = requests.Dequeue();
+                //byte[] tmp = requests.Peek();
+                sw.Restart();
 
                     buffSize = BitConverter.ToUInt16(tmp.Skip(4).Take(2).Reverse().ToArray(), 0);//BIG ENDIAN
                     buffSize = buffSize * 2 + 5;
                     Console.Out.WriteLine(DateTime.Now + " >> " + buffSize.ToString());
                     this.Port.Write(tmp, 0, 8);
-                    dataProcessed = false;
+                requests.Enqueue(tmp);
+                dataProcessed = false;
                     QueriesNumSND++;
                     Console.Out.WriteLine(DateTime.Now + " >> [" + BitConverter.ToString(tmp) + "]");
                     Console.Write(" >> [" + BitConverter.ToString(tmp) + "]");
@@ -378,31 +381,92 @@ namespace FreeModScan
                 {
                     uint regSize = tmpColl.ElementAt(j).RegSize();
                     long adr = tmpColl.ElementAt(j).Adress;
-                    long delta = adr - maxAddr;
-                    if (Math.Abs(delta) == 1)
-                    {
+                    //long delta = adr - maxAddr;
+                    //if (Math.Abs(delta) == 1)
+                    //{
                         if (adr < minAddr)
                             minAddr = (uint)(adr-1);
-                        maxAddr += regSize;
-                        counter += regSize;
-                    }
-                    else
-                    {
-                        if ((delta > 1) && (counter >= 1))
-                        {
-                            CreateRequest(Devices[ID].deviceAdress, (byte)tmp, counter, minAddr); //создаём запрос для группы регистров с неприрывным диапазоном адресов
-                            minAddr = (uint)(adr - 1);
-                            maxAddr = minAddr+regSize;
-                            counter = regSize;
-                        }
-                    }
+                    if (adr > maxAddr)
+                        maxAddr = (uint)(adr - 1)+ regSize;//TODO Организовать изменение запроса при изменении типа регистра
+
+                    counter += regSize;
+                    //}
+                    //else
+                    //{
+                    //    if ((delta > 1) && (counter >= 1))
+                    //    {
+                    //        CreateRequest(Devices[ID].deviceAdress, (byte)tmp, counter, minAddr); //создаём запрос для группы регистров с неприрывным диапазоном адресов
+                    //        minAddr = (uint)(adr - 1);
+                    //        maxAddr = minAddr+regSize;
+                    //        counter = regSize;
+                    //    }
+                    //}
                 }
 
                 //формируем один запрос для группы регистров с неприрывным диапазоном адресов
                 if (counter >= 1)
-                    CreateRequest(Devices[ID].deviceAdress, (byte)tmp, counter, minAddr);
+                    CreateRequest(Devices[ID].deviceAdress, (byte)tmp, maxAddr, minAddr);
             }
         }
+       //private void QueryGen(int ID)
+       // {
+       //     //Формат запроса Modbus-RTU: SlaveID+"03"+"Начальный регистр"+"Количество регистров"+"Контрольная сумма" 
+       //     //Например: 01 03 006B 0003 7417
+       //     //где   0x01 - адрес прибора
+       //     //      0х03 - команда (чтение)
+       //     //    0x006B - начальный адрес группы опрашиваемых регисторов (107 в десятичном представлении)
+       //     //    0x0003 - количество опрашиваемых регисторов в группе (3 в десятичном представлении)      
+       //     //    0x7417 - контрольная сумма для предыдущих данных (29719 в десятичном представлении) 
+
+       //     //1. Определяем адрес нужного прибора 
+       //     //2. Определяем команду
+       //     //3. Определяем минимальный адрес регистра в списке регистров данного устройства
+       //     //4. Определяем количество регистров с учётом типов данных, хранящихся в них
+       //     //5. Рассчитываем контрольную сумму для предыдущего набора данных (п. 1-4)
+       //     //6. Формируем массив байтов для отправки запроса в порт, связанный с текущим соединением
+       //     //7. Анализируем ответ        
+
+
+       //     //TODO Формировать запрос с  учётом типа регистра
+       //     foreach (Register.RegType tmp in Enum.GetValues(typeof(Register.RegType)))
+       //     {
+       //         //Console.Out.WriteLine(tmp);
+       //         var tmpColl = Devices[ID].Registers.Where(T => T.Type == tmp);//TODO реализовать опрос регистров других типов
+
+       //         uint counter = 0;
+       //         uint minAddr = 999999;
+       //         uint maxAddr = 0;
+       //         int numRegs = tmpColl.Count();
+       //         //int sh = 0;
+       //         for (int j = 0; j < numRegs; j++)
+       //         {
+       //             uint regSize = tmpColl.ElementAt(j).RegSize();
+       //             long adr = tmpColl.ElementAt(j).Adress;
+       //             long delta = adr - maxAddr;
+       //             if (Math.Abs(delta) == 1)
+       //             {
+       //                 if (adr < minAddr)
+       //                     minAddr = (uint)(adr-1);
+       //                 maxAddr += regSize;
+       //                 counter += regSize;
+       //             }
+       //             else
+       //             {
+       //                 if ((delta > 1) && (counter >= 1))
+       //                 {
+       //                     CreateRequest(Devices[ID].deviceAdress, (byte)tmp, counter, minAddr); //создаём запрос для группы регистров с неприрывным диапазоном адресов
+       //                     minAddr = (uint)(adr - 1);
+       //                     maxAddr = minAddr+regSize;
+       //                     counter = regSize;
+       //                 }
+       //             }
+       //         }
+
+       //         //формируем один запрос для группы регистров с неприрывным диапазоном адресов
+       //         if (counter >= 1)
+       //             CreateRequest(Devices[ID].deviceAdress, (byte)tmp, counter, minAddr);
+       //     }
+       // }
 
         public void ClearRequests()
         {

@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Список подключений пуст");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Список подключений пуст");
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.tslRequestTime = new System.Windows.Forms.ToolStripStatusLabel();
@@ -840,7 +840,7 @@
             this.tsTbPollInterval});
             this.toolStrip2.Location = new System.Drawing.Point(3, 75);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(253, 25);
+            this.toolStrip2.Size = new System.Drawing.Size(222, 25);
             this.toolStrip2.TabIndex = 3;
             this.toolStrip2.Text = "toolStrip2";
             // 
@@ -1118,10 +1118,10 @@
             this.tvConnectionTree.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tvConnectionTree.Location = new System.Drawing.Point(3, 32);
             this.tvConnectionTree.Name = "tvConnectionTree";
-            treeNode2.Name = "Узел0";
-            treeNode2.Text = "Список подключений пуст";
+            treeNode1.Name = "Узел0";
+            treeNode1.Text = "Список подключений пуст";
             this.tvConnectionTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode1});
             this.tvConnectionTree.Size = new System.Drawing.Size(338, 188);
             this.tvConnectionTree.TabIndex = 3;
             this.tvConnectionTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvConnectionTree_AfterSelect);
@@ -1264,7 +1264,7 @@
             // dgvTable
             // 
             this.dgvTable.AllowUserToAddRows = false;
-            this.dgvTable.AllowUserToOrderColumns = true;
+            this.dgvTable.AllowUserToResizeRows = false;
             this.dgvTable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -1292,6 +1292,7 @@
             this.dgvTable.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgvTable_CellMouseClick);
             this.dgvTable.CellValidated += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellValidated);
             this.dgvTable.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellValueChanged);
+            this.dgvTable.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dgvTable_RowsRemoved);
             this.dgvTable.SelectionChanged += new System.EventHandler(this.dgvTable_SelectionChanged);
             // 
             // RegisterCol

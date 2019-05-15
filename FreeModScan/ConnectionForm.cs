@@ -16,10 +16,10 @@ namespace FreeModScan
         Connection conn;
         BindingList<Connection> refConns;
 
-        public ConnectionForm(ref BindingList<Connection> conns)//вызывается в случае создания подключения
+        public ConnectionForm()//вызывается в случае создания подключения
         {
             InitializeComponent();
-            refConns = conns;
+            //refConns = conns;
             this.Text = "Добавить подключение";
         }
 
@@ -104,7 +104,7 @@ namespace FreeModScan
         {
             if (conn == null)
             {
-                refConns.Add(CreateConnection());
+                MainForm._conns.Add(CreateConnection());
             } else
             {
                 conn.ConnType = cbConnType.SelectedIndex;
@@ -117,17 +117,17 @@ namespace FreeModScan
                 conn.WriteTimeout = Convert.ToUInt32(tbDelayWrite.Text);
                 conn.ReadTimeout = Convert.ToUInt32(tbDelayRead.Text);
             }
-            this.Close();
+            //this.Close();
         }
 
         private void btnAddAndConnect_Click(object sender, EventArgs e)
         {
-            refConns.Add(CreateConnection());       //создаём новое подключение
+            MainForm._conns.Add(CreateConnection());       //создаём новое подключение
             
-            foreach (Connection tmp in refConns)
+            foreach (Connection tmp in MainForm._conns)
                 if ((tmp != null) && (!tmp.status))
                     tmp.Open();                         //подключаем все доступные    
-            this.Close();
+            //this.Close();
         }
 
         private void cbStopBits_SelectedIndexChanged(object sender, EventArgs e)

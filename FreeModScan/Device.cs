@@ -35,12 +35,13 @@ namespace FreeModScan
         {
             //для сериализации (при сохранении в XML) необходим конструктор без параметров 
             Registers.ListChanged += new ListChangedEventHandler(Registers_ListChanged);
-            DeleteAll += new DeviceEventHandler(RegistersDeleted);//подписываемся на событие Удаления
+
             Register.Delete += new Register.RegisterEventHandler(RegisterDeleted);
             Register.Create += new Register.RegisterEventHandler(RegisterAdded);//подписываемся на событие Создания
-            Register.Change += new Register.RegisterEventHandler(RegisterChanged);//подписываемся на событие Изменения
+            Register.ChangeType += new Register.RegisterEventHandler(RegisterTypeChanged);//подписываемся на событие ИзмененияТипа
 
             Delete += new DeviceEventHandler(DeviceDeleted);
+            DeleteAll += new DeviceEventHandler(RegistersDeleted);//подписываемся на событие Удаления
         }
 
         private void DeviceDeleted(Device d)
@@ -84,7 +85,7 @@ namespace FreeModScan
 
                 case ListChangedType.ItemDeleted:
                     //MessageBox.Show("Register deleted");
-                    //reg.OnDelete();
+                    Register.OnAfterDelete();
                     break;
 
                 case ListChangedType.Reset:
@@ -171,9 +172,9 @@ namespace FreeModScan
             }
         }
 
-        private void RegisterChanged(Register r)
+        private void RegisterTypeChanged(Register r)
         {
-           Console.Write("Class Device: register changed");
+           Console.Write("Class Device: register type was changed");
         }
 
         private void RegisterDeleted(Register r)
