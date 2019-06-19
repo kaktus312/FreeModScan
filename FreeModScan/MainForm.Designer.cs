@@ -136,17 +136,12 @@
             this.tsmiDelAll = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.tabControl = new System.Windows.Forms.TabControl();
+            this.TablePage = new System.Windows.Forms.TabPage();
+            this.btnCellAdd = new System.Windows.Forms.Button();
+            this.btnTableClear = new System.Windows.Forms.Button();
+            this.btnTableUpdate = new System.Windows.Forms.Button();
             this.dgvTable = new System.Windows.Forms.DataGridView();
-            this.RegisterCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DeviceCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AdressCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FormatCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ByteOrderCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.k = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.MulACol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MulBCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RepresentCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ValCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmi_ChartDialog = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmi_LogDialog = new System.Windows.Forms.ToolStripMenuItem();
@@ -165,23 +160,33 @@
             this.uINTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dOUBLEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lONGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.BEStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MidBEStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MidLEStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.LEStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem11 = new System.Windows.Forms.ToolStripMenuItem();
-            this.ячейкиСТакимЖеАдресомToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiSameCells = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator17 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmi_DelCurrRegister = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmi_DelAllRegisters = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator18 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmi_RegisterProperty = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnCellAdd = new System.Windows.Forms.Button();
-            this.btnTableUpdate = new System.Windows.Forms.Button();
-            this.btnTableClear = new System.Windows.Forms.Button();
+            this.TextPage = new System.Windows.Forms.TabPage();
+            this.rtbData = new System.Windows.Forms.RichTextBox();
+            this.btnCellAdd2 = new System.Windows.Forms.Button();
+            this.btnDataClear = new System.Windows.Forms.Button();
+            this.btnDataUpdate = new System.Windows.Forms.Button();
+            this.PackPage = new System.Windows.Forms.TabPage();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
+            this.rtbPackConsole = new System.Windows.Forms.RichTextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.btnConsoleClear = new System.Windows.Forms.Button();
             this.rtbConsole = new System.Windows.Forms.RichTextBox();
-            this.toolStrip3 = new System.Windows.Forms.ToolStrip();
-            this.tsBtnShowTable = new System.Windows.Forms.ToolStripButton();
-            this.tsBtnShowText = new System.Windows.Forms.ToolStripButton();
-            this.tsBtnShowPack = new System.Windows.Forms.ToolStripButton();
-            this.tsBtnListenPort = new System.Windows.Forms.ToolStripButton();
             this.toolStrip4 = new System.Windows.Forms.ToolStrip();
             this.tsBtnLogStart = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
@@ -197,6 +202,16 @@
             this.PollTimer = new System.Windows.Forms.Timer(this.components);
             this.deviceBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.mainFormBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.RegisterCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DeviceCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AdressCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FormatCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ByteOrderCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.k = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.MulACol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MulBCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RepresentCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ValCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -217,9 +232,12 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            this.tabControl.SuspendLayout();
+            this.TablePage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTable)).BeginInit();
             this.dataGridViewContextMenu.SuspendLayout();
-            this.toolStrip3.SuspendLayout();
+            this.TextPage.SuspendLayout();
+            this.PackPage.SuspendLayout();
             this.toolStrip4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.deviceBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainFormBindingSource)).BeginInit();
@@ -473,21 +491,22 @@
             this.tsMiTable.Name = "tsMiTable";
             this.tsMiTable.Size = new System.Drawing.Size(213, 22);
             this.tsMiTable.Text = "&Таблица";
+            this.tsMiTable.Click += new System.EventHandler(this.tsMiTable_Click);
             // 
             // tsMiText
             // 
-            this.tsMiText.Enabled = false;
             this.tsMiText.Image = global::FreeModScan.Resource.text_ab;
             this.tsMiText.Name = "tsMiText";
             this.tsMiText.Size = new System.Drawing.Size(213, 22);
             this.tsMiText.Text = "Т&екст";
+            this.tsMiText.Click += new System.EventHandler(this.tsMiText_Click);
             // 
             // tsMiShowPack
             // 
-            this.tsMiShowPack.Enabled = false;
             this.tsMiShowPack.Name = "tsMiShowPack";
             this.tsMiShowPack.Size = new System.Drawing.Size(213, 22);
             this.tsMiShowPack.Text = "П&росмотр пакетов";
+            this.tsMiShowPack.Click += new System.EventHandler(this.tsMiShowPack_Click);
             // 
             // tsMiListenPort
             // 
@@ -589,10 +608,10 @@
             // 
             // tsMiRecordRegister
             // 
-            this.tsMiRecordRegister.Enabled = false;
             this.tsMiRecordRegister.Name = "tsMiRecordRegister";
             this.tsMiRecordRegister.Size = new System.Drawing.Size(201, 22);
             this.tsMiRecordRegister.Text = "&Записать регистр";
+            this.tsMiRecordRegister.Click += new System.EventHandler(this.tsMiRecordRegister_Click);
             // 
             // tsMiSendReq
             // 
@@ -782,7 +801,6 @@
             this.tsBtnFloat.Size = new System.Drawing.Size(35, 22);
             this.tsBtnFloat.Text = "Float";
             this.tsBtnFloat.Visible = false;
-            this.tsBtnFloat.Click += new System.EventHandler(this.tsBtnFloat_Click_1);
             // 
             // toolStripSeparator19
             // 
@@ -838,7 +856,7 @@
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsBtnStartPoll,
             this.tsTbPollInterval});
-            this.toolStrip2.Location = new System.Drawing.Point(3, 75);
+            this.toolStrip2.Location = new System.Drawing.Point(3, 25);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.Size = new System.Drawing.Size(222, 25);
             this.toolStrip2.TabIndex = 3;
@@ -869,7 +887,7 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.splitContainer1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(732, 383);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(732, 408);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 24);
             this.toolStripContainer1.Name = "toolStripContainer1";
@@ -880,9 +898,8 @@
             // toolStripContainer1.TopToolStripPanel
             // 
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
-            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip3);
-            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip4);
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip2);
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip4);
             // 
             // splitContainer1
             // 
@@ -901,7 +918,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.groupBox3);
             this.splitContainer1.Panel2MinSize = 355;
-            this.splitContainer1.Size = new System.Drawing.Size(732, 383);
+            this.splitContainer1.Size = new System.Drawing.Size(732, 408);
             this.splitContainer1.SplitterDistance = 355;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -919,7 +936,7 @@
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.cbConnectionList);
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Location = new System.Drawing.Point(3, 249);
+            this.groupBox2.Location = new System.Drawing.Point(3, 274);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(349, 131);
             this.groupBox2.TabIndex = 0;
@@ -1042,7 +1059,7 @@
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(349, 248);
+            this.groupBox1.Size = new System.Drawing.Size(349, 273);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Подключения";
@@ -1065,7 +1082,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(344, 223);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(344, 248);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // btnConnectionAdd
@@ -1122,7 +1139,7 @@
             treeNode1.Text = "Список подключений пуст";
             this.tvConnectionTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1});
-            this.tvConnectionTree.Size = new System.Drawing.Size(338, 188);
+            this.tvConnectionTree.Size = new System.Drawing.Size(338, 213);
             this.tvConnectionTree.TabIndex = 3;
             this.tvConnectionTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvConnectionTree_AfterSelect);
             this.tvConnectionTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvConnectionTree_NodeMouseClick);
@@ -1233,7 +1250,7 @@
             this.groupBox3.Controls.Add(this.splitContainer2);
             this.groupBox3.Location = new System.Drawing.Point(0, 3);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(373, 380);
+            this.groupBox3.Size = new System.Drawing.Size(373, 405);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Регистры";
@@ -1248,18 +1265,75 @@
             // 
             // splitContainer2.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.dgvTable);
-            this.splitContainer2.Panel1.Controls.Add(this.btnCellAdd);
-            this.splitContainer2.Panel1.Controls.Add(this.btnTableUpdate);
-            this.splitContainer2.Panel1.Controls.Add(this.btnTableClear);
+            this.splitContainer2.Panel1.Controls.Add(this.tabControl);
             // 
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.btnConsoleClear);
             this.splitContainer2.Panel2.Controls.Add(this.rtbConsole);
-            this.splitContainer2.Size = new System.Drawing.Size(367, 361);
-            this.splitContainer2.SplitterDistance = 224;
+            this.splitContainer2.Size = new System.Drawing.Size(367, 386);
+            this.splitContainer2.SplitterDistance = 249;
             this.splitContainer2.TabIndex = 1;
+            // 
+            // tabControl
+            // 
+            this.tabControl.Controls.Add(this.TablePage);
+            this.tabControl.Controls.Add(this.TextPage);
+            this.tabControl.Controls.Add(this.PackPage);
+            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl.Location = new System.Drawing.Point(0, 0);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(367, 249);
+            this.tabControl.TabIndex = 3;
+            // 
+            // TablePage
+            // 
+            this.TablePage.Controls.Add(this.btnCellAdd);
+            this.TablePage.Controls.Add(this.btnTableClear);
+            this.TablePage.Controls.Add(this.btnTableUpdate);
+            this.TablePage.Controls.Add(this.dgvTable);
+            this.TablePage.Location = new System.Drawing.Point(4, 22);
+            this.TablePage.Name = "TablePage";
+            this.TablePage.Padding = new System.Windows.Forms.Padding(3);
+            this.TablePage.Size = new System.Drawing.Size(359, 223);
+            this.TablePage.TabIndex = 0;
+            this.TablePage.Text = "Таблица";
+            this.TablePage.UseVisualStyleBackColor = true;
+            // 
+            // btnCellAdd
+            // 
+            this.btnCellAdd.Location = new System.Drawing.Point(6, 6);
+            this.btnCellAdd.Name = "btnCellAdd";
+            this.btnCellAdd.Size = new System.Drawing.Size(106, 23);
+            this.btnCellAdd.TabIndex = 0;
+            this.btnCellAdd.Text = "Добавить ячейки";
+            this.btnCellAdd.UseVisualStyleBackColor = true;
+            this.btnCellAdd.Click += new System.EventHandler(this.добавитьЯчейкиToolStripMenuItem_Click);
+            // 
+            // btnTableClear
+            // 
+            this.btnTableClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnTableClear.AutoSize = true;
+            this.btnTableClear.Location = new System.Drawing.Point(289, 6);
+            this.btnTableClear.Name = "btnTableClear";
+            this.btnTableClear.Size = new System.Drawing.Size(64, 23);
+            this.btnTableClear.TabIndex = 0;
+            this.btnTableClear.Text = "Очистить";
+            this.btnTableClear.UseVisualStyleBackColor = true;
+            this.btnTableClear.Click += new System.EventHandler(this.btnTableClear_Click);
+            // 
+            // btnTableUpdate
+            // 
+            this.btnTableUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnTableUpdate.AutoSize = true;
+            this.btnTableUpdate.Image = global::FreeModScan.Resource.update;
+            this.btnTableUpdate.Location = new System.Drawing.Point(258, 6);
+            this.btnTableUpdate.Name = "btnTableUpdate";
+            this.btnTableUpdate.Size = new System.Drawing.Size(25, 23);
+            this.btnTableUpdate.TabIndex = 0;
+            this.btnTableUpdate.UseVisualStyleBackColor = true;
+            this.btnTableUpdate.Click += new System.EventHandler(this.btnTableUpdate_Click);
             // 
             // dgvTable
             // 
@@ -1282,9 +1356,9 @@
             this.RepresentCol,
             this.ValCol});
             this.dgvTable.ContextMenuStrip = this.dataGridViewContextMenu;
-            this.dgvTable.Location = new System.Drawing.Point(3, 36);
+            this.dgvTable.Location = new System.Drawing.Point(6, 35);
             this.dgvTable.Name = "dgvTable";
-            this.dgvTable.Size = new System.Drawing.Size(361, 182);
+            this.dgvTable.Size = new System.Drawing.Size(347, 182);
             this.dgvTable.TabIndex = 2;
             this.dgvTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellClick);
             this.dgvTable.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellDoubleClick);
@@ -1294,69 +1368,6 @@
             this.dgvTable.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellValueChanged);
             this.dgvTable.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dgvTable_RowsRemoved);
             this.dgvTable.SelectionChanged += new System.EventHandler(this.dgvTable_SelectionChanged);
-            // 
-            // RegisterCol
-            // 
-            this.RegisterCol.HeaderText = "Имя регистра";
-            this.RegisterCol.MinimumWidth = 150;
-            this.RegisterCol.Name = "RegisterCol";
-            // 
-            // DeviceCol
-            // 
-            this.DeviceCol.HeaderText = "Устройство";
-            this.DeviceCol.MinimumWidth = 150;
-            this.DeviceCol.Name = "DeviceCol";
-            this.DeviceCol.ReadOnly = true;
-            // 
-            // AdressCol
-            // 
-            this.AdressCol.HeaderText = "Адрес";
-            this.AdressCol.MinimumWidth = 100;
-            this.AdressCol.Name = "AdressCol";
-            // 
-            // FormatCol
-            // 
-            this.FormatCol.HeaderText = "Тип данных";
-            this.FormatCol.MinimumWidth = 100;
-            this.FormatCol.Name = "FormatCol";
-            this.FormatCol.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // ByteOrderCol
-            // 
-            this.ByteOrderCol.HeaderText = "Порядок байтов";
-            this.ByteOrderCol.Name = "ByteOrderCol";
-            // 
-            // k
-            // 
-            this.k.HeaderText = "Коэфф.";
-            this.k.MinimumWidth = 20;
-            this.k.Name = "k";
-            // 
-            // MulACol
-            // 
-            this.MulACol.HeaderText = "A";
-            this.MulACol.MinimumWidth = 50;
-            this.MulACol.Name = "MulACol";
-            // 
-            // MulBCol
-            // 
-            this.MulBCol.HeaderText = "B";
-            this.MulBCol.MinimumWidth = 50;
-            this.MulBCol.Name = "MulBCol";
-            // 
-            // RepresentCol
-            // 
-            this.RepresentCol.HeaderText = "Представление";
-            this.RepresentCol.MinimumWidth = 20;
-            this.RepresentCol.Name = "RepresentCol";
-            // 
-            // ValCol
-            // 
-            this.ValCol.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.ValCol.HeaderText = "Значение";
-            this.ValCol.MinimumWidth = 100;
-            this.ValCol.Name = "ValCol";
-            this.ValCol.ReadOnly = true;
             // 
             // dataGridViewContextMenu
             // 
@@ -1370,6 +1381,7 @@
             this.tsmi_RegisterAdd,
             this.toolStripMenuItem7,
             this.toolStripMenuItem3,
+            this.toolStripMenuItem1,
             this.toolStripMenuItem11,
             this.toolStripSeparator17,
             this.tsmi_DelCurrRegister,
@@ -1377,7 +1389,8 @@
             this.toolStripSeparator18,
             this.tsmi_RegisterProperty});
             this.dataGridViewContextMenu.Name = "cMSConnTree";
-            this.dataGridViewContextMenu.Size = new System.Drawing.Size(161, 270);
+            this.dataGridViewContextMenu.Size = new System.Drawing.Size(161, 292);
+            this.dataGridViewContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.dataGridViewContextMenu_Opening);
             // 
             // tsmi_ChartDialog
             // 
@@ -1404,13 +1417,14 @@
             this.tsmi_EnableReg.Name = "tsmi_EnableReg";
             this.tsmi_EnableReg.Size = new System.Drawing.Size(160, 22);
             this.tsmi_EnableReg.Text = "Опрашивать";
+            this.tsmi_EnableReg.Click += new System.EventHandler(this.tsmi_EnableReg_Click);
             // 
             // tsmi_DisableReg
             // 
-            this.tsmi_DisableReg.Enabled = false;
             this.tsmi_DisableReg.Name = "tsmi_DisableReg";
             this.tsmi_DisableReg.Size = new System.Drawing.Size(160, 22);
             this.tsmi_DisableReg.Text = "Не опрашивать";
+            this.tsmi_DisableReg.Click += new System.EventHandler(this.tsmi_DisableReg_Click);
             // 
             // toolStripSeparator16
             // 
@@ -1502,20 +1516,59 @@
             this.lONGToolStripMenuItem.Text = "FLOAT";
             this.lONGToolStripMenuItem.Click += new System.EventHandler(this.tsBtnFloat_Click);
             // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.BEStripMenuItem,
+            this.MidBEStripMenuItem,
+            this.MidLEStripMenuItem,
+            this.LEStripMenuItem});
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(160, 22);
+            this.toolStripMenuItem1.Text = "Byte Order";
+            // 
+            // BEStripMenuItem
+            // 
+            this.BEStripMenuItem.Name = "BEStripMenuItem";
+            this.BEStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.BEStripMenuItem.Text = "BigEndian";
+            this.BEStripMenuItem.Click += new System.EventHandler(this.BEStripMenuItem_Click);
+            // 
+            // MidBEStripMenuItem
+            // 
+            this.MidBEStripMenuItem.Name = "MidBEStripMenuItem";
+            this.MidBEStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.MidBEStripMenuItem.Text = "MiddleBigEndian";
+            this.MidBEStripMenuItem.Click += new System.EventHandler(this.MidBEStripMenuItem_Click);
+            // 
+            // MidLEStripMenuItem
+            // 
+            this.MidLEStripMenuItem.Name = "MidLEStripMenuItem";
+            this.MidLEStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.MidLEStripMenuItem.Text = "MiddleLittleEndian";
+            this.MidLEStripMenuItem.Click += new System.EventHandler(this.MidLEStripMenuItem_Click);
+            // 
+            // LEStripMenuItem
+            // 
+            this.LEStripMenuItem.Name = "LEStripMenuItem";
+            this.LEStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.LEStripMenuItem.Text = "LittleEndian";
+            this.LEStripMenuItem.Click += new System.EventHandler(this.LEStripMenuItem_Click);
+            // 
             // toolStripMenuItem11
             // 
             this.toolStripMenuItem11.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ячейкиСТакимЖеАдресомToolStripMenuItem});
-            this.toolStripMenuItem11.Enabled = false;
+            this.tsmiSameCells});
             this.toolStripMenuItem11.Name = "toolStripMenuItem11";
             this.toolStripMenuItem11.Size = new System.Drawing.Size(160, 22);
             this.toolStripMenuItem11.Text = "Выбрать";
             // 
-            // ячейкиСТакимЖеАдресомToolStripMenuItem
+            // tsmiSameCells
             // 
-            this.ячейкиСТакимЖеАдресомToolStripMenuItem.Name = "ячейкиСТакимЖеАдресомToolStripMenuItem";
-            this.ячейкиСТакимЖеАдресомToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.ячейкиСТакимЖеАдресомToolStripMenuItem.Text = "Ячейки с таким же адресом";
+            this.tsmiSameCells.Name = "tsmiSameCells";
+            this.tsmiSameCells.Size = new System.Drawing.Size(214, 22);
+            this.tsmiSameCells.Text = "Ячейки с таким же адресом";
+            this.tsmiSameCells.Click += new System.EventHandler(this.tsmiSameCells_Click);
             // 
             // toolStripSeparator17
             // 
@@ -1548,39 +1601,151 @@
             this.tsmi_RegisterProperty.Text = "Свойства";
             this.tsmi_RegisterProperty.Click += new System.EventHandler(this.tsmi_RegisterProperty_Click);
             // 
-            // btnCellAdd
+            // TextPage
             // 
-            this.btnCellAdd.Location = new System.Drawing.Point(3, 6);
-            this.btnCellAdd.Name = "btnCellAdd";
-            this.btnCellAdd.Size = new System.Drawing.Size(106, 23);
-            this.btnCellAdd.TabIndex = 0;
-            this.btnCellAdd.Text = "Добавить ячейки";
-            this.btnCellAdd.UseVisualStyleBackColor = true;
-            this.btnCellAdd.Click += new System.EventHandler(this.добавитьЯчейкиToolStripMenuItem_Click);
+            this.TextPage.Controls.Add(this.rtbData);
+            this.TextPage.Controls.Add(this.btnCellAdd2);
+            this.TextPage.Controls.Add(this.btnDataClear);
+            this.TextPage.Controls.Add(this.btnDataUpdate);
+            this.TextPage.Location = new System.Drawing.Point(4, 22);
+            this.TextPage.Name = "TextPage";
+            this.TextPage.Padding = new System.Windows.Forms.Padding(3);
+            this.TextPage.Size = new System.Drawing.Size(359, 223);
+            this.TextPage.TabIndex = 1;
+            this.TextPage.Text = "Текст";
+            this.TextPage.UseVisualStyleBackColor = true;
             // 
-            // btnTableUpdate
+            // rtbData
             // 
-            this.btnTableUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTableUpdate.AutoSize = true;
-            this.btnTableUpdate.Image = global::FreeModScan.Resource.update;
-            this.btnTableUpdate.Location = new System.Drawing.Point(269, 6);
-            this.btnTableUpdate.Name = "btnTableUpdate";
-            this.btnTableUpdate.Size = new System.Drawing.Size(25, 23);
-            this.btnTableUpdate.TabIndex = 0;
-            this.btnTableUpdate.UseVisualStyleBackColor = true;
-            this.btnTableUpdate.Click += new System.EventHandler(this.btnTableUpdate_Click);
+            this.rtbData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rtbData.Location = new System.Drawing.Point(6, 35);
+            this.rtbData.Name = "rtbData";
+            this.rtbData.Size = new System.Drawing.Size(347, 207);
+            this.rtbData.TabIndex = 4;
+            this.rtbData.Text = "";
             // 
-            // btnTableClear
+            // btnCellAdd2
             // 
-            this.btnTableClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnTableClear.AutoSize = true;
-            this.btnTableClear.Location = new System.Drawing.Point(300, 6);
-            this.btnTableClear.Name = "btnTableClear";
-            this.btnTableClear.Size = new System.Drawing.Size(64, 23);
-            this.btnTableClear.TabIndex = 0;
-            this.btnTableClear.Text = "Очистить";
-            this.btnTableClear.UseVisualStyleBackColor = true;
-            this.btnTableClear.Click += new System.EventHandler(this.btnTableClear_Click);
+            this.btnCellAdd2.Location = new System.Drawing.Point(6, 6);
+            this.btnCellAdd2.Name = "btnCellAdd2";
+            this.btnCellAdd2.Size = new System.Drawing.Size(106, 23);
+            this.btnCellAdd2.TabIndex = 1;
+            this.btnCellAdd2.Text = "Добавить ячейки";
+            this.btnCellAdd2.UseVisualStyleBackColor = true;
+            this.btnCellAdd2.Click += new System.EventHandler(this.добавитьЯчейкиToolStripMenuItem_Click);
+            // 
+            // btnDataClear
+            // 
+            this.btnDataClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDataClear.AutoSize = true;
+            this.btnDataClear.Location = new System.Drawing.Point(289, 6);
+            this.btnDataClear.Name = "btnDataClear";
+            this.btnDataClear.Size = new System.Drawing.Size(64, 23);
+            this.btnDataClear.TabIndex = 2;
+            this.btnDataClear.Text = "Очистить";
+            this.btnDataClear.UseVisualStyleBackColor = true;
+            this.btnDataClear.Click += new System.EventHandler(this.btnTableClear_Click);
+            // 
+            // btnDataUpdate
+            // 
+            this.btnDataUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDataUpdate.AutoSize = true;
+            this.btnDataUpdate.Image = global::FreeModScan.Resource.update;
+            this.btnDataUpdate.Location = new System.Drawing.Point(258, 6);
+            this.btnDataUpdate.Name = "btnDataUpdate";
+            this.btnDataUpdate.Size = new System.Drawing.Size(25, 23);
+            this.btnDataUpdate.TabIndex = 3;
+            this.btnDataUpdate.UseVisualStyleBackColor = true;
+            // 
+            // PackPage
+            // 
+            this.PackPage.Controls.Add(this.textBox1);
+            this.PackPage.Controls.Add(this.button5);
+            this.PackPage.Controls.Add(this.button4);
+            this.PackPage.Controls.Add(this.rtbPackConsole);
+            this.PackPage.Controls.Add(this.button1);
+            this.PackPage.Controls.Add(this.button2);
+            this.PackPage.Controls.Add(this.button3);
+            this.PackPage.Location = new System.Drawing.Point(4, 22);
+            this.PackPage.Name = "PackPage";
+            this.PackPage.Size = new System.Drawing.Size(359, 223);
+            this.PackPage.TabIndex = 2;
+            this.PackPage.Text = "Просмотр пакетов";
+            this.PackPage.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox1.Location = new System.Drawing.Point(93, 8);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(128, 20);
+            this.textBox1.TabIndex = 11;
+            // 
+            // button5
+            // 
+            this.button5.AutoSize = true;
+            this.button5.Location = new System.Drawing.Point(62, 6);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(25, 23);
+            this.button5.TabIndex = 10;
+            this.button5.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button4.AutoSize = true;
+            this.button4.Image = global::FreeModScan.Resource.accept;
+            this.button4.Location = new System.Drawing.Point(227, 6);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(25, 23);
+            this.button4.TabIndex = 9;
+            this.button4.UseVisualStyleBackColor = true;
+            // 
+            // rtbPackConsole
+            // 
+            this.rtbPackConsole.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rtbPackConsole.Location = new System.Drawing.Point(6, 35);
+            this.rtbPackConsole.Name = "rtbPackConsole";
+            this.rtbPackConsole.Size = new System.Drawing.Size(347, 185);
+            this.rtbPackConsole.TabIndex = 8;
+            this.rtbPackConsole.Text = "";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(6, 6);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(50, 23);
+            this.button1.TabIndex = 5;
+            this.button1.Text = "PDU";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button2.AutoSize = true;
+            this.button2.Location = new System.Drawing.Point(289, 6);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(64, 23);
+            this.button2.TabIndex = 6;
+            this.button2.Text = "Очистить";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button3
+            // 
+            this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button3.AutoSize = true;
+            this.button3.Image = global::FreeModScan.Resource.update;
+            this.button3.Location = new System.Drawing.Point(258, 6);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(25, 23);
+            this.button3.TabIndex = 7;
+            this.button3.UseVisualStyleBackColor = true;
             // 
             // btnConsoleClear
             // 
@@ -1588,9 +1753,9 @@
             this.btnConsoleClear.AutoSize = true;
             this.btnConsoleClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnConsoleClear.Image = global::FreeModScan.Resource.erase;
-            this.btnConsoleClear.Location = new System.Drawing.Point(317, 106);
+            this.btnConsoleClear.Location = new System.Drawing.Point(324, 106);
             this.btnConsoleClear.Name = "btnConsoleClear";
-            this.btnConsoleClear.Size = new System.Drawing.Size(30, 24);
+            this.btnConsoleClear.Size = new System.Drawing.Size(24, 24);
             this.btnConsoleClear.TabIndex = 0;
             this.btnConsoleClear.UseVisualStyleBackColor = true;
             this.btnConsoleClear.Click += new System.EventHandler(this.btnConsoleClear_Click);
@@ -1604,56 +1769,6 @@
             this.rtbConsole.Size = new System.Drawing.Size(367, 133);
             this.rtbConsole.TabIndex = 4;
             this.rtbConsole.Text = "";
-            // 
-            // toolStrip3
-            // 
-            this.toolStrip3.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsBtnShowTable,
-            this.tsBtnShowText,
-            this.tsBtnShowPack,
-            this.tsBtnListenPort});
-            this.toolStrip3.Location = new System.Drawing.Point(3, 25);
-            this.toolStrip3.Name = "toolStrip3";
-            this.toolStrip3.Size = new System.Drawing.Size(322, 25);
-            this.toolStrip3.TabIndex = 4;
-            // 
-            // tsBtnShowTable
-            // 
-            this.tsBtnShowTable.Image = global::FreeModScan.Resource.table;
-            this.tsBtnShowTable.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsBtnShowTable.Name = "tsBtnShowTable";
-            this.tsBtnShowTable.Size = new System.Drawing.Size(69, 22);
-            this.tsBtnShowTable.Text = "Таблица";
-            // 
-            // tsBtnShowText
-            // 
-            this.tsBtnShowText.Enabled = false;
-            this.tsBtnShowText.Image = global::FreeModScan.Resource.text_ab;
-            this.tsBtnShowText.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsBtnShowText.Name = "tsBtnShowText";
-            this.tsBtnShowText.Size = new System.Drawing.Size(56, 22);
-            this.tsBtnShowText.Text = "Текст";
-            // 
-            // tsBtnShowPack
-            // 
-            this.tsBtnShowPack.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsBtnShowPack.Enabled = false;
-            this.tsBtnShowPack.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnShowPack.Image")));
-            this.tsBtnShowPack.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsBtnShowPack.Name = "tsBtnShowPack";
-            this.tsBtnShowPack.Size = new System.Drawing.Size(104, 22);
-            this.tsBtnShowPack.Text = "Просмотр пакетов";
-            // 
-            // tsBtnListenPort
-            // 
-            this.tsBtnListenPort.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.tsBtnListenPort.Enabled = false;
-            this.tsBtnListenPort.Image = ((System.Drawing.Image)(resources.GetObject("tsBtnListenPort.Image")));
-            this.tsBtnListenPort.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsBtnListenPort.Name = "tsBtnListenPort";
-            this.tsBtnListenPort.Size = new System.Drawing.Size(83, 22);
-            this.tsBtnListenPort.Text = "Слушать порт";
             // 
             // toolStrip4
             // 
@@ -1752,6 +1867,76 @@
             // 
             this.mainFormBindingSource.DataSource = typeof(FreeModScan.MainForm);
             // 
+            // RegisterCol
+            // 
+            this.RegisterCol.HeaderText = "Имя регистра";
+            this.RegisterCol.MinimumWidth = 150;
+            this.RegisterCol.Name = "RegisterCol";
+            // 
+            // DeviceCol
+            // 
+            this.DeviceCol.HeaderText = "Устройство";
+            this.DeviceCol.MinimumWidth = 150;
+            this.DeviceCol.Name = "DeviceCol";
+            this.DeviceCol.ReadOnly = true;
+            // 
+            // AdressCol
+            // 
+            this.AdressCol.HeaderText = "Адрес";
+            this.AdressCol.MinimumWidth = 100;
+            this.AdressCol.Name = "AdressCol";
+            // 
+            // FormatCol
+            // 
+            this.FormatCol.HeaderText = "Тип данных";
+            this.FormatCol.MinimumWidth = 100;
+            this.FormatCol.Name = "FormatCol";
+            this.FormatCol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // ByteOrderCol
+            // 
+            this.ByteOrderCol.HeaderText = "Порядок байтов";
+            this.ByteOrderCol.MinimumWidth = 50;
+            this.ByteOrderCol.Name = "ByteOrderCol";
+            this.ByteOrderCol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // k
+            // 
+            this.k.HeaderText = "Коэфф.";
+            this.k.MinimumWidth = 20;
+            this.k.Name = "k";
+            this.k.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // MulACol
+            // 
+            this.MulACol.HeaderText = "A";
+            this.MulACol.MinimumWidth = 30;
+            this.MulACol.Name = "MulACol";
+            this.MulACol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // MulBCol
+            // 
+            this.MulBCol.HeaderText = "B";
+            this.MulBCol.MinimumWidth = 30;
+            this.MulBCol.Name = "MulBCol";
+            this.MulBCol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // RepresentCol
+            // 
+            this.RepresentCol.HeaderText = "Представление";
+            this.RepresentCol.MinimumWidth = 30;
+            this.RepresentCol.Name = "RepresentCol";
+            this.RepresentCol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // ValCol
+            // 
+            this.ValCol.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.ValCol.HeaderText = "Значение";
+            this.ValCol.MinimumWidth = 150;
+            this.ValCol.Name = "ValCol";
+            this.ValCol.ReadOnly = true;
+            this.ValCol.Width = 150;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1791,15 +1976,19 @@
             this.cMSConnTree.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
-            this.splitContainer2.Panel1.PerformLayout();
             this.splitContainer2.Panel2.ResumeLayout(false);
             this.splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            this.tabControl.ResumeLayout(false);
+            this.TablePage.ResumeLayout(false);
+            this.TablePage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvTable)).EndInit();
             this.dataGridViewContextMenu.ResumeLayout(false);
-            this.toolStrip3.ResumeLayout(false);
-            this.toolStrip3.PerformLayout();
+            this.TextPage.ResumeLayout(false);
+            this.TextPage.PerformLayout();
+            this.PackPage.ResumeLayout(false);
+            this.PackPage.PerformLayout();
             this.toolStrip4.ResumeLayout(false);
             this.toolStrip4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.deviceBindingSource)).EndInit();
@@ -1867,11 +2056,6 @@
         private System.Windows.Forms.ToolStripButton tsBtnStartPoll;
         private System.Windows.Forms.ToolStripTextBox tsTbPollInterval;
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;
-        private System.Windows.Forms.ToolStrip toolStrip3;
-        private System.Windows.Forms.ToolStripButton tsBtnShowTable;
-        private System.Windows.Forms.ToolStripButton tsBtnShowText;
-        private System.Windows.Forms.ToolStripButton tsBtnShowPack;
-        private System.Windows.Forms.ToolStripButton tsBtnListenPort;
         private System.Windows.Forms.ToolStrip toolStrip4;
         private System.Windows.Forms.ToolStripButton tsBtnLogStart;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
@@ -1947,7 +2131,7 @@
         private System.Windows.Forms.ToolStripMenuItem dOUBLEToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem lONGToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem11;
-        private System.Windows.Forms.ToolStripMenuItem ячейкиСТакимЖеАдресомToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tsmiSameCells;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator17;
         private System.Windows.Forms.ToolStripMenuItem tsmi_DelCurrRegister;
         private System.Windows.Forms.ToolStripMenuItem tsmi_DelAllRegisters;
@@ -1964,6 +2148,29 @@
         private System.Windows.Forms.ToolStripButton tsBtnFloat;
         private System.Windows.Forms.ToolStripButton tsBtnBE;
         private System.Windows.Forms.ToolStripButton tsBtnMidBE;
+        private System.Windows.Forms.ToolStripMenuItem oCTToolStripMenuItem;
+        public System.Windows.Forms.Timer PollDelayTimer;
+        private System.Windows.Forms.Timer PollTimer;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem BEStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem MidBEStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem MidLEStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem LEStripMenuItem;
+        private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.TabPage TablePage;
+        private System.Windows.Forms.TabPage TextPage;
+        private System.Windows.Forms.TabPage PackPage;
+        private System.Windows.Forms.Button btnCellAdd2;
+        private System.Windows.Forms.Button btnDataClear;
+        private System.Windows.Forms.Button btnDataUpdate;
+        private System.Windows.Forms.RichTextBox rtbData;
+        private System.Windows.Forms.RichTextBox rtbPackConsole;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button4;
         private System.Windows.Forms.DataGridViewTextBoxColumn RegisterCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn DeviceCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn AdressCol;
@@ -1974,9 +2181,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn MulBCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn RepresentCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn ValCol;
-        private System.Windows.Forms.ToolStripMenuItem oCTToolStripMenuItem;
-        public System.Windows.Forms.Timer PollDelayTimer;
-        private System.Windows.Forms.Timer PollTimer;
     }
 }
 

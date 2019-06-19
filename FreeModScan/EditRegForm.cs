@@ -53,20 +53,21 @@ namespace FreeModScan
                 currReg.B = float.Parse(tbB.Text);
             }
             currReg.byteOrder = (Register.ByteOrder)cbByteOrder.SelectedIndex;
-            switch (currReg.dataType){
-                case Register.DataType.Int16:
-                    currReg.ValArr = new byte[2];
-                    break;                
-                case Register.DataType.Int32:
-                case Register.DataType.Float:
-                    currReg.ValArr = new byte[4];
-                    break;
-                case Register.DataType.Int64:
-                case Register.DataType.Double:
-                default:
-                    currReg.ValArr = new byte[8];
-                    break;
-            }
+            currReg.ValArr = new byte[currReg.ByteNum()];
+            //switch (currReg.dataType){
+            //    case Register.DataType.Int16:
+            //        currReg.ValArr = new byte[2];
+            //        break;                
+            //    case Register.DataType.Int32:
+            //    case Register.DataType.Float:
+            //        currReg.ValArr = new byte[4];
+            //        break;
+            //    case Register.DataType.Int64:
+            //    case Register.DataType.Double:
+            //    default:
+            //        currReg.ValArr = new byte[8];
+            //        break;
+            //}
             
 
             if (currReg.devName != cbDeviceList.Text) {     //было изменено устройство и/или подключение

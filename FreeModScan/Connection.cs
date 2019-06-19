@@ -65,11 +65,15 @@ namespace FreeModScan
 
 
         public Connection() {
-            //для сериализации (при сохранении в XML) необходим конструктор без параметров 
+            //для сериализации (при сохранении в XML) необходим конструктор без параметров            
+            Register.Delete += new Register.RegisterEventHandler(RegisterDeleted);
+            Register.Create += new Register.RegisterEventHandler(UpdateRequests);
+
+            sw = new Stopwatch();
         }
 
 
-        public Connection(int ConnType, string ConName, SerialPort sp, uint readTout, uint writeTout)
+        public Connection(int ConnType, string ConName, SerialPort sp, uint readTout, uint writeTout):this()
         {
             this.ConnType = ConnType;
             this.ConnName = ConName;
@@ -78,8 +82,6 @@ namespace FreeModScan
             ReadTimeout = readTout;
             Devices.ListChanged += new ListChangedEventHandler(Devices_ListChanged);
             Port.DataReceived += new SerialDataReceivedEventHandler(spDataReceived);
-            Register.Delete += new Register.RegisterEventHandler(RegisterDeleted);
-            sw = new Stopwatch();
         }
 
         private void RegisterDeleted(Register r)
@@ -227,33 +229,78 @@ namespace FreeModScan
                     sw.Stop();
                     Register.RegType rT = (Register.RegType)BitConverter.ToInt16(resp, 1);
                     var tmpColl = MainForm.currDevice.Registers.Where(r => r.Type == rT);
-                    int index = 3;//первые 3 байта ответа - номер устройства, номер команды, признак ошибки/корректного ответа - пропускаем
-                    int skip = 0;
-                    int skipRegs = 0;
-                    int startAdrr = 0;
-                    foreach (Register r in tmpColl)
+                    int num = tmpColl.Count();
+                    if (num > 0)
                     {
-                        int bytesNum = Convert.ToInt32(r.ByteNum());
-                        int adr = (int) r.Adress;
-                        if ((adr - startAdrr) <= (skipRegs))
+                        int index = 3;//пропускаем первые 3 байта ответа - номер устройства, номер команды, количество байт ответа 
+                        int skip = 0;
+                        int regPointer = 0;
+                        int nextAdrr = 0;
+                        int skipRegs = 0;
+                        int skippedRegs = 0;
+
+                        foreach (Register r in tmpColl)
+                        //for (int i = 0; i < num; i++)
                         {
-                            r.Status = false;
+                            int adr = (int)r.Adress;
+                            if (nextAdrr == 0)
+                                nextAdrr = adr; 
+
+                            int bytesNum = Convert.ToInt32(r.ByteNum());
+
+                            if ((adr < nextAdrr))
+                            {
+                                    r.Status = false;
+                            }else
+                                {
+                                    r.Status = true;
+                                } 
+                                
+                                //Register r = tmpColl.ElementAt(i);
+
+                                //startAdrr = (startAdrr==0)?adr:startAdrr;
+
+                                //if (i < skipRegs)
+                                //if ((adr - startAdrr) > skipRegs)
+                                //{
+                                ////    //r.Status = false;
+                                ////    //skipRegs = 1;
+                                ////    //skip = index;//сколько регистров необходимо пропустить для перехода к значени текущего регистра регистров
+                                //}
+                                //else
+                                //{
+                            //r.Status = true;
+                                ////    //skip = (int)(r.Adress - 1) * 2 + 3;
+
+                                ////    //skipRegs = (adr - startAdrr);
+                                                                                                                          
+                                //}
+
+                                //skip += (adr - startAdrr) * bytesNum;//сколько регистров необходимо пропустить для перехода к значени текущего регистра регистров                            
+
+                                skip = regPointer * 2 + 3;//смещение в ответе к значению текущего регистра
+
+                                byte[] tmp = buff.Skip(skip).Take(bytesNum).ToArray();
+                                r.ValArr = tmp;
+
+                                //index += bytesNum;//один регистр - 2 байта в ответе
+                                index += 2;//один регистр - 2 байта в ответе
+
+                                //skipRegs = (bytesNum > 2) ? (bytesNum / 2) - 1 : skipRegs;//сколько регистров необходимо пропустить для перехода к значени текущего регистра регистров
+                                if (bytesNum > 2)
+                                {
+                                    nextAdrr = adr + (bytesNum / 2);//запоминаем текущий адрес как предыдущий
+                                }                               
+                                regPointer++;
+                            //}
+                            
                         }
-                        else
-                        { 
-                            r.Status = true;
-                            skip = (int) (r.Adress - 1) * 2 + 3;//сколько регистров необходимо пропустить для случая, если значение занимает несколько регистров
-                            byte[] tmp = buff.Skip(skip).Take(bytesNum).ToArray();
-                            r.ValArr = tmp;
-                            skipRegs = bytesNum/2-1;
-                            startAdrr = adr;
-                        } 
                     }
 
                     QueriesNumRCV++;
 
                     totalRCV = 0;
-                    dataProcessed = true;
+                    //dataProcessed = true;
                 }
             }
             //} catch(Exception exept)
@@ -327,16 +374,17 @@ namespace FreeModScan
                 //Console.Out.WriteLine(DateTime.Now + " >> ");
                 if (this.status)
                 {
-                byte[] tmp = requests.Dequeue();
-                //byte[] tmp = requests.Peek();
-                sw.Restart();
+                    byte[] tmp = requests.Dequeue();
+                    //byte[] tmp = requests.Peek();
+                    sw.Restart();
 
                     buffSize = BitConverter.ToUInt16(tmp.Skip(4).Take(2).Reverse().ToArray(), 0);//BIG ENDIAN
                     buffSize = buffSize * 2 + 5;
                     Console.Out.WriteLine(DateTime.Now + " >> " + buffSize.ToString());
                     this.Port.Write(tmp, 0, 8);
-                requests.Enqueue(tmp);
-                dataProcessed = false;
+                    if ((Convert.ToInt32(tmp[1])!=0x05) && (Convert.ToInt32(tmp[1])!=0x06))
+                        requests.Enqueue(tmp);
+                    dataProcessed = false;
                     QueriesNumSND++;
                     Console.Out.WriteLine(DateTime.Now + " >> [" + BitConverter.ToString(tmp) + "]");
                     Console.Write(" >> [" + BitConverter.ToString(tmp) + "]");
@@ -379,35 +427,29 @@ namespace FreeModScan
                 //int sh = 0;
                 for (int j = 0; j < numRegs; j++)
                 {
-                    uint regSize = tmpColl.ElementAt(j).RegSize();
-                    long adr = tmpColl.ElementAt(j).Adress;
+                    Register r = tmpColl.ElementAt(j);
+                    uint regSize = r.RegSize();
+                    long adr = r.Adress;
                     //long delta = adr - maxAddr;
                     //if (Math.Abs(delta) == 1)
                     //{
+                    if (r.Status)
+                    {
                         if (adr < minAddr)
                             minAddr = (uint)(adr-1);
-                    if (adr > maxAddr)
+                        if ((adr + regSize) > maxAddr)
                         maxAddr = (uint)(adr - 1)+ regSize;//TODO Организовать изменение запроса при изменении типа регистра
-
-                    counter += regSize;
-                    //}
-                    //else
-                    //{
-                    //    if ((delta > 1) && (counter >= 1))
-                    //    {
-                    //        CreateRequest(Devices[ID].deviceAdress, (byte)tmp, counter, minAddr); //создаём запрос для группы регистров с неприрывным диапазоном адресов
-                    //        minAddr = (uint)(adr - 1);
-                    //        maxAddr = minAddr+regSize;
-                    //        counter = regSize;
-                    //    }
-                    //}
+                        counter ++;
+                    }
                 }
 
                 //формируем один запрос для группы регистров с неприрывным диапазоном адресов
-                if (counter >= 1)
-                    CreateRequest(Devices[ID].deviceAdress, (byte)tmp, maxAddr, minAddr);
+                if (counter > 0)
+                    CreateRequest(Devices[ID].deviceAdress, (byte)tmp, (maxAddr - minAddr), minAddr);
             }
         }
+
+
        //private void QueryGen(int ID)
        // {
        //     //Формат запроса Modbus-RTU: SlaveID+"03"+"Начальный регистр"+"Количество регистров"+"Контрольная сумма" 
@@ -479,8 +521,13 @@ namespace FreeModScan
             for (int i = 0; i < Devices.Count(); i++)
                 QueryGen(i);
         }
-        
-        private void CreateRequest(byte devAdr, byte command, uint counter, uint minAddr)
+
+        public void UpdateRequests(Register r)
+        {
+            UpdateRequests();
+        }
+  
+        public void CreateRequest(byte devAdr, byte command, uint counter, uint minAddr)
         {
             if (counter > 0)
             {

@@ -69,6 +69,12 @@
     <Compile Include="AddRegisterForm.Designer.cs">
       <DependentUpon>AddRegisterForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="WriteRegForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WriteRegForm.Designer.cs">
+      <DependentUpon>WriteRegForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="EditRegForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,6 +109,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AddRegisterForm.resx">
       <DependentUpon>AddRegisterForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WriteRegForm.resx">
+      <DependentUpon>WriteRegForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="EditRegForm.resx">
       <DependentUpon>EditRegForm.cs</DependentUpon>
@@ -198,6 +207,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\record_red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\accept.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow_ew.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -49,16 +49,17 @@ namespace FreeModScan
             InitializeComponent();
             _conns.ListChanged += new ListChangedEventHandler(Connections_ListChanged);
             //console.ListChanged += new ListChangedEventHandler(ConsoleMsg_Changes);
-                cbConnectionList.DataSource = _conns;
-                cbConnectionList.DisplayMember = "ConnName";
-                cbConnectionList.ValueMember = "ConnName";
+            cbConnectionList.DataSource = _conns;
+            cbConnectionList.DisplayMember = "ConnName";
+            cbConnectionList.ValueMember = "ConnName";
 
             cbDataType.DataSource = Enum.GetNames(typeof(Register.DataType));
             cbDataType.SelectedIndex = (int)Register.DataType.Int16;
             tslRequestTotalNum.Text = tslAnswerNum.Text = tsLblLogRecordsNum.Text = tslRequestTime.Text = "0";
 
             Register.Create += new Register.RegisterEventHandler(registerCreated);
-            Register.ChangeType += new Register.RegisterEventHandler(registerDeleted);
+            Register.Change += new Register.RegisterEventHandler(registerChanged);
+            Register.ChangeType += new Register.RegisterEventHandler(registerTypeChanged);
             Register.Delete += new Register.RegisterEventHandler(registerDeleted);
             Device.Create += new Device.DeviceEventHandler(deviceAdded);
             Device.Delete += new Device.DeviceEventHandler(deviceDeleted);
@@ -72,6 +73,11 @@ namespace FreeModScan
             Console.SetOut(_writer);
         }
 
+        private void registerChanged(Register r)
+        {
+            Console.Write("Class MainForm: Register Changed");
+        }
+
         private void deviceDeleted(Device d)
         {
             Console.Write("Class MainForm: Device Deleted");
@@ -82,25 +88,33 @@ namespace FreeModScan
             Console.Write("Class MainForm: Register Created");
         }
 
+        private void registerTypeChanged(Register r)
+        {
+            Console.Write("Class MainForm: Register Type Changed");
+            dgvTable.UpdateCellValue(dgvTable.Columns["FormatCol"].Index, dgvTable.CurrentRow.Index);
+            bool PollTimerState = PollTimer.Enabled;//сосояние опроса до удаления регистра
+            PollTimer.Enabled = false;//остановка опроса
+            currConn.UpdateRequests();//обновление запроса
+            //foreach (byte[] tmpReq in currConn.requests)
+            //    Console.Write(Convert.ToString(tmpReq));
+            PollTimer.Enabled = PollTimerState;//восстановление состояния 
+        }
+
         private void registerDeleted(Register r)
         {
-            Console.Write("Class MainForm: After Register Deleting");
-            //bool PollTimerState = PollTimer.Enabled;//сосояние опроса до удаления регистра
-            //PollTimer.Enabled = false;//остановка опроса
-            //currConn.UpdateRequests();//обновление запроса
-            ////foreach (byte[] tmpReq in currConn.requests)
-            ////    Console.Write(Convert.ToString(tmpReq));
-            //PollTimer.Enabled = PollTimerState;//восстановление состояния 
+            Console.Write("Class MainForm: Register Deleted");
         }
-   
+
         private void Connections_ListChanged(object sender, ListChangedEventArgs e)
         {
 
             Connection conn = null;
             int connsNum = _conns.Count();//поличество подключений после изменения
 
-            if (e.NewIndex != connsNum)
+            if ((e.NewIndex != connsNum) && (e.NewIndex >= 0))
                 conn = _conns[e.NewIndex];//объект с которым производились манипуляции
+            else
+                conn = null;
 
             switch (e.ListChangedType)
             {
@@ -113,8 +127,8 @@ namespace FreeModScan
                         tvConnectionTree.Nodes.Clear();
                     //tvConnectionTree.Nodes.Add(_conns[currConn].ConnName + " (" + _conns[currConn].Port.PortName + "): " + _conns[currConn].statusString);
                     //console.Add("** " + DateTime.Now + " - " + _conns[currConn].ConnName + " (" + _conns[currConn].Port.PortName + "): Соединение создано**\n");
-                    tvConnectionTree.Nodes.Add(currConn.ConnName + " (" + currConn.Port.PortName + "): " +currConn.statusString);
-                    Console.Write(currConn.ConnName + " (" + currConn.Port.PortName + "): Соединение создано");                   
+                    tvConnectionTree.Nodes.Add(currConn.ConnName + " (" + currConn.Port.PortName + "): " + currConn.statusString);
+                    Console.Write(currConn.ConnName + " (" + currConn.Port.PortName + "): Соединение создано");
 
                     //запуск события Создания для других подписчиков
                     conn.OnCreate();
@@ -240,7 +254,7 @@ namespace FreeModScan
             //TreeNode currNode = tvConnectionTree.Nodes[currConn];
             TreeNode currNode = tvConnectionTree.Nodes[_conns.IndexOf(currConn)];
             currNode.Text = c.ConnName + " - " + c.Port.PortName + " - " + c.statusString;
-            Console.Write(c.ConnName + " ("+c.Port.PortName+"): Соединение " + c.statusString);
+            Console.Write(c.ConnName + " (" + c.Port.PortName + "): Соединение " + c.statusString);
 
             var tmpColl = _conns.Where(tmpConn => c.status == true);
             if (tmpColl.Count() <= 0)
@@ -413,7 +427,7 @@ namespace FreeModScan
                     }
                     //_conns[currConn].OnDelete();//запуск события Удаления соединения для прочих подписчиков
                     currConn.OnDelete();//запуск события Удаления соединения для прочих подписчиков
-                    Console.Write( currConn.ConnName + " (" + currConn.Port.PortName + "): Соединение удалено");
+                    Console.Write(currConn.ConnName + " (" + currConn.Port.PortName + "): Соединение удалено");
                     _conns.RemoveAt(selectedNodeIndex);
 
                     cbConnectionList.Text = tvConnectionTree.SelectedNode.Text;
@@ -555,7 +569,7 @@ namespace FreeModScan
             //console.Add("** " + DateTime.Now.ToString() + " - " + _conns[currConn].ConnName + " (" + _conns[currConn].Port.PortName + "): Добавлено устройство " + d.deviceName + " **" + "\n");
             currDevice = currConn.Devices[currNode.LastNode.Index];
             //currDevice.Registers.ListChanged += new ListChangedEventHandler(RegistersListChanged);
-            currRegister = (currDevice.Registers.Count()>0)?currDevice.Registers.First():null;
+            currRegister = (currDevice.Registers.Count() > 0) ? currDevice.Registers.First() : null;
             Console.Write(currConn.ConnName + " (" + currConn.Port.PortName + "): Устройство " + d.deviceName + " добавлено");
         }
 
@@ -591,7 +605,7 @@ namespace FreeModScan
 
             AddRegisterForm eRegForm = new AddRegisterForm(_conns, connIndex, devIndex);
             DialogResult res = eRegForm.ShowDialog(this);
-            
+
         }
 
         private void btnTableClear_Click(object sender, EventArgs e)
@@ -662,7 +676,8 @@ namespace FreeModScan
         private void dgvTable_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             //currRegister = e.RowIndex;
-            currRegister = currDevice.Registers[e.RowIndex];
+            if (e.RowIndex > 0)
+                currRegister = currDevice.Registers[e.RowIndex];
             //MessageBox.Show(currRegister.ToString());
 
         }
@@ -682,11 +697,12 @@ namespace FreeModScan
                 if (res == DialogResult.Yes)
                 {
                     currRegister = null;
-                    dgvTable.DataSource=null;
+                    dgvTable.DataSource = null;
                     currDevice.OnDeleteAll();
                 }
 
-            } else
+            }
+            else
             {
                 MessageBox.Show("Выберите устройство", MSG_INFO_TITLE);
             }
@@ -715,13 +731,13 @@ namespace FreeModScan
         private void tsmi_RegisterProperty_Click(object sender, EventArgs e)
         {
             //if (currRegister > 0)
-            if (currRegister !=null)
+            if (currRegister != null)
             {
                 EditRegForm regForm = new EditRegForm();
                 DialogResult res = regForm.ShowDialog(this);
                 if (res == DialogResult.OK)
                 {
-                    
+
                     dgvRowUpdate();
                 }
             }
@@ -801,8 +817,7 @@ namespace FreeModScan
 
         private void cbConnectionList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //currConn = cbConnectionList.SelectedIndex;
-            currConn = _conns[cbConnectionList.SelectedIndex];
+            currConn = (cbConnectionList.SelectedIndex>=0)?_conns[cbConnectionList.SelectedIndex]:null;
         }
 
         private void tsmiByteOrder_CheckStateChanged(object sender, EventArgs e)
@@ -817,57 +832,39 @@ namespace FreeModScan
 
         private void tsBtnDec_Click(object sender, EventArgs e)
         {
-            //if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
             if (currRegister != null)
             {
-                //_conns[currConn].Devices[currDevice].Registers[currRegister].Represent = Register.Representation.DEC;
                 currRegister.Represent = Register.Representation.DEC;
-                dgvRowUpdate();
+                dgvTable.UpdateCellValue(dgvTable.Columns["RepresentCol"].Index, dgvTable.CurrentRow.Index);//TODO Добавить команду обновления колонки Значение
+                //или добавить событие и перенести туда команды обновления колоки Представления и значения
             }
         }
 
         private void tsBtnHex_Click(object sender, EventArgs e)
         {
-            //if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
             if (currRegister != null)
             {
-                //_conns[currConn].Devices[currDevice].Registers[currRegister].Represent = Register.Representation.HEX;
                 currRegister.Represent = Register.Representation.HEX;
-                dgvRowUpdate();
+                dgvTable.UpdateCellValue(dgvTable.Columns["RepresentCol"].Index, dgvTable.CurrentRow.Index);
             }
 
         }
 
         private void tsBtnBin_Click(object sender, EventArgs e)
         {
-            //if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
-            //if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
             if (currRegister != null)
             {
-                //_conns[currConn].Devices[currDevice].Registers[currRegister].Represent = Register.Representation.BIN;
                 currRegister.Represent = Register.Representation.BIN;
-                dgvRowUpdate();
+                dgvTable.UpdateCellValue(dgvTable.Columns["RepresentCol"].Index, dgvTable.CurrentRow.Index);
             }
         }
 
         private void tsBtnOct_Click(object sender, EventArgs e)
         {
-            //if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
             if (currRegister != null)
             {
-                //_conns[currConn].Devices[currDevice].Registers[currRegister].Represent = Register.Representation.OCT;
                 currRegister.Represent = Register.Representation.OCT;
-                dgvRowUpdate();
-            }
-        }
-
-        private void tsBtnFloat_Click_1(object sender, EventArgs e)
-        {
-            //if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
-            if (currRegister !=null)
-            {
-                //_conns[currConn].Devices[currDevice].Registers[currRegister].Represent = Register.Representation.Float;
-                dgvRowUpdate();
+                dgvTable.UpdateCellValue(dgvTable.Columns["RepresentCol"].Index, dgvTable.CurrentRow.Index);
             }
         }
 
@@ -876,11 +873,8 @@ namespace FreeModScan
             //if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
             if (currRegister != null)
             {
-                //_conns[currConn].Devices[currDevice].Registers[currRegister].dataType = Register.DataType.Int16;
-                //_conns[currConn].Devices[currDevice].Registers[currRegister].ValArr = new byte[2];
                 currRegister.dataType = Register.DataType.Int16;
                 currRegister.ValArr = new byte[2];
-                dgvRowUpdate();
                 currRegister.OnChangeType();
             }
         }
@@ -890,49 +884,36 @@ namespace FreeModScan
             //if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
             if (currRegister != null)
             {
-                //_conns[currConn].Devices[currDevice].Registers[currRegister].dataType = Register.DataType.Int32;
-                //_conns[currConn].Devices[currDevice].Registers[currRegister].ValArr = new byte[4];
                 currRegister.dataType = Register.DataType.Int32;
                 currRegister.ValArr = new byte[4];
-                dgvRowUpdate();
                 currRegister.OnChangeType();
             }
         }
 
         private void tsBtnInt64_Click(object sender, EventArgs e)
         {
-            //if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
-            if (currRegister !=null)
+            if (currRegister != null)
             {
-                //_conns[currConn].Devices[currDevice].Registers[currRegister].dataType = Register.DataType.Int64;
-                //_conns[currConn].Devices[currDevice].Registers[currRegister].ValArr = new byte[8];
                 currRegister.dataType = Register.DataType.Int64;
                 currRegister.ValArr = new byte[8];
-                dgvRowUpdate();
                 currRegister.OnChangeType();
             }
         }
 
         private void tsBtnFloat_Click(object sender, EventArgs e)
         {
-            //if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
-            if (currRegister !=null)
+            if (currRegister != null)
             {
-                //_conns[currConn].Devices[currDevice].Registers[currRegister].dataType = Register.DataType.Float;
-                //_conns[currConn].Devices[currDevice].Registers[currRegister].ValArr = new byte[8];
                 currRegister.dataType = Register.DataType.Float;
                 currRegister.ValArr = new byte[8];
-                dgvRowUpdate();
                 currRegister.OnChangeType();
             }
         }
 
         private void tsBtnBE_Click(object sender, EventArgs e)
         {
-            //if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
             if (currRegister != null)
             {
-                //_conns[currConn].Devices[currDevice].Registers[currRegister].byteOrder = Register.ByteOrder.BIGENDIAN;
                 currRegister.byteOrder = Register.ByteOrder.BIGENDIAN;
                 dgvRowUpdate();
             }
@@ -940,30 +921,24 @@ namespace FreeModScan
 
         private void tsBtnLE_Click(object sender, EventArgs e)
         {
-            //if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
             if (currRegister != null)
             {
-                //_conns[currConn].Devices[currDevice].Registers[currRegister].byteOrder = Register.ByteOrder.LITTLEENDIAN;
                 currRegister.byteOrder = Register.ByteOrder.LITTLEENDIAN;
                 dgvRowUpdate();
             }
         }
         private void tsBtnMidLE_Click(object sender, EventArgs e)
         {
-            //if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
-            if (currRegister !=null)
+            if (currRegister != null)
             {
-                //_conns[currConn].Devices[currDevice].Registers[currRegister].byteOrder = Register.ByteOrder.MIDLITTLEENDIAN;
                 currRegister.byteOrder = Register.ByteOrder.MIDLITTLEENDIAN;
                 dgvRowUpdate();
             }
         }
         private void tsBtnMidBE_Click(object sender, EventArgs e)
         {
-            //if ((currConn >= 0) && (currDevice >= 0) && (currRegister >= 0))
             if (currRegister != null)
             {
-                //_conns[currConn].Devices[currDevice].Registers[currRegister].byteOrder = Register.ByteOrder.MIDBIGENDIAN;
                 currRegister.byteOrder = Register.ByteOrder.MIDBIGENDIAN;
                 dgvRowUpdate();
             }
@@ -971,6 +946,8 @@ namespace FreeModScan
         private void tsBtnStartPoll_Click(object sender, EventArgs e)
         {
             //if ((_conns.Count > 0) && (_conns[currConn].status))
+            if (currConn==null)
+                return;
             if ((_conns.Count > 0) && (currConn.status))
             {
                 //_conns[currConn].UpdateRequests();
@@ -1029,8 +1006,8 @@ namespace FreeModScan
                         currConn.Poll();
 
                         //обновление колонки значений
-                                for (int i = 0; i < dgvTable.RowCount; i++)
-                                    dgvTable.UpdateCellValue((dgvTable.ColumnCount - 1), i);
+                        for (int i = 0; i < dgvTable.RowCount; i++)
+                            dgvTable.UpdateCellValue((dgvTable.ColumnCount - 1), i);
                     }
             }
         }
@@ -1066,6 +1043,16 @@ namespace FreeModScan
 
         private void dgvTable_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
+            if (dgvTable.CurrentCell != null)
+            {
+                //dgvTable.UpdateCellValue(dgvTable.CurrentCell.ColumnIndex, dgvTable.CurrentCell.RowIndex);
+                if (dgvTable.CurrentCell.OwningColumn.Name == "k")
+                {
+                    dgvTable.UpdateCellValue(dgvTable.Columns["MulACol"].Index, dgvTable.CurrentCell.RowIndex);
+                    dgvTable.UpdateCellValue(dgvTable.Columns["MulBCol"].Index, dgvTable.CurrentCell.RowIndex);
+                }
+            }
+
 
         }
 
@@ -1179,7 +1166,7 @@ namespace FreeModScan
 
                 TreeNode selectedConn = (tvConnectionTree.SelectedNode.Level == 0) ?
                 tvConnectionTree.SelectedNode : tvConnectionTree.SelectedNode.Parent;
-                    if (_conns[selectedConn.Index].status)
+                if (_conns[selectedConn.Index].status)
                 {
                     cMSConnTree.Items["tsmiDisconnect"].Enabled = true;
                     cMSConnTree.Items["tsmiConnect"].Enabled = false;
@@ -1206,6 +1193,105 @@ namespace FreeModScan
         {
             dgvTable.RefreshEdit();
             dgvTable.Update();
+        }
+
+        private void BEStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (currRegister != null)
+            {
+                currRegister.byteOrder = Register.ByteOrder.BIGENDIAN;
+                dgvTable.UpdateCellValue(dgvTable.Columns["ByteOrderCol"].Index, dgvTable.CurrentRow.Index);
+                //dgvRowUpdate();
+            }
+        }
+
+        private void MidBEStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (currRegister != null)
+            {
+                currRegister.byteOrder = Register.ByteOrder.MIDBIGENDIAN;
+                dgvTable.UpdateCellValue(dgvTable.Columns["ByteOrderCol"].Index, dgvTable.CurrentRow.Index);
+            }
+        }
+
+        private void MidLEStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (currRegister != null)
+            {
+                currRegister.byteOrder = Register.ByteOrder.MIDLITTLEENDIAN;
+                dgvTable.UpdateCellValue(dgvTable.Columns["ByteOrderCol"].Index, dgvTable.CurrentRow.Index);
+            }
+        }
+
+        private void LEStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (currRegister != null)
+            {
+                currRegister.byteOrder = Register.ByteOrder.LITTLEENDIAN;
+                dgvTable.UpdateCellValue(dgvTable.Columns["ByteOrderCol"].Index, dgvTable.CurrentRow.Index);
+            }
+        }
+
+        private void tsmiSameCells_Click(object sender, EventArgs e)
+        {
+            long adr = long.Parse(dgvTable.Rows[dgvTable.CurrentCell.RowIndex].Cells["AdressCol"].Value.ToString());
+            foreach (DataGridViewRow dgr in dgvTable.Rows)
+                if ((long)dgr.Cells["AdressCol"].Value == adr)
+                    dgr.Selected = true;
+        }
+
+        private void dataGridViewContextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            tsmi_DisableReg.Enabled = (((Register)dgvTable.CurrentRow.DataBoundItem).Status) ? true : false;
+            tsmi_EnableReg.Enabled = (((Register)dgvTable.CurrentRow.DataBoundItem).Status) ? false : true;
+        }
+
+        private void tsmi_DisableReg_Click(object sender, EventArgs e)
+        {
+            Register r = (Register)dgvTable.CurrentRow.DataBoundItem;
+            r.Status = false;
+            dgvTable.CurrentRow.DefaultCellStyle.ForeColor = Color.DarkGray;
+            r.OnChange();
+            currConn.UpdateRequests();
+        }
+
+        private void tsmi_EnableReg_Click(object sender, EventArgs e)
+        {
+            Register r = (Register)dgvTable.CurrentRow.DataBoundItem;
+            r.Status = true;
+            dgvTable.CurrentRow.DefaultCellStyle.ForeColor = dgvTable.DefaultCellStyle.ForeColor;
+            r.OnChange();
+            currConn.UpdateRequests();
+        }
+
+        private void tsMiRecordRegister_Click(object sender, EventArgs e)
+        {
+            if (currRegister != null)
+            {
+                WriteRegForm wrF = new WriteRegForm();
+                wrF.ShowDialog(this);
+            }
+
+        }
+
+        private void tsMiTable_Click(object sender, EventArgs e)
+        {
+            tabControl.TabPages["TablePage"].Select();
+        }
+
+        private void tsMiText_Click(object sender, EventArgs e)
+        {
+            tabControl.TabPages["TextPage"].Select();
+        }
+
+        private void tsMiShowPack_Click(object sender, EventArgs e)
+        {
+            tabControl.TabPages["PackPage"].Select();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            rtbPackConsole.Clear();
         }
 
 

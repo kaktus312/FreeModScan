@@ -103,9 +103,9 @@ namespace FreeModScan
             get { return _dataType; }
             set
             {
-                _dataType = value;
+                _dataType = (_status) ? value : _dataType;
                 //_represent = (value == DataType.Float) ? Representation.Float : _represent;
-                _useMults = (value == DataType.Float) ? true : _useMults;
+                _useMults = (_dataType == DataType.Float) ? true : _useMults;
             }
         }
 
@@ -134,7 +134,7 @@ namespace FreeModScan
         {
             get
             {
-                if ((!Status) || (ValArr == null))
+                if ((!Status) || (ValArr == null) || (ValArr.Count()<=0))
                     return "-";
 
                 dynamic tmp;
@@ -233,6 +233,7 @@ namespace FreeModScan
 
         public delegate void RegisterEventHandler(Register r);
         public static event RegisterEventHandler Create;
+        public static event RegisterEventHandler Change;
         public static event RegisterEventHandler ChangeType;
         public static event RegisterEventHandler DeleteAll;
         public static event RegisterEventHandler Delete;
@@ -346,14 +347,22 @@ namespace FreeModScan
         {
             if (Create != null) Create(this);
         }
+        
+        public void OnChange()
+        {
+            if (Change != null) Change(this);
+        }
+
         public void OnChangeType()
         {
             if (ChangeType != null) ChangeType(this);
         }
+        
         public void OnDelete()
         {
             if (Delete != null) Delete(this);
         }
+        
         public static void OnAfterDelete()
         {
             if (AfterDelete != null) AfterDelete(null);

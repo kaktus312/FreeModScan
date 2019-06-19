@@ -126,6 +126,23 @@ namespace FreeModScan
         public void addRegisters(string regString, int rType, int dType, int bOrder = 1)
         {
             MatchCollection matches = Regex.Matches(regString, "((?<s>\\d+)-(?<e>\\d+))|(?<r>\\d+)");
+            
+            int step = 0;
+            switch ((Register.DataType)dType)
+            {
+                case Register.DataType.Int16:
+                default:
+                    step = 2 / 2;
+                    break;
+                case Register.DataType.Int32:
+                case Register.DataType.Float:
+                    step = 4 / 2;
+                    break;
+                case Register.DataType.Int64:
+                case Register.DataType.Double:
+                    step = 8 / 2;
+                    break;
+            }
 
             foreach (Match match in matches)
             {
@@ -145,17 +162,41 @@ namespace FreeModScan
                     endIndex = int.Parse(match.Groups["e"].Value);
                 }
 
-                for (int i = startIndex; i <= endIndex; i++)
+                int i = startIndex;
+
+                
+                while (i <= endIndex)
                 {
                     tmpReg = new Register(deviceName, (uint)i, (Register.RegType)rType, (Register.DataType)dType, (Register.ByteOrder)bOrder);
-                    //tmpReg.Create += new Register.RegisterEventHandler(RegisterAdded);//подписываемся на событие Создания
-                    //Register.Delete += new Register.RegisterEventHandler(RegisterDeleted);//подписываемся на событие Удаления
-                    
-                    //tmpReg.Change += new Register.RegisterEventHandler(RegisterChanged);//подписываемся на событие Изменения
-                    //MessageBox.Show(i.ToString());
-                    //dev.Registers.Add(tmpReg);
                     Registers.Add(tmpReg);
+                    i += step;
                 }
+                //int skip = 0;
+                //for (int i = startIndex; i <= endIndex; i++)
+                //{
+                //    switch ((Register.DataType)dType)
+                //    {
+                //        case Register.DataType.Int16:
+                //        default:
+                //            skip = 2 / 2 - 1;
+                //            break;
+                //        case Register.DataType.Int32:
+                //        case Register.DataType.Float:
+                //            skip = 4 / 2 - 1;
+                //            break;
+                //        case Register.DataType.Int64:
+                //        case Register.DataType.Double:
+                //            skip = 8 / 2 - 1;
+                //            break;
+                //    }
+                //    if (skip == 0)
+                //    {
+                //        tmpReg = new Register(deviceName, (uint)i, (Register.RegType)rType, (Register.DataType)dType, (Register.ByteOrder)bOrder);
+                //        Registers.Add(tmpReg);
+                //    }
+                //    else
+                //        skip--;
+                //}
             }
         }
 
