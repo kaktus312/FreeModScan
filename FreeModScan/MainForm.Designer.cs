@@ -142,6 +142,16 @@
             this.btnTableClear = new System.Windows.Forms.Button();
             this.btnTableUpdate = new System.Windows.Forms.Button();
             this.dgvTable = new System.Windows.Forms.DataGridView();
+            this.RegisterCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DeviceCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AdressCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FormatCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ByteOrderCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.k = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.MulACol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MulBCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RepresentCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ValCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmi_ChartDialog = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmi_LogDialog = new System.Windows.Forms.ToolStripMenuItem();
@@ -202,16 +212,6 @@
             this.PollTimer = new System.Windows.Forms.Timer(this.components);
             this.deviceBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.mainFormBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.RegisterCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.DeviceCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AdressCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FormatCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ByteOrderCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.k = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.MulACol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.MulBCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.RepresentCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ValCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
@@ -887,7 +887,7 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.splitContainer1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(732, 408);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(732, 433);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 24);
             this.toolStripContainer1.Name = "toolStripContainer1";
@@ -918,7 +918,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.groupBox3);
             this.splitContainer1.Panel2MinSize = 355;
-            this.splitContainer1.Size = new System.Drawing.Size(732, 408);
+            this.splitContainer1.Size = new System.Drawing.Size(732, 433);
             this.splitContainer1.SplitterDistance = 355;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -936,7 +936,7 @@
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.cbConnectionList);
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Location = new System.Drawing.Point(3, 274);
+            this.groupBox2.Location = new System.Drawing.Point(3, 299);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(349, 131);
             this.groupBox2.TabIndex = 0;
@@ -1059,7 +1059,7 @@
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(349, 273);
+            this.groupBox1.Size = new System.Drawing.Size(349, 298);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Подключения";
@@ -1082,7 +1082,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(344, 248);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(344, 273);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // btnConnectionAdd
@@ -1139,7 +1139,7 @@
             treeNode1.Text = "Список подключений пуст";
             this.tvConnectionTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1});
-            this.tvConnectionTree.Size = new System.Drawing.Size(338, 213);
+            this.tvConnectionTree.Size = new System.Drawing.Size(338, 238);
             this.tvConnectionTree.TabIndex = 3;
             this.tvConnectionTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvConnectionTree_AfterSelect);
             this.tvConnectionTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvConnectionTree_NodeMouseClick);
@@ -1250,7 +1250,7 @@
             this.groupBox3.Controls.Add(this.splitContainer2);
             this.groupBox3.Location = new System.Drawing.Point(0, 3);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(373, 405);
+            this.groupBox3.Size = new System.Drawing.Size(373, 430);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Регистры";
@@ -1271,8 +1271,8 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.btnConsoleClear);
             this.splitContainer2.Panel2.Controls.Add(this.rtbConsole);
-            this.splitContainer2.Size = new System.Drawing.Size(367, 386);
-            this.splitContainer2.SplitterDistance = 249;
+            this.splitContainer2.Size = new System.Drawing.Size(367, 411);
+            this.splitContainer2.SplitterDistance = 274;
             this.splitContainer2.TabIndex = 1;
             // 
             // tabControl
@@ -1284,7 +1284,7 @@
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(367, 249);
+            this.tabControl.Size = new System.Drawing.Size(367, 274);
             this.tabControl.TabIndex = 3;
             // 
             // TablePage
@@ -1296,7 +1296,7 @@
             this.TablePage.Location = new System.Drawing.Point(4, 22);
             this.TablePage.Name = "TablePage";
             this.TablePage.Padding = new System.Windows.Forms.Padding(3);
-            this.TablePage.Size = new System.Drawing.Size(359, 223);
+            this.TablePage.Size = new System.Drawing.Size(359, 248);
             this.TablePage.TabIndex = 0;
             this.TablePage.Text = "Таблица";
             this.TablePage.UseVisualStyleBackColor = true;
@@ -1358,7 +1358,7 @@
             this.dgvTable.ContextMenuStrip = this.dataGridViewContextMenu;
             this.dgvTable.Location = new System.Drawing.Point(6, 35);
             this.dgvTable.Name = "dgvTable";
-            this.dgvTable.Size = new System.Drawing.Size(347, 182);
+            this.dgvTable.Size = new System.Drawing.Size(347, 207);
             this.dgvTable.TabIndex = 2;
             this.dgvTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellClick);
             this.dgvTable.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellDoubleClick);
@@ -1368,6 +1368,76 @@
             this.dgvTable.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellValueChanged);
             this.dgvTable.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dgvTable_RowsRemoved);
             this.dgvTable.SelectionChanged += new System.EventHandler(this.dgvTable_SelectionChanged);
+            // 
+            // RegisterCol
+            // 
+            this.RegisterCol.HeaderText = "Имя регистра";
+            this.RegisterCol.MinimumWidth = 150;
+            this.RegisterCol.Name = "RegisterCol";
+            // 
+            // DeviceCol
+            // 
+            this.DeviceCol.HeaderText = "Устройство";
+            this.DeviceCol.MinimumWidth = 150;
+            this.DeviceCol.Name = "DeviceCol";
+            this.DeviceCol.ReadOnly = true;
+            // 
+            // AdressCol
+            // 
+            this.AdressCol.HeaderText = "Адрес";
+            this.AdressCol.MinimumWidth = 100;
+            this.AdressCol.Name = "AdressCol";
+            // 
+            // FormatCol
+            // 
+            this.FormatCol.HeaderText = "Тип данных";
+            this.FormatCol.MinimumWidth = 100;
+            this.FormatCol.Name = "FormatCol";
+            this.FormatCol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // ByteOrderCol
+            // 
+            this.ByteOrderCol.HeaderText = "Порядок байтов";
+            this.ByteOrderCol.MinimumWidth = 50;
+            this.ByteOrderCol.Name = "ByteOrderCol";
+            this.ByteOrderCol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // k
+            // 
+            this.k.HeaderText = "Коэфф.";
+            this.k.MinimumWidth = 20;
+            this.k.Name = "k";
+            this.k.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // MulACol
+            // 
+            this.MulACol.HeaderText = "A";
+            this.MulACol.MinimumWidth = 30;
+            this.MulACol.Name = "MulACol";
+            this.MulACol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // MulBCol
+            // 
+            this.MulBCol.HeaderText = "B";
+            this.MulBCol.MinimumWidth = 30;
+            this.MulBCol.Name = "MulBCol";
+            this.MulBCol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // RepresentCol
+            // 
+            this.RepresentCol.HeaderText = "Представление";
+            this.RepresentCol.MinimumWidth = 30;
+            this.RepresentCol.Name = "RepresentCol";
+            this.RepresentCol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            // 
+            // ValCol
+            // 
+            this.ValCol.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.ValCol.HeaderText = "Значение";
+            this.ValCol.MinimumWidth = 150;
+            this.ValCol.Name = "ValCol";
+            this.ValCol.ReadOnly = true;
+            this.ValCol.Width = 150;
             // 
             // dataGridViewContextMenu
             // 
@@ -1781,7 +1851,7 @@
             this.toolStripSeparator11,
             this.toolStripLabel1,
             this.tsLblLogRecordsNum});
-            this.toolStrip4.Location = new System.Drawing.Point(3, 50);
+            this.toolStrip4.Location = new System.Drawing.Point(229, 25);
             this.toolStrip4.Name = "toolStrip4";
             this.toolStrip4.Size = new System.Drawing.Size(400, 25);
             this.toolStrip4.TabIndex = 5;
@@ -1866,76 +1936,6 @@
             // mainFormBindingSource
             // 
             this.mainFormBindingSource.DataSource = typeof(FreeModScan.MainForm);
-            // 
-            // RegisterCol
-            // 
-            this.RegisterCol.HeaderText = "Имя регистра";
-            this.RegisterCol.MinimumWidth = 150;
-            this.RegisterCol.Name = "RegisterCol";
-            // 
-            // DeviceCol
-            // 
-            this.DeviceCol.HeaderText = "Устройство";
-            this.DeviceCol.MinimumWidth = 150;
-            this.DeviceCol.Name = "DeviceCol";
-            this.DeviceCol.ReadOnly = true;
-            // 
-            // AdressCol
-            // 
-            this.AdressCol.HeaderText = "Адрес";
-            this.AdressCol.MinimumWidth = 100;
-            this.AdressCol.Name = "AdressCol";
-            // 
-            // FormatCol
-            // 
-            this.FormatCol.HeaderText = "Тип данных";
-            this.FormatCol.MinimumWidth = 100;
-            this.FormatCol.Name = "FormatCol";
-            this.FormatCol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // ByteOrderCol
-            // 
-            this.ByteOrderCol.HeaderText = "Порядок байтов";
-            this.ByteOrderCol.MinimumWidth = 50;
-            this.ByteOrderCol.Name = "ByteOrderCol";
-            this.ByteOrderCol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // k
-            // 
-            this.k.HeaderText = "Коэфф.";
-            this.k.MinimumWidth = 20;
-            this.k.Name = "k";
-            this.k.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // MulACol
-            // 
-            this.MulACol.HeaderText = "A";
-            this.MulACol.MinimumWidth = 30;
-            this.MulACol.Name = "MulACol";
-            this.MulACol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // MulBCol
-            // 
-            this.MulBCol.HeaderText = "B";
-            this.MulBCol.MinimumWidth = 30;
-            this.MulBCol.Name = "MulBCol";
-            this.MulBCol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // RepresentCol
-            // 
-            this.RepresentCol.HeaderText = "Представление";
-            this.RepresentCol.MinimumWidth = 30;
-            this.RepresentCol.Name = "RepresentCol";
-            this.RepresentCol.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            // 
-            // ValCol
-            // 
-            this.ValCol.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            this.ValCol.HeaderText = "Значение";
-            this.ValCol.MinimumWidth = 150;
-            this.ValCol.Name = "ValCol";
-            this.ValCol.ReadOnly = true;
-            this.ValCol.Width = 150;
             // 
             // MainForm
             // 
