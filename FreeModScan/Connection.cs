@@ -245,28 +245,37 @@ namespace FreeModScan
                         foreach (Register r in tmpColl)
                         {
                             int adr = (int)r.Adress;
-                            if (nextAdrr == 0)
-                                nextAdrr = adr;
 
-                            if (prevAdrr == 0)
-                                prevAdrr = adr;
+
+                            //if (prevAdrr == 0)
+                            //    prevAdrr = adr;
 
                             int bytesNum = Convert.ToInt32(r.ByteNum());
 
-                            r.Status = !(adr < nextAdrr);
-                            regPointer += (adr - prevAdrr);
-                            skip = regPointer * 2 + 3;//смещение в ответе к значению текущего регистра
-
-                            byte[] tmp = buff.Skip(skip).Take(bytesNum).ToArray();
-                            r.ValArr = tmp;
-
-                            index += 2;//один регистр - 2 байта в ответе
-
-                            if (bytesNum > 2)
+                            //regPointer += (adr - prevAdrr);
+                            regPointer = (adr - startRegister);
+                            if ((nextAdrr == 0) || (regPointer < 0))//TODO разобраться со вставкой регистров меньше начального
                             {
-                                nextAdrr = adr + (bytesNum / 2);//запоминаем текущий адрес как предыдущий
+                                nextAdrr = adr;
+                                regPointer = 0;
                             }
-                            prevAdrr = adr;
+
+                            if (regPointer >= 0)
+                            {
+                                r.Status = !(adr < nextAdrr);
+                                skip = regPointer * 2 + 3;//смещение в ответе к значению текущего регистра
+
+                                byte[] tmp = buff.Skip(skip).Take(bytesNum).ToArray();
+                                r.ValArr = tmp;
+
+                                //index += 2;//один регистр - 2 байта в ответе
+
+                                if (bytesNum > 2)
+                                {
+                                    nextAdrr = adr + (bytesNum / 2);//запоминаем текущий адрес как предыдущий
+                                }
+                                //prevAdrr = adr;
+                            }
                         }
                     }
 
@@ -354,7 +363,7 @@ namespace FreeModScan
                 buffSize = BitConverter.ToUInt16(tmp.Skip(4).Take(2).Reverse().ToArray(), 0);//BIG ENDIAN
                 buffSize = buffSize * 2 + 5;
                 Console.Out.WriteLine(DateTime.Now + " >> " + buffSize.ToString());
-                startRegister = Convert.ToInt32(tmp[2]);//TODO брать 2 и 3 байты
+                startRegister = BitConverter.ToInt16(tmp.Skip(2).Take(2).Reverse().ToArray(), 0) + 1;
                 this.Port.Write(tmp, 0, 8);
                 if ((Convert.ToInt32(tmp[1]) != 0x05) && (Convert.ToInt32(tmp[1]) != 0x06))
                     requests.Enqueue(tmp);
