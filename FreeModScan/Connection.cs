@@ -96,6 +96,7 @@ namespace FreeModScan
              * Аналогично - для случая добавления регистра
              */
             Console.Write("Class Connection: Register Deleted");
+            UpdateRequests();
         }
 
         private void Devices_ListChanged(object sender, ListChangedEventArgs e)
@@ -239,12 +240,12 @@ namespace FreeModScan
                         int index = 3;//пропускаем первые 3 байта ответа - номер устройства, номер команды, количество байт ответа 
                         int skip = 0;
                         int regPointer = 0;
-                        int nextAdrr = 0;
-                        int prevAdrr = 0;
+                        int lastAdrr = 0;
+                        int firstAdrr = 0;
 
                         foreach (Register r in tmpColl)
                         {
-                            int adr = (int)r.Adress;
+                            int adr = (int)r.realAdress;
 
 
                             //if (prevAdrr == 0)
@@ -253,28 +254,30 @@ namespace FreeModScan
                             int bytesNum = Convert.ToInt32(r.ByteNum());
 
                             //regPointer += (adr - prevAdrr);
+                            if (lastAdrr == 0) //TODO разобраться со вставкой регистров меньше начального
+                                lastAdrr = firstAdrr = adr;
+
+                           //if (adr <= startRegister){
+                           //    nextAdrr = adr;
+                           //    startRegister = adr;
+                           //} 
                             regPointer = (adr - startRegister);
-                            if ((nextAdrr == 0) || (regPointer < 0))//TODO разобраться со вставкой регистров меньше начального
-                            {
-                                nextAdrr = adr;
-                                regPointer = 0;
-                            }
 
                             if (regPointer >= 0)
                             {
-                                r.Status = !(adr < nextAdrr);
+                                r.Status = !((adr>firstAdrr)&&(adr < lastAdrr));
                                 skip = regPointer * 2 + 3;//смещение в ответе к значению текущего регистра
 
                                 byte[] tmp = buff.Skip(skip).Take(bytesNum).ToArray();
                                 r.ValArr = tmp;
-
-                                //index += 2;//один регистр - 2 байта в ответе
-
+                               
+                                
+                                
                                 if (bytesNum > 2)
-                                {
-                                    nextAdrr = adr + (bytesNum / 2);//запоминаем текущий адрес как предыдущий
+                                { 
+                                    firstAdrr = adr;
+                                  lastAdrr = adr + (bytesNum / 2);//запоминаем текущий адрес как предыдущий                                     
                                 }
-                                //prevAdrr = adr;
                             }
                         }
                     }
@@ -363,7 +366,13 @@ namespace FreeModScan
                 buffSize = BitConverter.ToUInt16(tmp.Skip(4).Take(2).Reverse().ToArray(), 0);//BIG ENDIAN
                 buffSize = buffSize * 2 + 5;
                 Console.Out.WriteLine(DateTime.Now + " >> " + buffSize.ToString());
-                startRegister = BitConverter.ToInt16(tmp.Skip(2).Take(2).Reverse().ToArray(), 0) + 1;
+
+                startRegister = BitConverter.ToInt16(tmp.Skip(2).Take(2).Reverse().ToArray(), 0);
+                Console.Write(" >> " + startRegister );
+
+                //startRegister = BitConverter.ToInt16(tmp.Skip(2).Take(2).Reverse().ToArray(), 0) + 1;
+                //Console.Write(" >> " + startRegister);
+
                 this.Port.Write(tmp, 0, 8);
                 if ((Convert.ToInt32(tmp[1]) != 0x05) && (Convert.ToInt32(tmp[1]) != 0x06))
                     requests.Enqueue(tmp);
@@ -412,16 +421,16 @@ namespace FreeModScan
                 {
                     Register r = tmpColl.ElementAt(j);
                     uint regSize = r.RegSize();
-                    long adr = r.Adress;
+                    long adr = r.realAdress;
                     //long delta = adr - maxAddr;
                     //if (Math.Abs(delta) == 1)
                     //{
                     if (r.Status)
                     {
                         if (adr < minAddr)
-                            minAddr = (uint)(adr - 1);
+                            minAddr = (uint)(adr);
                         if ((adr + regSize) > maxAddr)
-                            maxAddr = (uint)(adr - 1) + regSize;//TODO Организовать изменение запроса при изменении типа регистра
+                            maxAddr = (uint)(adr) + regSize;//TODO Организовать изменение запроса при изменении типа регистра
                         counter++;
                     }
                 }

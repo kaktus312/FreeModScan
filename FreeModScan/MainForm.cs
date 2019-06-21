@@ -605,7 +605,8 @@ namespace FreeModScan
 
             AddRegisterForm eRegForm = new AddRegisterForm(_conns, connIndex, devIndex);
             DialogResult res = eRegForm.ShowDialog(this);
-
+            if (res == DialogResult.OK)
+                currConn.UpdateRequests();
         }
 
         private void btnTableClear_Click(object sender, EventArgs e)

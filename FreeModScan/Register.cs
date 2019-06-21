@@ -59,11 +59,12 @@ namespace FreeModScan
         public string devName { get; set; }
 
         uint _offset;
-        public uint Offset { get { return _offset; } set { _offset = value * 100000+1; } }
+        public uint Offset { get { return _offset; } set { _offset = value * 100000; } }
 
         long _adress = 0;
         public long Adress { get { return _adress; } set { _adress = value; } }
-        public long FullAdress { get { return Offset + Adress-1; } }
+        public long realAdress { get { return _adress - 1; } }
+        public long FullAdress { get { return (_offset + Adress); } }
 
         float _a = 1;
         public float A { get { return _a; } set { _a = value; } }

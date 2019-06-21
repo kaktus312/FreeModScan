@@ -858,7 +858,7 @@
             this.tsTbPollInterval});
             this.toolStrip2.Location = new System.Drawing.Point(3, 25);
             this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.Size = new System.Drawing.Size(222, 25);
+            this.toolStrip2.Size = new System.Drawing.Size(253, 25);
             this.toolStrip2.TabIndex = 3;
             this.toolStrip2.Text = "toolStrip2";
             // 
@@ -887,7 +887,7 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.splitContainer1);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(732, 433);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(732, 408);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 24);
             this.toolStripContainer1.Name = "toolStripContainer1";
@@ -918,7 +918,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.groupBox3);
             this.splitContainer1.Panel2MinSize = 355;
-            this.splitContainer1.Size = new System.Drawing.Size(732, 433);
+            this.splitContainer1.Size = new System.Drawing.Size(732, 408);
             this.splitContainer1.SplitterDistance = 355;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -936,7 +936,7 @@
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.cbConnectionList);
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Location = new System.Drawing.Point(3, 299);
+            this.groupBox2.Location = new System.Drawing.Point(3, 274);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(349, 131);
             this.groupBox2.TabIndex = 0;
@@ -1059,7 +1059,7 @@
             this.groupBox1.Controls.Add(this.tableLayoutPanel1);
             this.groupBox1.Location = new System.Drawing.Point(3, 3);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(349, 298);
+            this.groupBox1.Size = new System.Drawing.Size(349, 273);
             this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Подключения";
@@ -1082,7 +1082,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(344, 273);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(344, 248);
             this.tableLayoutPanel1.TabIndex = 4;
             // 
             // btnConnectionAdd
@@ -1139,7 +1139,7 @@
             treeNode1.Text = "Список подключений пуст";
             this.tvConnectionTree.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1});
-            this.tvConnectionTree.Size = new System.Drawing.Size(338, 238);
+            this.tvConnectionTree.Size = new System.Drawing.Size(338, 213);
             this.tvConnectionTree.TabIndex = 3;
             this.tvConnectionTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvConnectionTree_AfterSelect);
             this.tvConnectionTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.tvConnectionTree_NodeMouseClick);
@@ -1250,7 +1250,7 @@
             this.groupBox3.Controls.Add(this.splitContainer2);
             this.groupBox3.Location = new System.Drawing.Point(0, 3);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(373, 430);
+            this.groupBox3.Size = new System.Drawing.Size(373, 405);
             this.groupBox3.TabIndex = 0;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Регистры";
@@ -1271,8 +1271,8 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.btnConsoleClear);
             this.splitContainer2.Panel2.Controls.Add(this.rtbConsole);
-            this.splitContainer2.Size = new System.Drawing.Size(367, 411);
-            this.splitContainer2.SplitterDistance = 274;
+            this.splitContainer2.Size = new System.Drawing.Size(367, 386);
+            this.splitContainer2.SplitterDistance = 249;
             this.splitContainer2.TabIndex = 1;
             // 
             // tabControl
@@ -1284,7 +1284,7 @@
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(367, 274);
+            this.tabControl.Size = new System.Drawing.Size(367, 249);
             this.tabControl.TabIndex = 3;
             // 
             // TablePage
@@ -1296,7 +1296,7 @@
             this.TablePage.Location = new System.Drawing.Point(4, 22);
             this.TablePage.Name = "TablePage";
             this.TablePage.Padding = new System.Windows.Forms.Padding(3);
-            this.TablePage.Size = new System.Drawing.Size(359, 248);
+            this.TablePage.Size = new System.Drawing.Size(359, 223);
             this.TablePage.TabIndex = 0;
             this.TablePage.Text = "Таблица";
             this.TablePage.UseVisualStyleBackColor = true;
@@ -1358,7 +1358,7 @@
             this.dgvTable.ContextMenuStrip = this.dataGridViewContextMenu;
             this.dgvTable.Location = new System.Drawing.Point(6, 35);
             this.dgvTable.Name = "dgvTable";
-            this.dgvTable.Size = new System.Drawing.Size(347, 207);
+            this.dgvTable.Size = new System.Drawing.Size(347, 182);
             this.dgvTable.TabIndex = 2;
             this.dgvTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellClick);
             this.dgvTable.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvTable_CellDoubleClick);
@@ -1692,7 +1692,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rtbData.Location = new System.Drawing.Point(6, 35);
             this.rtbData.Name = "rtbData";
-            this.rtbData.Size = new System.Drawing.Size(347, 207);
+            this.rtbData.Size = new System.Drawing.Size(347, 232);
             this.rtbData.TabIndex = 4;
             this.rtbData.Text = "";
             // 
@@ -1781,7 +1781,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rtbPackConsole.Location = new System.Drawing.Point(6, 35);
             this.rtbPackConsole.Name = "rtbPackConsole";
-            this.rtbPackConsole.Size = new System.Drawing.Size(347, 185);
+            this.rtbPackConsole.Size = new System.Drawing.Size(347, 210);
             this.rtbPackConsole.TabIndex = 8;
             this.rtbPackConsole.Text = "";
             // 
@@ -1851,7 +1851,7 @@
             this.toolStripSeparator11,
             this.toolStripLabel1,
             this.tsLblLogRecordsNum});
-            this.toolStrip4.Location = new System.Drawing.Point(229, 25);
+            this.toolStrip4.Location = new System.Drawing.Point(3, 50);
             this.toolStrip4.Name = "toolStrip4";
             this.toolStrip4.Size = new System.Drawing.Size(400, 25);
             this.toolStrip4.TabIndex = 5;
