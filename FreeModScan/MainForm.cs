@@ -26,6 +26,7 @@ namespace FreeModScan
         private const string NO_REGS_MSG = "Регистры устройства не определены";
         private const string NO_REGS_SELECT_MSG = "Регистр не выбран";
         private const string NO_ACTIVE_CONN_MSG = "Нет активных подключений";
+        private const string NO_DEVICES_MSG = "Устройства не определены";
         private const string MSG_INFO_TITLE = "Информация";
 
         public static BindingList<Connection> _conns = new BindingList<Connection>();
@@ -37,6 +38,10 @@ namespace FreeModScan
         public static Register currRegister = null;//текущий регистр
 
         public static bool registerDelitting = false;
+
+        public delegate void PollEventHandler();
+        public static event PollEventHandler PollStart;
+        public static event PollEventHandler PollStop;
 
         //public static BindingList<string> console = new BindingList<string>();
 
@@ -63,14 +68,61 @@ namespace FreeModScan
             Register.Delete += new Register.RegisterEventHandler(registerDeleted);
             Device.Create += new Device.DeviceEventHandler(deviceAdded);
             Device.Delete += new Device.DeviceEventHandler(deviceDeleted);
+            Device.DeleteAll += new Device.DeviceEventHandler(AllRegistersDeleted);
             Connection.StateChanged += new Connection.ConnectionEventHandler(ConnStateChanged);
             Connection.Error += new Connection.ConnectionErrorHandler(ConnError);
             dgvTable.DataError += new DataGridViewDataErrorEventHandler(test);//для подавления ошибки при удалении последних строк DataGridView
+
+            PollStart += new PollEventHandler(pollStart);
+            PollStop += new PollEventHandler(pollStop);
 
             // Инстанциируем writer
             _writer = new ConsoleStreamWriter(rtbConsole);
             // Перенаправляем выходной поток консоли
             Console.SetOut(_writer);
+        }
+
+        private void pollStop()
+        {
+            PollTimer.Enabled = false;//остановка опроса
+            tsBtnStartPoll.Text = "Начать опрос";
+        }
+
+        private void pollStart()
+        {
+            if (currDevice==null)
+            {
+                MessageBox.Show(NO_DEVICES_MSG, MSG_INFO_TITLE);
+                return;
+            }
+            currConn.UpdateRequests();//обновление запросов
+            if (currConn.requests.Count() <= 0)
+            {
+                MessageBox.Show(NO_REGS_MSG, MSG_INFO_TITLE);
+                return;
+            }
+            PollTimer.Interval = int.Parse(tsTbPollInterval.Text);
+            PollTimer.Enabled = true;//старт опроса
+            tsBtnStartPoll.Text = "Остановить опрос";
+        }
+
+        //Методы On.....() - для запуска события из внешних классов
+        public void OnPollStop()
+        {
+            if (PollStop != null) PollStop();
+        }
+        public void OnPollStart()
+        {
+            if (PollStart != null) PollStart();
+        }
+
+
+
+        private void AllRegistersDeleted(Device d)
+        {
+            Console.Write("Class MainForm: All Registers Deleted");
+            OnPollStop();
+            currConn.requests.Clear();
         }
 
         private void registerChanged(Register r)
@@ -255,12 +307,10 @@ namespace FreeModScan
             TreeNode currNode = tvConnectionTree.Nodes[_conns.IndexOf(currConn)];
             currNode.Text = c.ConnName + " - " + c.Port.PortName + " - " + c.statusString;
             Console.Write(c.ConnName + " (" + c.Port.PortName + "): Соединение " + c.statusString);
-
             var tmpColl = _conns.Where(tmpConn => c.status == true);
             if (tmpColl.Count() <= 0)
             {
-                PollTimer.Enabled = false;
-                tsBtnStartPoll.Text = "Начать опрос";
+                OnPollStop();
             }
         }
 
@@ -273,6 +323,7 @@ namespace FreeModScan
 
         private void btnDisconnect_Click(object sender, EventArgs e)
         {
+            OnPollStop();//Останавливаем опрос
             foreach (Connection tmp in _conns)
             {
                 if ((tmp != null) && (tmp.status))
@@ -422,8 +473,7 @@ namespace FreeModScan
                     //if (selectedNodeIndex == currConn)
                     if (selectedNodeIndex == _conns.IndexOf(currConn))
                     {
-                        PollTimer.Enabled = false;
-                        tsBtnStartPoll.Text = (PollTimer.Enabled) ? "Остановить опрос" : "Начать опрос";
+                        OnPollStop();
                     }
                     //_conns[currConn].OnDelete();//запуск события Удаления соединения для прочих подписчиков
                     currConn.OnDelete();//запуск события Удаления соединения для прочих подписчиков
@@ -818,7 +868,7 @@ namespace FreeModScan
 
         private void cbConnectionList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            currConn = (cbConnectionList.SelectedIndex>=0)?_conns[cbConnectionList.SelectedIndex]:null;
+            currConn = (cbConnectionList.SelectedIndex >= 0) ? _conns[cbConnectionList.SelectedIndex] : null;
         }
 
         private void tsmiByteOrder_CheckStateChanged(object sender, EventArgs e)
@@ -946,27 +996,17 @@ namespace FreeModScan
         }
         private void tsBtnStartPoll_Click(object sender, EventArgs e)
         {
-            //if ((_conns.Count > 0) && (_conns[currConn].status))
-            if (currConn==null)
+            if ((currConn == null) || (!currConn.status))
+            {
+                MessageBox.Show(NO_ACTIVE_CONN_MSG, MSG_INFO_TITLE);
                 return;
-            if ((_conns.Count > 0) && (currConn.status))
-            {
-                //_conns[currConn].UpdateRequests();
-                currConn.UpdateRequests();
-                PollTimer.Interval = int.Parse(tsTbPollInterval.Text);
-                PollTimer.Enabled = !PollTimer.Enabled;
-                tsBtnStartPoll.Text = (PollTimer.Enabled) ? "Остановить опрос" : "Начать опрос";
-
             }
-            else
-            {
-                //if (_conns[currConn].status)
+
+            if (_conns.Count > 0)
                 if (currConn.status)
-                    tsBtnStartPoll.Text = "Начать опрос";
+                    OnPollStart();
                 else
-                    MessageBox.Show(NO_ACTIVE_CONN_MSG, MSG_INFO_TITLE);
-            }
-
+                    OnPollStop();
         }
 
         private void PollTimer_Tick(object sender, EventArgs e)

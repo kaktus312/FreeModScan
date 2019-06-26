@@ -870,7 +870,7 @@
             this.tsBtnStartPoll.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsBtnStartPoll.Name = "tsBtnStartPoll";
             this.tsBtnStartPoll.Size = new System.Drawing.Size(110, 22);
-            this.tsBtnStartPoll.Text = "Включить опрос";
+            this.tsBtnStartPoll.Text = "Начать опрос";
             this.tsBtnStartPoll.Click += new System.EventHandler(this.tsBtnStartPoll_Click);
             // 
             // tsTbPollInterval
@@ -1483,7 +1483,6 @@
             // 
             // tsmi_EnableReg
             // 
-            this.tsmi_EnableReg.Enabled = false;
             this.tsmi_EnableReg.Name = "tsmi_EnableReg";
             this.tsmi_EnableReg.Size = new System.Drawing.Size(160, 22);
             this.tsmi_EnableReg.Text = "Опрашивать";
